@@ -22,7 +22,8 @@ function App() {
   return (
     <>
 
-{/* CAMBIAR SVG A PNG */}
+{/* COMENTARIO
+CAMBIAR SVG A PNG */}
 
       <div className='menu'>
           <nav className='navbar'>
