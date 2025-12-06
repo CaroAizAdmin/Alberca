@@ -21,6 +21,7 @@ const Inicio = () => {
   return (
     <>
     <ListadoEscenas />
+    
 
 {/* ACA VA EL LISTADO DE ESCENAS */}
     </>
