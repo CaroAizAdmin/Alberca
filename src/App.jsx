@@ -1,27 +1,23 @@
 import "./App.css";
 /* import Detalle from "./components/Detalle"; */
+
+import { Routes, Route, NavLink } from "react-router-dom";
+
+
 import Inicio from "./components/Inicio";
 import Menu from "./components/Menu";
 import Header from "./components/Header";
-import { Routes, Route } from "react-router";
 import GestorEscenas from "./components/GestorEscenas";
 import Detalle from "./components/Detalle";
 import EditarEscena from "./components/EditarEscena";
 import Error404 from "./components/Error404";
 import React from "react";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
 
 function App() {
 
 
-  const [escenas, setEscenas] = useState([
-    {
-      id: "fiesta",
-      nombre: "Fiesta en la playa",
-      descripcion: "Una fiesta divertida en la playa con amigos.",
-      imagen: "https://example.com/fiesta.jpg",
-    }]);
+  const [escenas, setEscenas] = useState([]);
 
   return (
     <>
