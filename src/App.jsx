@@ -8,6 +8,7 @@ import GestorEscenas from "./components/GestorEscenas";
 import DetalleEscena from "./components/DetalleEscena";
 import EditarEscena from "./components/EditarEscena";
 import Error404 from "./components/Error404";
+import React from "react";
 import { useState } from "react";
 
 function App() {
