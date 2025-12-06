@@ -6,7 +6,7 @@ const CardEscena = ({escena}) => {
       <h3>{escena.name}</h3>
       <p>{escena.descripcion}</p>
       <div className="acciones">
-        <p><strong>Chorros de agua:</strong> {escena.actions.chorrosAgua || "N/A"}</p>
+        <p><strong>Chorros de agua:</strong> {escena.actions.chorrosAgua ? "Prendidos" : "Apagados"}</p>
         <p><strong>Luces encendidas:</strong> {escena.actions.luces.estado ? "Sí" : "No"}</p>
 
         <p><strong>Color:</strong>  
