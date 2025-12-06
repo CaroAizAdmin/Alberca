@@ -14,6 +14,18 @@ const Detalle = ({ id }) => {
   if (error) return <p>Error al cargar la escena</p>;
 
   return (
+
+/* COMENTARIO
+
+INFORMACION QUE NOS PIDE:
+NOMBRE
+DESCRIPCION
+DIAS Y HORARIOS PROGRAMADOS
+LISTADO DE ACCIONES ASOCIADAS A DISPOSITIVOS
+HISTORIAL DE EJECUCION, FECHA, DIA, Y MODO DE ACTIVACION (MANUAL/AUTOMATICA)
+PERMITIR EJECUTAR EDITAR Y ELIMINAR */
+
+
     <div>
       <h1>{escena?.name}</h1>
       <p>{escena?.descripcion}</p>

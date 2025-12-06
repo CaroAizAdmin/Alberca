@@ -12,6 +12,12 @@ const ListadoEscenas = () => {
   if (isLoading) return <p>Cargando...</p>;
   if (error) return <p>Error al cargar las escenas</p>;
 
+
+/* COMENTARIO
+
+SI NO HAY ESCENAS, PONER PANTALLA DE INFO PARA EL USUARIO */
+
+
   return (
     <div className="escena-list">
       {Object.entries(escenas).map(([id, escena]) => (

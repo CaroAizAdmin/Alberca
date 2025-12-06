@@ -26,6 +26,10 @@ const CardEscena = ({escena}) => {
 
       </div>
       {/* Agregá lo que necesites: imagen, autor, etiquetas, etc */}
+
+
+      {/* COMENTARIO
+      AGREGAR BOTON DE EJECUTAR Y QUE LLAME A UNA VENTANA MODULE QUE DIGA QUE LA ACCION SE HIZO Y CAMBIE EN LA PESTALA DE DASHBOARD COMO ESCENA ACTIVA */}
     </div>
   )
 }
