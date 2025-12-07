@@ -1,0 +1,115 @@
+/* --- 1. FONDO DE AGUA --- */
+.full-pool-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(45deg, #0288d1, #29b6f6, #0277bd);
+    background-size: 400% 400%;
+    animation: waterShimmer 10s ease infinite;
+    overflow: hidden; 
+    font-family: sans-serif;
+    /* Importante: para que la tarjeta quede centrada */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes waterShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- 2. EL FLOTADOR (Controlado por JS) --- */
+.drifting-float {
+    position: absolute;
+    top: 0;  /* JS controlará esto mediante translate */
+    left: 0; /* JS controlará esto mediante translate */
+    z-index: 1;
+    /* IMPORTANTE: Quitamos "animation: driftAround..." */
+    will-change: transform; /* Optimización para movimiento suave */
+}
+
+/* El dibujo del flotador (Mantenemos el giro interno) */
+.pool-float-css {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 30px solid #ff5722;
+    background-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    /* Mantenemos que gire sobre sí mismo */
+    animation: spinFloat 10s infinite linear;
+}
+
+.float-stripe {
+    position: absolute;
+    background-color: white;
+}
+.stripe-1 { width: 12px; height: 30px; top: -30px; left: calc(50% - 6px); }
+.stripe-2 { width: 12px; height: 30px; bottom: -30px; left: calc(50% - 6px); }
+.stripe-3 { width: 30px; height: 12px; left: -30px; top: calc(50% - 6px); }
+.stripe-4 { width: 30px; height: 12px; right: -30px; top: calc(50% - 6px); }
+
+@keyframes spinFloat {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* --- 3. CONTENIDO (Glassmorphism) --- */
+.content-card {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 3rem;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    max-width: 90%;
+    width: 400px;
+}
+
+.pool-404-number {
+    font-size: 6rem;
+    font-weight: 900;
+    margin: 0;
+    color: #0277bd;
+    line-height: 1;
+}
+
+.pool-404-title {
+    font-size: 2rem;
+    margin: 10px 0 20px;
+    color: #01579b;
+}
+
+.pool-404-message {
+    color: #455a64;
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.pool-404-button {
+    padding: 14px 28px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: white;
+    background-color: #ff5722;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(255, 87, 34, 0.4);
+}
+
+.pool-404-button:hover {
+    background-color: #f4511e;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 15px rgba(255, 87, 34, 0.5);
+}
