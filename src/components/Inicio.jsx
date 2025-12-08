@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
 import ListadoEscenas from "./ListadoEscenas.jsx";
 
+
 const Inicio = () => {
 
 /* 
@@ -21,7 +22,7 @@ const Inicio = () => {
   return (
     <>
     <ListadoEscenas />
-    
+
 
 {/* ACA VA EL LISTADO DE ESCENAS */}
     </>
