@@ -2,7 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import imgEscenas from '../assets/imagenes/home.png'
 import imgHome from '../assets/imagenes/home.png'
-import imgMas from '../assets/imagenes/home.png' 
+import imgMas from '../assets/imagenes/mas.png' 
 
 
 const Menu = () => {

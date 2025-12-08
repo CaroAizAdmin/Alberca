@@ -36,7 +36,7 @@ function App() {
       {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
 
       {/* <Inicio /> */}
-      <Menu />
+      
       {/* <Detalle id="fiesta" /> */}
 
 
@@ -54,6 +54,7 @@ function App() {
           <Route path='*' element={<><Error404 /></>} />
           
         </Routes>
+        <Menu />
     </>
   );
 }
