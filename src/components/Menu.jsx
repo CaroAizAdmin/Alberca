@@ -30,7 +30,7 @@ const Menu = () => {
                     <img src={imgHome} alt="Inicio" style={iconStyle} />
                 </NavLink>
 
-                <NavLink to="/mas">
+                <NavLink to="/CrearEscena">
                     <img src={imgMas} alt="Más" style={iconStyle} />
                 </NavLink>
 

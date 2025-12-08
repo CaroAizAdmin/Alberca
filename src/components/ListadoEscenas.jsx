@@ -2,7 +2,6 @@ import React from "react";
 import CardEscena from "./CardEscena.jsx";
 import { useQuery } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants.js";
-// 1. IMPORTAMOS EL EMPTY STATE
 import SinEscenas from "./SinEscenas.jsx";
 
 const ListadoEscenas = () => {
@@ -12,24 +11,33 @@ const ListadoEscenas = () => {
       fetch(`${URL_BASE}/escenas.json`).then((res) => res.json()),
   });
 
-  if (isLoading) return <p>Cargando...</p>;
-  if (error) return <p>Error al cargar las escenas</p>;
+  if (isLoading) return <p style={{textAlign:'center', marginTop: 20}}>Cargando...</p>;
+  if (error) return <p style={{textAlign:'center', marginTop: 20}}>Error al cargar las escenas</p>;
 
-  // 2. LÓGICA DE VALIDACIÓN
-  // Si escenas es null (Firebase devuelve null si no hay datos)
-  // O si es un objeto vacío (Object.keys(escenas).length === 0)
-  const noHayEscenas = !escenas || Object.keys(escenas).length === 0;
-
-  if (noHayEscenas) {
+  // Validación si está vacío
+  if (!escenas || Object.keys(escenas).length === 0) {
     return <SinEscenas />;
   }
 
-  // 3. SI HAY ESCENAS, LAS MOSTRAMOS
   return (
     <div className="escena-list">
-      {Object.entries(escenas).map(([id, escena]) => (
-        <div key={id}>
-          <CardEscena escena={{ id, ...escena }} />
+      {/* Object.entries devuelve: 
+         [ 
+           ["-OfwGFg...", {name: "Escena prueba", ...}], 
+           ["fiesta", {name: "Fiesta", ...}] 
+         ]
+      */}
+      {Object.entries(escenas).map(([firebaseKey, datosEscena]) => (
+        <div key={firebaseKey}>
+          {/* AQUÍ ESTÁ LA SOLUCIÓN:
+             1. 'key' de React usa la firebaseKey para optimización.
+             2. Pasamos 'id' como prop explícita con el valor de la key.
+             3. Pasamos 'escena' tal cual viene de la BD (sin alterarla).
+          */}
+          <CardEscena 
+             id={firebaseKey} 
+             escena={datosEscena} 
+          />
         </div>
       ))}
     </div>

@@ -19,7 +19,7 @@ const SinEscenas = () => {
       </div>
 
       <div className="empty-text-content">
-        <h3>Tu piscina está en silencio</h3>
+        <h3>No hay ningún modo/escena</h3>
         <p>
           Aún no tienes escenas configuradas. 
           <br />

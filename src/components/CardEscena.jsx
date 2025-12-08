@@ -1,21 +1,34 @@
 import React from 'react';
-import './CardEscenaModern.css';
+import { useNavigate } from 'react-router-dom';
+import './CardEscenaModern.css'; // Asegúrate que el nombre del CSS sea correcto
 
-const CardEscena = ({ escena }) => {
-  const { r, g, b } = escena.actions.luces.color;
+// AHORA RECIBIMOS "id" y "escena" POR SEPARADO
+const CardEscena = ({ id, escena }) => {
+  const navigate = useNavigate();
+
+  // Protecciones por si los datos vienen vacíos de Firebase
+  const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
+  const color = luces.color || { r: 255, g: 255, b: 255 }; // Fallback a blanco
+  
+  // Manejo de color RGB o Hexadecimal si ya tienes el sistema nuevo
+  // Si guardaste como Hex string, tendrás que convertirlo o usarlo directo.
+  // Asumiendo estructura original RGB:
+  const { r, g, b } = color;
   const colorRGB = `rgb(${r}, ${g}, ${b})`;
-  const lucesOn = escena.actions.luces.estado;
-  const aguaOn = escena.actions.chorrosAgua;
+
+  const lucesOn = luces.estado;
+  const aguaOn = escena.actions?.chorrosAgua;
 
   return (
     <div 
       className="modern-card"
       style={{ 
-        '--scene-color': colorRGB, // Variable CSS dinámica
+        '--scene-color': colorRGB,
         '--scene-glow': lucesOn ? colorRGB : 'transparent' 
       }}
+      // AL HACER CLICK, USAMOS LA "KEY" QUE RECIBIMOS COMO "ID"
+      onClick={() => navigate(`/escenas/${id}`)}
     >
-      {/* Círculo de color decorativo de fondo */}
       <div className="bg-glow"></div>
 
       <div className="card-content">
@@ -24,47 +37,23 @@ const CardEscena = ({ escena }) => {
           <p>{escena.descripcion}</p>
         </div>
 
-        {/* Grid de Estado (Estilo Dashboard) */}
+        {/* ... resto de tu grid de estado (Chorros/Luces) ... */}
         <div className="status-grid">
-          
-          {/* Widget de Agua */}
-          <div className={`status-box ${aguaOn ? 'active-water' : ''}`}>
-            <div className="icon-wrapper">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-              </svg>
-            </div>
-            <span>Chorros</span>
-            <span className="status-text">{aguaOn ? 'ON' : 'OFF'}</span>
-          </div>
-
-          {/* Widget de Luces */}
-          <div className={`status-box ${lucesOn ? 'active-light' : ''}`}>
-            <div className="icon-wrapper">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="12" y1="1" x2="12" y2="5"></line>
-                <line x1="12" y1="19" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="7.05" y2="7.05"></line>
-                <line x1="16.95" y1="16.95" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="5" y2="12"></line>
-                <line x1="19" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="7.05" y2="16.95"></line>
-                <line x1="16.95" y1="7.05" x2="19.78" y2="4.22"></line>
-              </svg>
-            </div>
-            <span>Luces</span>
-            <div 
-              className="color-dot" 
-              style={{ backgroundColor: colorRGB, boxShadow: `0 0 10px ${colorRGB}` }}
-            ></div>
-          </div>
-
+             {/* ... tus widgets de agua y luz ... */}
+             {/* (El código visual que ya tenías) */}
         </div>
 
-        <button className="btn-modern-action">
-          Activar Escena
+        <button 
+            className="btn-modern-action"
+            onClick={(e) => {
+                e.stopPropagation(); // Para que no navegue al detalle al dar click aquí
+                navigate(`/editar-escena/${id}`); // USAMOS LA KEY AQUÍ TAMBIÉN
+            }}
+        >
+          Editar Escena
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="9 18 15 12 9 6"></polyline>
+             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
           </svg>
         </button>
       </div>
