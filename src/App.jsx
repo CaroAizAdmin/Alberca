@@ -22,16 +22,22 @@ function App() {
   return (
     <>
 
-{/* COMENTARIO
-CAMBIAR SVG A PNG */}
-
-      
-
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
+      {/* LO IDEAL SERIA HACER USO DEL OUTLET */}
 
       {/* <Inicio /> */}
       <Menu />
       {/* <Detalle id="fiesta" /> */}
-            {/* router va acá */}
 
 
         <Routes>
