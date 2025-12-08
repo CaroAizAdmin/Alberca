@@ -1,53 +1,85 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './CardEscenaModern.css'; // Asegúrate que el nombre del CSS sea correcto
+// 1. IMPORTACIÓN COMO OBJETO 'styles'
+import styles from './CardEscena.module.css'; 
 
-// AHORA RECIBIMOS "id" y "escena" POR SEPARADO
 const CardEscena = ({ id, escena }) => {
   const navigate = useNavigate();
 
-  // Protecciones por si los datos vienen vacíos de Firebase
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
-  const color = luces.color || { r: 255, g: 255, b: 255 }; // Fallback a blanco
   
-  // Manejo de color RGB o Hexadecimal si ya tienes el sistema nuevo
-  // Si guardaste como Hex string, tendrás que convertirlo o usarlo directo.
-  // Asumiendo estructura original RGB:
-  const { r, g, b } = color;
-  const colorRGB = `rgb(${r}, ${g}, ${b})`;
+  let colorRGB = "rgb(255, 255, 255)";
+  if (luces.color) {
+    if (typeof luces.color === 'string') {
+        colorRGB = luces.color;
+    } else {
+        const { r, g, b } = luces.color;
+        colorRGB = `rgb(${r || 0}, ${g || 0}, ${b || 0})`;
+    }
+  }
 
   const lucesOn = luces.estado;
   const aguaOn = escena.actions?.chorrosAgua;
 
   return (
     <div 
-      className="modern-card"
+      // 2. USO: styles.modernCard
+      className={styles.modernCard} 
       style={{ 
         '--scene-color': colorRGB,
         '--scene-glow': lucesOn ? colorRGB : 'transparent' 
       }}
-      // AL HACER CLICK, USAMOS LA "KEY" QUE RECIBIMOS COMO "ID"
       onClick={() => navigate(`/escenas/${id}`)}
     >
-      <div className="bg-glow"></div>
+      <div className={styles.bgGlow}></div>
 
-      <div className="card-content">
-        <div className="card-titles">
+      <div className={styles.cardContent}>
+        <div className={styles.cardTitles}>
           <h3>{escena.name}</h3>
           <p>{escena.descripcion}</p>
         </div>
 
-        {/* ... resto de tu grid de estado (Chorros/Luces) ... */}
-        <div className="status-grid">
-             {/* ... tus widgets de agua y luz ... */}
-             {/* (El código visual que ya tenías) */}
+        <div className={styles.statusGrid}>
+          
+          {/* Lógica condicional con Template Literals */}
+          {/* Antes: className={`status-box ${aguaOn ? 'active-water' : ''}`} */}
+          {/* Ahora: Accedemos a las propiedades del objeto styles */}
+          <div className={`${styles.statusBox} ${aguaOn ? styles.activeWater : ''}`}>
+            <div className={styles.iconWrapper}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+              </svg>
+            </div>
+            <span>Chorros</span>
+            <span className={styles.statusText}>{aguaOn ? 'ON' : 'OFF'}</span>
+          </div>
+
+          <div className={`${styles.statusBox} ${lucesOn ? styles.activeLight : ''}`}>
+            <div className={styles.iconWrapper}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="12" y1="1" x2="12" y2="5"></line>
+                <line x1="12" y1="19" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="7.05" y2="7.05"></line>
+                <line x1="16.95" y1="16.95" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="5" y2="12"></line>
+                <line x1="19" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="7.05" y2="16.95"></line>
+                <line x1="16.95" y1="7.05" x2="19.78" y2="4.22"></line>
+              </svg>
+            </div>
+            <span>Luces</span>
+            <div 
+              className={styles.colorDot} 
+              style={{ backgroundColor: colorRGB, boxShadow: `0 0 10px ${colorRGB}` }}
+            ></div>
+          </div>
         </div>
 
         <button 
-            className="btn-modern-action"
+            className={styles.btnModernAction}
             onClick={(e) => {
-                e.stopPropagation(); // Para que no navegue al detalle al dar click aquí
-                navigate(`/editar-escena/${id}`); // USAMOS LA KEY AQUÍ TAMBIÉN
+                e.stopPropagation();
+                navigate(`/editar-escena/${id}`);
             }}
         >
           Editar Escena
