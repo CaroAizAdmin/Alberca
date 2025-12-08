@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
+import imgFlecha from '../assets/imagenes/flechaAtras.png';
 // REUTILIZAMOS LOS ESTILOS DEL GESTOR PARA MANTENER LA COHERENCIA
 import './GestorEscenas.css';
+
 
 const EditarEscena = () => {
   const { id } = useParams(); // Obtenemos el ID de la URL
@@ -147,14 +149,22 @@ const EditarEscena = () => {
   if (isLoading) return <div style={{textAlign: 'center', marginTop: 50}}>Cargando datos de la escena...</div>;
   if (isError) return <div style={{textAlign: 'center', marginTop: 50, color: 'red'}}>Error al cargar la escena.</div>;
 
+
+
+      const iconStyle = {
+    width: '24px',
+    height: '24px',
+    objectFit: 'contain' // Para que no se deformen
+  };
+
+
   return (
     <>
+    <div className="flecha">
       <div className="btn-volver" onClick={() => navigate(-1)}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
-        </svg>
+        <img src={imgFlecha} alt="Flecha atras" style={iconStyle} />
       </div>
-      
+    </div>  
 
 
 

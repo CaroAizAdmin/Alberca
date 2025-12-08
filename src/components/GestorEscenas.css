@@ -103,6 +103,7 @@
   background-color: #f2f2f7; /* Gris muy clarito input iOS */
   transition: border-color 0.2s;
   box-sizing: border-box; /* Importante para que el padding no rompa el ancho */
+  color: #1c1c1e;
 }
 
 .form-input:focus, .form-textarea:focus {

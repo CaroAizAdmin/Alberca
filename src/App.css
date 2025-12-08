@@ -16,7 +16,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #f5f7fa; /* Un gris muy suave para fondo general */
+  background-color: #bdd4f7; /* Un gris muy suave para fondo general */
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
 }
 
@@ -123,4 +123,11 @@ body {
   flex-direction: column;
   justify-content: center;
   gap: 20px;
+}
+
+.flecha{
+  position: fixed;
+  top: 90px;
+  left: 20px;
+  z-index: 1001;
 }
