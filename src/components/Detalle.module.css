@@ -1,0 +1,347 @@
+/* CONTENEDOR PRINCIPAL */
+.detalleContainer {
+  min-height: 100vh;
+  background: linear-gradient(
+    180deg,
+    #f0f9ff 0%,
+    #e0f2fe 50%,
+    #ffffff 100%
+  );
+  padding-bottom: 80px;
+}
+
+/* LOADING Y ERROR STATES */
+.loadingMsg,
+.errorMsg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-size: 1.1rem;
+  color: #64748b;
+  padding: 20px;
+}
+
+.errorMsg {
+  color: #ef4444;
+  font-weight: 500;
+}
+
+/* HEADER */
+.detalleHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.btnBack,
+.btnEdit {
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3b82f6;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btnBack:hover,
+.btnEdit:hover {
+  background: rgba(59, 130, 246, 0.1);
+}
+
+.btnBack:active,
+.btnEdit:active {
+  transform: scale(0.95);
+}
+
+/* HERO SECTION */
+.detalleHero {
+  padding: 32px 20px 40px;
+  text-align: center;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.05) 0%,
+    rgba(147, 197, 253, 0.08) 100%
+  );
+}
+
+.detalleHero h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 12px 0;
+  letter-spacing: -0.03em;
+}
+
+.detalleDesc {
+  font-size: 1rem;
+  color: #64748b;
+  margin: 0 0 32px 0;
+  line-height: 1.5;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* BOTÓN GRANDE DE ACTIVAR */
+.btnBigPlay {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background: linear-gradient(
+    135deg,
+    #3b82f6 0%,
+    #2563eb 100%
+  );
+  color: white;
+  border: none;
+  border-radius: 50px;
+  padding: 18px 40px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 
+    0 8px 24px rgba(59, 130, 246, 0.35),
+    0 4px 12px rgba(37, 99, 235, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btnBigPlay:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 12px 32px rgba(59, 130, 246, 0.45),
+    0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+.btnBigPlay:active {
+  transform: translateY(0);
+}
+
+.playIcon {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+/* CARDS GENÉRICAS */
+.detalleCard {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 24px 20px;
+  margin: 20px 20px 0;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.detalleCard h3 {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin: 0 0 20px 0;
+}
+
+/* LISTA DE DISPOSITIVOS */
+.deviceListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.deviceListItem:last-child {
+  border-bottom: none;
+}
+
+.deviceListItem > span:first-child {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #334155;
+}
+
+/* STATUS BADGES */
+.statusBadge {
+  display: inline-block;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+}
+
+.statusBadge.on {
+  background: rgba(34, 197, 94, 0.15);
+  color: #16a34a;
+}
+
+.statusBadge.off {
+  background: rgba(148, 163, 184, 0.15);
+  color: #64748b;
+}
+
+/* COLOR PREVIEW DOT */
+.colorPreviewDot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 
+    0 0 0 1px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* MOCK DATA ROW */
+.mockDataRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.05) 0%,
+    rgba(147, 197, 253, 0.08) 100%
+  );
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.1);
+}
+
+.mockDataRow .icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.mockDataRow strong {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 4px;
+}
+
+.mockDataRow p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #64748b;
+}
+
+/* HISTORIAL */
+.historyList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.historyList li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.historyList li:last-child {
+  border-bottom: none;
+}
+
+.historyDate {
+  font-size: 0.95rem;
+  color: #334155;
+  font-weight: 500;
+}
+
+.historyType {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.historyType.manual {
+  background: rgba(59, 130, 246, 0.15);
+  color: #2563eb;
+}
+
+.historyType.auto {
+  background: rgba(168, 85, 247, 0.15);
+  color: #9333ea;
+}
+
+/* ZONA DE PELIGRO */
+.dangerZone {
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.btnDelete {
+  width: 100%;
+  background: #ffffff;
+  color: #ef4444;
+  border: 2px solid rgba(239, 68, 68, 0.3);
+  border-radius: 14px;
+  padding: 14px 20px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.btnDelete:hover {
+  background: rgba(239, 68, 68, 0.05);
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.btnDelete:active {
+  transform: scale(0.98);
+}
+
+.btnDelete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .detalleHero h1 {
+    font-size: 1.75rem;
+  }
+
+  .detalleDesc {
+    font-size: 0.95rem;
+  }
+
+  .btnBigPlay {
+    width: 100%;
+    max-width: 400px;
+  }
+
+  .detalleCard {
+    margin: 16px 16px 0;
+    padding: 20px 16px;
+  }
+
+  .deviceListItem {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .dangerZone {
+    padding: 16px;
+  }
+}

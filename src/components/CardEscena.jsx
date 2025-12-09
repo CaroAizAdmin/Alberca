@@ -1,64 +1,52 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import './CardEscenaModern.css'; // Asegúrate que el nombre del CSS sea correcto
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import styles from "./CardEscena.module.css";
 
-// AHORA RECIBIMOS "id" y "escena" POR SEPARADO
 const CardEscena = ({ id, escena }) => {
   const navigate = useNavigate();
-
-  // Protecciones por si los datos vienen vacíos de Firebase
-  const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
-  const color = luces.color || { r: 255, g: 255, b: 255 }; // Fallback a blanco
   
-  // Manejo de color RGB o Hexadecimal si ya tienes el sistema nuevo
-  // Si guardaste como Hex string, tendrás que convertirlo o usarlo directo.
-  // Asumiendo estructura original RGB:
-  const { r, g, b } = color;
-  const colorRGB = `rgb(${r}, ${g}, ${b})`;
+  const handleCardClick = () => {
+    navigate(`/escenas/${id}`);
+  };
 
-  const lucesOn = luces.estado;
-  const aguaOn = escena.actions?.chorrosAgua;
+  const lucesActivas = escena.actions?.luces?.estado || false;
+  const color = escena.actions?.luces?.color || { r: 255, g: 255, b: 255 };
+  const colorRGB = `rgb(${color.r}, ${color.g}, ${color.b})`;
+  const chorrosActivos = escena.actions?.chorrosAgua || false;
+
 
   return (
-    <div 
-      className="modern-card"
-      style={{ 
-        '--scene-color': colorRGB,
-        '--scene-glow': lucesOn ? colorRGB : 'transparent' 
+    <div
+      className={styles.card}
+      onClick={handleCardClick}
+      style={{
+        "--glow-color": lucesActivas ? colorRGB : "rgba(255,255,255,0.1)"
       }}
-      // AL HACER CLICK, USAMOS LA "KEY" QUE RECIBIMOS COMO "ID"
-      onClick={() => navigate(`/escenas/${id}`)}
     >
-      <div className="bg-glow"></div>
-
-      <div className="card-content">
-        <div className="card-titles">
-          <h3>{escena.name}</h3>
-          <p>{escena.descripcion}</p>
-        </div>
-
-        {/* ... resto de tu grid de estado (Chorros/Luces) ... */}
-        <div className="status-grid">
-             {/* ... tus widgets de agua y luz ... */}
-             {/* (El código visual que ya tenías) */}
-        </div>
-
-        <button 
-            className="btn-modern-action"
-            onClick={(e) => {
-                e.stopPropagation(); // Para que no navegue al detalle al dar click aquí
-                navigate(`/editar-escena/${id}`); // USAMOS LA KEY AQUÍ TAMBIÉN
-            }}
-        >
-          Editar Escena
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-          </svg>
-        </button>
+      <div className={styles.header}>
+        <h3 className={styles.title}>{escena.name}</h3>
+        <p className={styles.desc}>{escena.descripcion}</p>
       </div>
+
+      <div className={styles.indicatorRow}>
+        <div className={styles.indicatorItem}>
+          <span className={styles.indicatorLabel}>Luces:</span>
+          {lucesActivas ? (
+            <div className={styles.colorDot} style={{ backgroundColor: colorRGB }}></div>
+          ) : (
+            <span className={styles.indicatorStatus}>OFF</span>
+          )}
+        </div>
+        <div className={styles.indicatorItem}>
+          <span className={styles.indicatorLabel}>Chorros:</span>
+          <span className={`${styles.indicatorStatus} ${chorrosActivos ? styles.on : styles.off}`}>
+            {chorrosActivos ? "ON" : "OFF"}
+          </span>
+        </div>
+      </div>
+      
     </div>
-  )
-}
+  );
+};
 
 export default CardEscena;
