@@ -60,9 +60,9 @@ const Detalle = () => {
     alert(`¡Ejecutando escena: ${escena?.name}!`);
   };
 
-  // --- PROTECCIÓN DE DATOS (Evitar 'undefined') ---
-  if (isLoading) return <div className="loading-msg">Cargando detalle...</div>;
-  if (error || !escena) return <div className="error-msg">No se encontró la escena o hubo un error de conexión.</div>;
+  // --- PROTECCIÓN DE DATOS ---
+  if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando detalle...</div>;
+  if (error || !escena) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>No se encontró la escena o hubo un error de conexión.</div>;
 
   // Acceso seguro a los datos (por si faltan propiedades en el JSON)
   const actions = escena.actions || {};
@@ -80,94 +80,98 @@ const Detalle = () => {
   }
 
   return (
-    <div className="detalle-container">
+    <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
       
-      {/* HEADER */}
-      <div className="detalle-header">
-        <button className="btn-back" onClick={() => navigate('/escenas')}>
-          ← Volver
-        </button>
-        <button className="btn-edit" onClick={handleEdit}>
-          Editar
-        </button>
-      </div>
+      {/* CONTENEDOR CENTRAL LIMITADO */}
+      <div className={styles.centerWrapper}>
 
-      {/* HERO (NOMBRE Y DESCRIPCIÓN) */}
-      <div className="detalle-hero">
-        <h1>{escena.name}</h1>
-        <p className="detalle-desc">{escena.descripcion || "Sin descripción disponible."}</p>
-        
-        {/* BOTÓN ACTIVAR */}
-        <button className="btn-big-play" onClick={handleExecute}>
-          <div className="play-icon">▶</div>
-          <span>ACTIVAR AHORA</span>
-        </button>
-      </div>
-
-      {/* SECCIÓN 1: DISPOSITIVOS */}
-      <div className="detalle-card">
-        <h3>Dispositivos Configurados</h3>
-        
-        {/* Fila Chorros */}
-        <div className="device-list-item">
-          <span>🌊 Chorros de agua</span>
-          <span className={`status-badge ${actions.chorrosAgua ? 'on' : 'off'}`}>
-            {actions.chorrosAgua ? 'ENCENDIDOS' : 'APAGADOS'}
-          </span>
+        {/* HEADER */}
+        <div className={styles.detalleHeader}>
+          <button className={styles.btnBack} onClick={() => navigate('/escenas')}>
+            <span className={styles.iconBack}>&#x2190;</span> Volver
+          </button>
+          <button className={styles.btnEdit} onClick={handleEdit}>
+            <span className={styles.iconEdit}>&#x2699;</span> Editar
+          </button>
         </div>
 
-        {/* Fila Luces */}
-        <div className="device-list-item">
-          <span>💡 Luces Piscina</span>
-          <div style={{display:'flex', alignItems:'center', gap: 10}}>
-             {luces.estado && (
-                 <div className="color-preview-dot" style={{backgroundColor: colorRGB}}></div>
-             )}
-             <span className={`status-badge ${luces.estado ? 'on' : 'off'}`}>
-                {luces.estado ? 'ENCENDIDAS' : 'APAGADAS'}
-             </span>
+        {/* HERO (NOMBRE Y DESCRIPCIÓN) */}
+        <div className={styles.detalleHero}>
+          <h1>{escena.name}</h1>
+          <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción disponible."}</p>
+          
+          {/* BOTÓN ACTIVAR */}
+          <button className={styles.btnBigPlay} onClick={handleExecute}>
+            <div className={styles.playIcon}>&#x25B6;</div>
+            <span>ACTIVAR AHORA</span>
+          </button>
+        </div>
+
+        {/* SECCIÓN 1: DISPOSITIVOS */}
+        <div className={styles.detalleCard}>
+          <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
+          
+          {/* Fila Chorros */}
+          <div className={styles.deviceListItem}>
+            <span className={styles.deviceLabel}>Chorros de agua</span>
+            <span className={`${styles.statusBadge} ${actions.chorrosAgua ? styles.on : styles.off}`}>
+              {actions.chorrosAgua ? 'ENCENDIDOS' : 'APAGADOS'}
+            </span>
+          </div>
+
+          {/* Fila Luces */}
+          <div className={styles.deviceListItem}>
+            <span className={styles.deviceLabel}>Luces Piscina</span>
+            <div className={styles.lightStatus}>
+              {luces.estado && (
+                  <div className={styles.colorPreviewDot} style={{backgroundColor: colorRGB}}></div>
+              )}
+              <span className={`${styles.statusBadge} ${luces.estado ? styles.on : styles.off}`}>
+                  {luces.estado ? 'ENCENDIDAS' : 'APAGADAS'}
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* SECCIÓN 2: MOCK DATA (Para cumplir con el diseño) */}
-      <div className="detalle-card">
-        <h3>📅 Días y Horarios</h3>
-        <div className="mock-data-row">
-            <span className="icon">⏰</span>
-            <div>
-                <strong>Lunes, Miércoles y Viernes</strong>
-                <p>Inicio automático: 19:00 hs</p>
-            </div>
+        {/* SECCIÓN 2: DÍAS Y HORARIOS */}
+        <div className={styles.detalleCard}>
+          <h3 className={styles.cardTitle}>Días y Horarios</h3>
+          <div className={styles.scheduleRow}>
+              <span className={styles.scheduleIcon}>&#x23F0;</span>
+              <div className={styles.scheduleContent}>
+                  <strong className={styles.scheduleTitle}>Lunes, Miércoles y Viernes</strong>
+                  <p className={styles.scheduleText}>Inicio automático: 19:00 hs</p>
+              </div>
+          </div>
         </div>
-      </div>
 
-      {/* SECCIÓN 3: MOCK DATA (Historial) */}
-      <div className="detalle-card">
-        <h3>📜 Historial de Ejecución</h3>
-        <ul className="history-list">
-            <li>
-                <span className="history-date">Hoy, 10:30 AM</span>
-                <span className="history-type manual">Manual</span>
-            </li>
-            <li>
-                <span className="history-date">Ayer, 07:00 PM</span>
-                <span className="history-type auto">Automático</span>
-            </li>
-        </ul>
-      </div>
+        {/* SECCIÓN 3: HISTORIAL */}
+        <div className={styles.detalleCard}>
+          <h3 className={styles.cardTitle}>Historial de Ejecución</h3>
+          <ul className={styles.historyList}>
+              <li>
+                  <span className={styles.historyDate}>Hoy, 10:30 AM</span>
+                  <span className={`${styles.historyType} ${styles.manual}`}>Manual</span>
+              </li>
+              <li>
+                  <span className={styles.historyDate}>Ayer, 07:00 PM</span>
+                  <span className={`${styles.historyType} ${styles.auto}`}>Automático</span>
+              </li>
+          </ul>
+        </div>
 
-      {/* ZONA DE PELIGRO (ELIMINAR) */}
-      <div className="danger-zone">
-        <button 
-            className="btn-delete" 
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
-        >
-            {deleteMutation.isPending ? "Eliminando..." : "Eliminar Escena"}
-        </button>
-      </div>
+        {/* ZONA DE PELIGRO */}
+        <div className={styles.dangerZone}>
+          <button 
+              className={styles.btnDelete} 
+              onClick={handleDelete}
+              disabled={deleteMutation.isPending}
+          >
+              {deleteMutation.isPending ? "Eliminando..." : "Eliminar Escena"}
+          </button>
+        </div>
 
+      </div> {/* FIN centerWrapper */}
     </div>
   );
 };

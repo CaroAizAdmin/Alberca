@@ -1,9 +1,15 @@
-import React from 'react'
+import React from 'react';
+import styles from './Header.module.css';
 
-const Header = ({nombre}) => {
+// Componente simplificado que solo usa la prop 'nombre'
+const Header = ({ nombre }) => {
   return (
-    <header className="cabeza">{nombre}</header>
+    // Usamos el nombre del módulo CSS
+    <header className={styles.headerContainer}>
+        {/* Solo el nombre, sin card ni info extra */}
+        <h1 className={styles.dynamicTitle}>{nombre}</h1>
+    </header>
   )
 }
 
-export default Header
+export default Header;

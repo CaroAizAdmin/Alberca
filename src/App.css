@@ -2,16 +2,6 @@
    1. CONFIGURACIÓN GLOBAL Y ROOT
    ================================///////// */
 
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 0;
-  /* IMPORTANTE: Espacio superior para que el header fijo no tape el contenido */
-  padding-top: 80px; 
-  /* Espacio inferior para que el menú fijo no tape el contenido */
-  padding-bottom: 80px; 
-  text-align: center;
-}
 
 body {
   margin: 0;
@@ -119,10 +109,20 @@ body {
 }
 
 .escena-list{
+  /* --- CAMBIOS CLAVE PARA CENTRAR Y LIMITAR ANCHO --- */
+  
+  /* Limita el ancho del contenedor de la lista (típico ancho de móvil) */
+  /* max-width: 400px;  */
+  width: 90%; /* Usa 90% para que haya un margen lateral en pantallas más grandes que 400px */
+  
+  /* Centra el contenedor completo en la página */
+  margin: 0 auto; 
+  padding-top: 30px; /* Separación del header fijo "Mis Escenas" */
+  
+  /* Estilos de lista */
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 20px;
+  gap: 10px;
 }
 
 .flecha{

@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// 1. IMPORTACIÓN COMO OBJETO 'styles'
 import styles from './CardEscena.module.css'; 
 
 const CardEscena = ({ id, escena }) => {
@@ -23,8 +22,7 @@ const CardEscena = ({ id, escena }) => {
 
   return (
     <div 
-      // 2. USO: styles.modernCard
-      className={styles.modernCard} 
+      className={styles.modernCard}
       style={{ 
         '--scene-color': colorRGB,
         '--scene-glow': lucesOn ? colorRGB : 'transparent' 
@@ -41,9 +39,6 @@ const CardEscena = ({ id, escena }) => {
 
         <div className={styles.statusGrid}>
           
-          {/* Lógica condicional con Template Literals */}
-          {/* Antes: className={`status-box ${aguaOn ? 'active-water' : ''}`} */}
-          {/* Ahora: Accedemos a las propiedades del objeto styles */}
           <div className={`${styles.statusBox} ${aguaOn ? styles.activeWater : ''}`}>
             <div className={styles.iconWrapper}>
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
