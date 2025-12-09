@@ -1,0 +1,99 @@
+/* =========================================
+   CONTENEDOR PRINCIPAL (.menuContainer)
+   ========================================= */
+.menuContainer {
+  display: flex;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: transparent; 
+  z-index: 1000; 
+}
+
+/* =========================================
+   BARRA DE NAVEGACIÓN (.navbarWrapper)
+   ========================================= */
+.navbarWrapper {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 0.8rem 2rem;
+    display: flex;
+    gap: 3rem;
+    width: 100%;
+    justify-content: center;
+    
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    
+    border-radius: 300px 300px 0 0;
+    box-shadow: 0 -5px 30px rgba(0, 0, 0, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    z-index: 1000;
+    min-width: 300px;
+}
+
+/* -------------------------------------- */
+/* ESTILOS DE ENLACE BASE (NavLink 'a') */
+/* -------------------------------------- */
+.navbarWrapper a {
+    padding: 1.2em;
+    border-radius: 100px ;
+    height: 1.1em;
+    width: 1.1em;
+    box-shadow: 2px 2px 8px rgb(0, 6, 22);
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    transition: 0.3s ease-in-out;
+    background: white;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Estilo del anillo que aparece al hacer hover o estar activo */
+.navbarWrapper a::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 4px solid rgb(9, 59, 116);
+    border-radius: 50%;
+    transform: scale(0);
+    transition: transform 0.3s ease;
+}
+
+/* Aplicar estilo al hacer hover */
+.navbarWrapper a:hover::before {
+    transform: scale(1);
+}
+
+.navbarWrapper a:hover {
+    color: white;
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* -------------------------------------- */
+/* 🏆 ESTILOS ACTIVO (navLinkActive) */
+/* -------------------------------------- */
+
+.navLinkActive {
+    /* Esto aplica el efecto de levantamiento y sombra al botón activo */
+    color: white;
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+/* Aplicar el anillo al elemento ACTIVO */
+.navLinkActive::before {
+    transform: scale(1) !important; 
+}
+
+
+.navbarWrapper a img {
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+}

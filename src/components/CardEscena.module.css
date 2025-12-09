@@ -1,235 +1,81 @@
+/* =========================================
+   4. ESTILOS DE LISTA Y TARJETAS (CORREGIDO ANCHO COMPLETO)
+   ========================================= */
 
-/* .modern-card pasa a .modernCard */
-.modernCard {
-  position: relative;
-  background-color: #1a1a1a;
-  border-radius: 20px;
-  overflow: hidden;
-  cursor: pointer;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.2s, box-shadow 0.2s;
-  color: white;
-  min-height: 200px;
+/* CONTENEDOR DE LA LISTA: Permitir que ocupe todo el ancho */
+.escena-list{
+  /* --- AJUSTE CLAVE 1: ELIMINAR LÍMITE DE ANCHO --- */
+  /* Eliminamos max-width: 400px; */
+  width: 100%; /* Permitimos que ocupe el 100% del contenedor #root */
+  
+  /* Eliminamos margin: 0 auto; porque el ancho es 100% */
+  margin: 0; 
+  
+  /* Compensación superior (para la cabecera) */
+  padding-top: 120px; 
+  
+  /* 🏆 CORRECCIÓN FINAL: AUMENTAR EL MARGIN-BOTTOM para que el menú no tape la última escena */
+  /* Lo aumentamos a 100px para garantizar el espacio libre encima del menú fijo. */
+  margin-bottom: 100px; 
+  
+  /* Estilos de lista */
   display: flex;
   flex-direction: column;
+  gap: 5px; 
 }
 
-.modernCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-/* .bg-glow pasa a .bgGlow */
-.bgGlow {
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: var(--scene-glow);
-  filter: blur(60px);
-  opacity: 0.3;
-  border-radius: 50%;
-  pointer-events: none;
-  transition: background 0.5s ease;
-}
-
-.cardContent {
-  padding: 20px;
-  position: relative;
-  z-index: 2;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.cardTitles h3 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin-bottom: 5px;
-}
-
-.cardTitles p {
-  margin: 0;
-  color: #888;
-  font-size: 0.9rem;
-  margin-bottom: 20px;
-  line-height: 1.4;
-}
-
-/* Grid de Estado */
-.statusGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-.statusBox {
-  background-color: #2a2a2a;
-  border-radius: 12px;
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 5px;
-  border: 1px solid transparent;
-  transition: all 0.3s ease;
-}
-
-.iconWrapper svg {
-  width: 24px;
-  height: 24px;
-  color: #888;
-}
-
-.statusBox span {
-  font-size: 0.8rem;
-  color: #ccc;
-  font-weight: 500;
-}
-
-.statusText {
-  font-weight: bold;
-  font-size: 0.7rem;
-  opacity: 0.7;
-}
-
-/* Estados Activos */
-.activeWater {
-  background-color: rgba(0, 122, 255, 0.15);
-  border-color: rgba(0, 122, 255, 0.4);
-}
-/* Ojo aqui: usamos :global o selectores anidados si el svg no tiene clase, 
-   pero como es modulo, mejor anidar la clase del padre */
-.activeWater .iconWrapper svg {
-  color: #007aff;
-}
-.activeWater span {
-  color: #66b2ff;
-}
-
-.activeLight {
-  background-color: rgba(255, 204, 0, 0.15);
-  border-color: rgba(255, 204, 0, 0.4);
-}
-.activeLight .iconWrapper svg {
-  color: #ffcc00;
-}
-.activeLight span {
-  color: #ffe066;
-}
-
-.colorDot {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  margin-top: 2px;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-.btnModernAction {
-  margin-top: auto;
-  width: 100%;
-  background-color: white;
-  color: black;
-  border: none;
-  border-radius: 10px;
-  padding: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  transition: background 0.2s;
-}
-
-.btnModernAction:hover {
-  background-color: #e0e0e0;
-}
-/* VARIABLES DE COLOR */
-:root {
-  --color-text-light: #F0F0F0;
-  --color-text-faded: #B0B3CC;
-  --color-separator: rgba(255, 255, 255, 0.08); 
-}
 
 /* CONTENEDOR PRINCIPAL DE LA TARJETA */
 .cardEscena {
-  /* --- CAMBIO CLAVE: Quitamos el padding horizontal --- */
-  /* Dejamos el padding vertical para espaciado interno */
+  /* --- AJUSTE CLAVE 2: Eliminar el padding horizontal de la tarjeta --- */
+  /* Ahora el padding lo darán los elementos internos */
   padding: 16px 0; 
-  /* ------------------------------------------------ */
+  /* ------------------------------------------------------------------ */
   
   display: flex;
   justify-content: space-between; 
   align-items: center;
-  
-  border-bottom: 1px solid var(--color-separator); 
+  /* Ya no necesita min-width ya que el padre define el ancho */
+  color: aliceblue;
+  border-bottom: 1px solid rgb(255, 255, 255); 
+  min-width: 450px;
   background-color: transparent; 
   cursor: pointer;
   transition: background-color 0.2s ease;
-}
+background-color: rgba(255, 255, 255, 0.05); 
+  border-radius: 30px;
+  /* 2. Filtro de desenfoque aplicado al fondo que se encuentra detrás del elemento */
+  backdrop-filter: blur(10px); 
+  /* Si usas Safari o iOS, a veces necesitas el prefijo -webkit- */
+  -webkit-backdrop-filter: blur(10px);
 
-.cardEscena:last-child {
-    border-bottom: none; 
 }
 
 .cardEscena:hover {
-  background-color: rgba(255, 255, 255, 0.03); 
+background-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Contenedor de Información (Nombre y Descripción) */
 .infoWrapper {
   flex-grow: 1; 
   min-width: 0;
-  padding-right: 20px;
+  
+  /* --- AJUSTE 3A: Definir el margen IZQUIERDO del contenido --- */
+  padding-left: 20px; /* Separación del texto del borde IZQUIERDO */
+  padding-right: 20px; /* Separación entre el texto y los iconos */
+
   text-align: left; 
-}
-
-.escenaTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--color-text-light);
-  margin: 0;
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
-}
-
-.escenaDesc {
-  font-size: 0.85rem;
-  color: var(--color-text-faded);
-  margin: 4px 0 0;
-  white-space: nowrap; 
-  overflow: hidden; 
-  text-overflow: ellipsis; 
 }
 
 /* Contenedor de Iconos */
 .iconosWrapper {
   display: flex;
   gap: 15px; 
-  margin-right: 20px;
+  
+  /* Eliminamos los márgenes fijos innecesarios */
+  margin: 0; 
+  
   flex-shrink: 0;
-}
-
-.iconItem {
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.deviceIcon {
-  width: 100%;
-  height: auto;
-  transition: opacity 0.3s ease;
 }
 
 /* Flecha de Navegación */
@@ -238,26 +84,33 @@
   font-size: 1.2rem;
   font-weight: 300;
   color: var(--color-text-faded);
+  
+  /* --- AJUSTE 3B: Definir el margen DERECHO del contenido --- */
+  /* Usamos padding-right en la flecha para crear el espacio visible al borde derecho */
+  padding-right: 20px; /* Espacio entre la flecha y el borde DERECHO de la tarjeta */
+  margin-left: 10px; 
 }
 
-/* RESPONSIVE: SOLUCIÓN CLAVE PARA EL SCROLL LATERAL */
+/* RESPONSIVE */
 @media (max-width: 600px) {
   .cardEscena {
-    /* Mantenemos un padding lateral de 20px si quieres que la info no toque los bordes */
-    padding: 12px 20px; 
+    padding: 12px 0; /* Mantener padding horizontal en 0 */
   }
 
-  .escenaTitle {
-    font-size: 1rem;
+  .infoWrapper {
+      padding-left: 15px; /* Reducir padding izquierdo en móvil */
+      padding-right: 15px; 
   }
   
   .iconosWrapper {
-    gap: 10px;
-    margin-right: 10px;
+    gap: 8px;
   }
   
-  .iconItem {
-    width: 20px; 
-    height: 20px;
+  .arrow {
+      padding-right: 15px; /* Reducir padding derecho en móvil */
+  }
+  
+  .escena-list {
+      width: 100%;
   }
 }

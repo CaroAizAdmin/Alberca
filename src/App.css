@@ -1,18 +1,52 @@
-/* =========================================
-   1. CONFIGURACIÓN GLOBAL Y ROOT
-   ================================///////// */
+/* VARIABLES DE COLOR */
+:root {
+  /* Color principal de fondo (Azul de Hydrate) */
+  --color-dark-blue: #103C76; 
+  --color-header-blue: #213547;
+}
 
+/* =========================================
+   1. CONFIGURACIÓN GLOBAL Y ROOT (FONDO FIJO ASEGURADO)
+   ========================================= */
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #bdd4f7; /* Un gris muy suave para fondo general */
+  
+  /* Color de respaldo */
+  background-color: var(--color-dark-blue); 
+  
+  /* CLAVE: Aplica la imagen de fondo */
+  background-image: url('./assets/imagenes/fondo1.png'); 
+  
+  /* CLAVE: Mantiene la imagen fija mientras el contenido se desplaza */
+  background-attachment: fixed; 
+  
+  /* Ajuste de tamaño y posición */
+  background-size: cover; 
+  background-repeat: no-repeat;
+  background-position: center bottom; 
+  
+  /* Propiedades de Scroll y Ancho */
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden; 
+}
+
+/* El #ROOT queda limpio de fondo para no competir con el body */
+#root {
+  min-height: 100vh;
+  width: 100%;
+  
+  background-image: none; 
+  
+  box-sizing: border-box;
 }
 
 /* =========================================
    2. HEADER (ENCABEZADO FIJO)
-   ================================///////// */
+   ========================================= */
 
 .header {
   width: 100%;
@@ -24,20 +58,18 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; /* Asegura que esté siempre encima */
-  box-sizing: border-box; /* Evita que el padding sume al ancho total */
+  z-index: 1000; 
+  box-sizing: border-box; 
 
   /* Estilos Visuales */
-  background-color: #213547;
+  background-color: var(--color-header-blue);
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 1rem;
 
-  /* Tipografía */
+  /* Tipografía y Alineación */
   font-size: 1.5rem;
   font-weight: bold;
-
-  /* Alineación (Centrado absoluto del texto) */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -45,19 +77,9 @@ body {
 
 /* =========================================
    3. MENÚ (BARRA DE NAVEGACIÓN INFERIOR)
-   ================================///////// */
+   ========================================= */
 
-.menu {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #ffffff;
-  border-top: 1px solid #e0e0e0;
-  z-index: 1000; /* Igual que el header para estar encima del contenido */
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
+
 
 .navbar {
   margin: auto;
@@ -65,12 +87,12 @@ body {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  max-width: 400px; /* Limite para que no se estire demasiado en PC */
+  max-width: 400px; 
 }
 
 /* =========================================
-   4. ESTILOS BASE DE REACT (BOILERPLATE)
-   ================================///////// */
+   4. ESTILOS DE LISTA Y BOILERPLATE
+   ========================================= */
 
 .logo {
   height: 6em;
@@ -109,20 +131,19 @@ body {
 }
 
 .escena-list{
-  /* --- CAMBIOS CLAVE PARA CENTRAR Y LIMITAR ANCHO --- */
-  
-  /* Limita el ancho del contenedor de la lista (típico ancho de móvil) */
-  /* max-width: 400px;  */
-  width: 90%; /* Usa 90% para que haya un margen lateral en pantallas más grandes que 400px */
-  
-  /* Centra el contenedor completo en la página */
+  /* Centrado y límite de ancho */
+/*   max-width: 400px;  */
+
+  width: 90%; 
   margin: 0 auto; 
-  padding-top: 30px; /* Separación del header fijo "Mis Escenas" */
+  margin-bottom: 120px;
+  /* Compensación para la ola y el título (Ajusta este valor si es necesario) */
+  padding-top: 20px; 
   
   /* Estilos de lista */
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 30px;
 }
 
 .flecha{

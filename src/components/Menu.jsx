@@ -1,36 +1,47 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import imgEscenas from '../assets/imagenes/home.png'
-import imgHome from '../assets/imagenes/home.png'
 import imgMas from '../assets/imagenes/mas.png' 
-
+import styles from "./Menu.module.css"; // Importa los estilos modulares
 
 const Menu = () => {
 
-
     const iconStyle = {
-    width: '24px',
-    height: '24px',
-    objectFit: 'contain' // Para que no se deformen
-  };
+        width: '32px', 
+        height: '32px',
+        objectFit: 'contain' 
+    };
 
     
   return (
-
-        <div className='menu'>
-            <nav className='navbar'>
+        <div className={styles.menuContainer}> 
+            <nav className={styles.navbarWrapper}> 
                 
-                {/* 2. REEMPLAZA LOS SVG POR LA ETIQUETA IMG */}
-                
-                <NavLink to="/escenas">
+                {/* 1. Enlace a /escenas */}
+                <NavLink 
+                    to="/escenas"
+                    // 🏆 Agrega la clase modular .navLinkActive si isActive es true
+                    className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
+                >
                     <img src={imgEscenas} alt="Escenas" style={iconStyle} />
                 </NavLink>
 
-                <NavLink to="/">
-                    <img src={imgHome} alt="Inicio" style={iconStyle} />
+                {/* 2. Enlace a / (Inicio) - Activo por defecto */}
+                <NavLink 
+                    to="/" 
+                    end // 🏆 CLAVE: Asegura que solo se active cuando la ruta es EXACTAMENTE '/'
+                    // 🏆 Agrega la clase modular .navLinkActive si isActive es true (lo cual es por defecto en la raíz)
+                    className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
+                > 
+                    <img src={imgEscenas} alt="Inicio" style={iconStyle} />
                 </NavLink>
 
-                <NavLink to="/CrearEscena">
+                {/* 3. Enlace a /CrearEscena */}
+                <NavLink 
+                    to="/CrearEscena"
+                    // 🏆 Agrega la clase modular .navLinkActive si isActive es true
+                    className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
+                >
                     <img src={imgMas} alt="Más" style={iconStyle} />
                 </NavLink>
 
