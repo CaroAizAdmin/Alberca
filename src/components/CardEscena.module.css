@@ -1,116 +1,122 @@
-/* =========================================
-   4. ESTILOS DE LISTA Y TARJETAS (CORREGIDO ANCHO COMPLETO)
-   ========================================= */
 
-/* CONTENEDOR DE LA LISTA: Permitir que ocupe todo el ancho */
-.escena-list{
-  /* --- AJUSTE CLAVE 1: ELIMINAR LÍMITE DE ANCHO --- */
-  /* Eliminamos max-width: 400px; */
-  width: 100%; /* Permitimos que ocupe el 100% del contenedor #root */
-  
-  /* Eliminamos margin: 0 auto; porque el ancho es 100% */
-  margin: 0; 
-  
-  /* Compensación superior (para la cabecera) */
-  padding-top: 120px; 
-  
-  /* 🏆 CORRECCIÓN FINAL: AUMENTAR EL MARGIN-BOTTOM para que el menú no tape la última escena */
-  /* Lo aumentamos a 100px para garantizar el espacio libre encima del menú fijo. */
-  margin-bottom: 100px; 
-  
-  /* Estilos de lista */
-  display: flex;
-  flex-direction: column;
-  gap: 5px; 
-}
-
-
-/* CONTENEDOR PRINCIPAL DE LA TARJETA */
-.cardEscena {
-  /* --- AJUSTE CLAVE 2: Eliminar el padding horizontal de la tarjeta --- */
-  /* Ahora el padding lo darán los elementos internos */
-  padding: 16px 0; 
-  /* ------------------------------------------------------------------ */
-  
+/* CONTENEDOR PRINCIPAL DE LA TARJETA (Clase: Línea) */
+.modernCardLine {
+  width: auto; 
   display: flex;
   justify-content: space-between; 
-  align-items: center;
-  /* Ya no necesita min-width ya que el padre define el ancho */
+  align-items: center; 
+  
+  /* Altura Reducida */
+  padding: 12px 0; 
+  
+  /* Margen Lateral Consistente */
+  margin: 0 20px; 
+  
   color: aliceblue;
-  border-bottom: 1px solid rgb(255, 255, 255); 
-  min-width: 450px;
-  background-color: transparent; 
   cursor: pointer;
   transition: background-color 0.2s ease;
-background-color: rgba(255, 255, 255, 0.05); 
-  border-radius: 30px;
-  /* 2. Filtro de desenfoque aplicado al fondo que se encuentra detrás del elemento */
-  backdrop-filter: blur(10px); 
-  /* Si usas Safari o iOS, a veces necesitas el prefijo -webkit- */
-  -webkit-backdrop-filter: blur(10px);
-
+  
+  /* EFECTO GLASSY */
+  background-color: rgba(255, 255, 255, 0.03); 
+  backdrop-filter: blur(5px); 
+  -webkit-backdrop-filter: blur(5px);
+  
+  /* Bordes curvados */
+  border-radius: 12px; 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
 }
 
-.cardEscena:hover {
-background-color: rgba(255, 255, 255, 0.1);
+.modernCardLine:hover {
+  background-color: rgba(255, 255, 255, 0.08); 
 }
 
-/* Contenedor de Información (Nombre y Descripción) */
+/* -------------------------------------- */
+/* 1. INFORMACIÓN (IZQUIERDA) */
+/* -------------------------------------- */
 .infoWrapper {
   flex-grow: 1; 
-  min-width: 0;
-  
-  /* --- AJUSTE 3A: Definir el margen IZQUIERDO del contenido --- */
-  padding-left: 20px; /* Separación del texto del borde IZQUIERDO */
-  padding-right: 20px; /* Separación entre el texto y los iconos */
-
-  text-align: left; 
+  min-width: 0; 
+  padding-left: 20px; 
 }
 
-/* Contenedor de Iconos */
+.sceneTitle {
+  margin: 0 0 2px 0;
+  font-size: 1.1rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; 
+}
+
+.sceneDescription {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.6;
+}
+
+/* -------------------------------------- */
+/* 2. ÍCONOS (DERECHA) */
+/* -------------------------------------- */
 .iconosWrapper {
   display: flex;
-  gap: 15px; 
-  
-  /* Eliminamos los márgenes fijos innecesarios */
-  margin: 0; 
-  
+  align-items: center;
+  gap: 12px; 
   flex-shrink: 0;
+  margin-left: 15px; 
+  padding-right: 10px;
 }
 
-/* Flecha de Navegación */
+.iconItem {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconItem svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 1.5;
+  /* Color por defecto: tenue */
+  color: rgba(255, 255, 255, 0.7); 
+  transition: all 0.3s ease;
+}
+
+/* 🏆 RE-ACTIVACIÓN DE ESTADOS ACTIVOS (COLORES NEÓN) */
+
+.activeWater svg {
+  color: #3b9fff; /* Azul neón para chorros activos */
+  filter: drop-shadow(0 0 4px #3b9fff); /* Sombra para efecto neón */
+}
+
+.activeLight svg {
+  /* Usamos la variable CSS --scene-color del JSX */
+  color: var(--scene-color, #FFF88C); 
+  filter: drop-shadow(0 0 6px var(--scene-color, #FFF88C)); /* Sombra neón dinámica */
+}
+
+/* 4. FLECHA DE DETALLE */
 .arrow {
-  flex-shrink: 0;
   font-size: 1.2rem;
   font-weight: 300;
-  color: var(--color-text-faded);
-  
-  /* --- AJUSTE 3B: Definir el margen DERECHO del contenido --- */
-  /* Usamos padding-right en la flecha para crear el espacio visible al borde derecho */
-  padding-right: 20px; /* Espacio entre la flecha y el borde DERECHO de la tarjeta */
-  margin-left: 10px; 
+  color: rgba(255, 255, 255, 0.4);
+  flex-shrink: 0;
 }
 
+/* -------------------------------------- */
 /* RESPONSIVE */
+/* -------------------------------------- */
 @media (max-width: 600px) {
-  .cardEscena {
-    padding: 12px 0; /* Mantener padding horizontal en 0 */
+  .modernCardLine {
+      margin: 0 10px; 
   }
-
+  
   .infoWrapper {
-      padding-left: 15px; /* Reducir padding izquierdo en móvil */
-      padding-right: 15px; 
+      padding-left: 15px;
   }
   
   .iconosWrapper {
-    gap: 8px;
-  }
-  
-  .arrow {
-      padding-right: 15px; /* Reducir padding derecho en móvil */
-  }
-  
-  .escena-list {
-      width: 100%;
+      padding-right: 5px;
   }
 }

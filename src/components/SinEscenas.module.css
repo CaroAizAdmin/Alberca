@@ -1,0 +1,85 @@
+/* Asumimos que estas variables están definidas en :root en otro archivo */
+/* --color-card-background-glass: rgba(45, 50, 90, 0.4); 
+  --color-primary-blue: #5C97F2; 
+  --color-text-light: #F0F0F0;
+  --color-text-faded: #B0B3CC;
+  --color-border-glass: rgba(255, 255, 255, 0.1);
+*/
+
+.emptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 20px;
+  
+  /* 🏆 Estilo Glassy: Fondo oscuro */
+  background: var(--color-card-background-glass);
+  backdrop-filter: blur(10px);
+  
+  border-radius: 24px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  margin: 20px auto;
+  max-width: 400px;
+  /* Borde de cristal */
+  border: 1px solid var(--color-border-glass); 
+  font-family: 'Inter', sans-serif;
+}
+
+.emptyIconWrapper {
+  width: 80px; height: 80px;
+  /* Fondo azul claro y semi-transparente */
+  background-color: rgba(92, 151, 242, 0.2); 
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 24px;
+  /* Icono azul primario */
+  color: var(--color-primary-blue);
+  box-shadow: 0 0 10px rgba(92, 151, 242, 0.4);
+}
+
+.emptyTextContent h3 {
+  font-size: 1.25rem; font-weight: 700; 
+  /* Título claro */
+  color: var(--color-text-light); 
+  margin: 0 0 8px 0;
+}
+
+.emptyTextContent p {
+  font-size: 0.95rem; 
+  /* Párrafo desvanecido */
+  color: var(--color-text-faded); 
+  line-height: 1.5;
+  margin: 0 0 32px 0;
+}
+
+/* 🏆 Estilo Glassy para el botón */
+.btnCreateFirst {
+  /* Fondo glassy azul */
+  background: rgba(92, 151, 242, 0.3);
+  backdrop-filter: blur(5px); 
+  color: var(--color-text-light); 
+  border: 1px solid rgba(92, 151, 242, 0.5); /* Borde azul semi-transparente */
+  
+  border-radius: 100px;
+  padding: 14px 28px;
+  font-size: 1rem; font-weight: 600;
+  cursor: pointer;
+  display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 15px rgba(92, 151, 242, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btnCreateFirst:hover { 
+    /* Efecto hover */
+    transform: translateY(-2px); 
+    background: rgba(92, 151, 242, 0.5); 
+    box-shadow: 0 6px 20px rgba(92, 151, 242, 0.6);
+}
+
+.plusIcon { 
+    font-size: 1.2rem; 
+    line-height: 1; 
+    font-weight: 800; /* Hacemos el + más grueso */
+}

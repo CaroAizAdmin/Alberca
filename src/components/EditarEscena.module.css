@@ -1,0 +1,523 @@
+/* ========================================================== */
+/* VARIABLES DE COLOR (Mismas que Detalle)                    */
+/* ========================================================== */
+:root {
+  --color-app-background: #191E3B; 
+  --color-card-background-glass: rgba(45, 50, 90, 0.4); 
+  --color-primary-blue: #5C97F2; 
+  --color-text-light: #F0F0F0;
+  --color-text-faded: #B0B3CC;
+  --color-success: #34c759;
+  --color-danger: #F65959; 
+  --color-border-glass: rgba(255, 255, 255, 0.1);
+  --color-progress-fill: #5C97F2; 
+}
+
+/* ========================================================== */
+/* 1. CONTENEDOR Y TÍTULO                                     */
+/* ========================================================== */
+
+.edit-container {
+    min-height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    padding: 30px 20px 80px; 
+    box-sizing: border-box;
+}
+
+/* 🏆 CLAVE: ESTILO DEL TÍTULO PRINCIPAL GRANDE */
+.edit-title {
+    /* Hacemos el título grande como "Detalle de la escena" */
+    font-size: 2.5rem; 
+    font-weight: 800; /* Lo hacemos más grueso */
+    text-align: center;
+    margin: 50px 0 30px; /* Margen superior amplio para bajarlo de la nav */
+    line-height: 1.1;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); /* Pequeño neón para destacarlo */
+}
+
+
+/* ========================================================== */
+/* 2. BOTÓN DE NAVEGACIÓN (Volver)                            */
+/* ========================================================== */
+
+.flecha {
+    position: absolute;
+    top: 25px;
+    left: 20px;
+    z-index: 20; 
+}
+
+.btnBackNav{
+  /* 🏆 ESTILO GLASSY BASE */
+  background: rgba(45, 50, 90, 0.4); /* Fondo semi-transparente */
+  backdrop-filter: blur(8px); /* Desenfoque */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  
+  /* Estilos funcionales */
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: whitesmoke;
+  cursor: pointer;
+  padding: 8px 14px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btnBackNav:hover{
+  background: rgba(45, 50, 90, 0.6); /* Más opaco al hacer hover */
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btnBackNav img {
+    filter: invert(1); 
+    width: 20px;
+    height: 20px;
+}
+
+
+/* ========================================================== */
+/* 3. TARJETA PRINCIPAL (Form Card)                           */
+/* ========================================================== */
+
+.form-card {
+    background: var(--color-card-background-glass); 
+    backdrop-filter: blur(10px); 
+    border-radius: 18px; 
+    padding: 30px;
+    color: var(--color-text-light);
+    width: 100%;
+    max-width: 500px; 
+    box-sizing: border-box;
+    border: 1px solid var(--color-border-glass); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+}
+
+.form-title {
+    color: var(--color-primary-blue);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-border-glass);
+    padding-bottom: 10px;
+}
+
+/* ========================================================== */
+/* 4. CAMPOS DE FORMULARIO                                    */
+/* ========================================================== */
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.form-input, 
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border-glass);
+    background: rgba(0, 0, 0, 0.3); 
+    color: var(--color-text-light);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus, 
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 2px rgba(92, 151, 242, 0.5); 
+}
+
+.form-textarea {
+    resize: vertical;
+}
+
+.error-msg {
+    color: var(--color-danger);
+    margin-top: 8px;
+    font-size: 0.85rem;
+}
+
+/* ========================================================== */
+/* 5. BOTONES Y NAVEGACIÓN                                    */
+/* ========================================================== */
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+ .btn-nav {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    font-size: 1rem;
+    color: var(--color-text-light);
+} 
+
+
+.btn-prev {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-light);
+}
+.btn-prev:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ------------------------------------------------------------- */
+/* 🏆 ESTILOS GLASSY PARA BOTÓN DE ACCIÓN (.btn-next)            */
+/* ------------------------------------------------------------- */
+
+.btn-next {
+    /* Mantenemos el color de fondo primario (azul) para calcular la transparencia */
+    background: rgba(92, 151, 242, 0.2); 
+    backdrop-filter: blur(8px); 
+    /* Borde basado en el color primario, semi-transparente */
+    border: 1px solid rgba(92, 151, 242, 0.4); 
+    /* Sombra basada en el color primario */
+    box-shadow: 0 4px 10px rgba(92, 151, 242, 0.3);
+    
+    color: var(--color-text-light); 
+    flex-grow: 1; 
+    padding: 12px 20px; 
+    border-radius: 10px; 
+    font-weight: 700; 
+    cursor: pointer;
+    transition: all 0.2s ease; 
+    font-size: 1rem;
+}
+
+/* Efecto hover */
+.btn-next:hover:not(:disabled) {
+    /* Aumentamos la opacidad del fondo para el hover */
+    background: rgba(92, 151, 242, 0.4); 
+    transform: translateY(-1px);
+    opacity: 1; 
+}
+
+/* Estilo para cuando está deshabilitado */
+.btn-next[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    background: rgba(92, 151, 242, 0.1); /* Fondo más tenue */
+    border-color: rgba(92, 151, 242, 0.2); 
+}
+
+/* AJUSTE PARA EL COLOR VERDE (Guardar Cambios) */
+.btn-next[style*="--color-success"] {
+    background: rgba(52, 199, 89, 0.2) !important; 
+    border-color: rgba(52, 199, 89, 0.4) !important;
+    box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3) !important;
+}
+
+.btn-next[style*="--color-success"]:hover:not(:disabled) {
+    background: rgba(52, 199, 89, 0.4) !important; 
+}
+
+/* ========================================================== */
+/* 6. BARRA DE PROGRESO                                       */
+/* ========================================================== */
+
+.progress-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.progress-line {
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.15);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.progress-fill {
+    position: absolute;
+    height: 3px;
+    background-color: var(--color-progress-fill);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: width 0.3s ease-in-out;
+}
+
+.step-indicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-text-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    z-index: 3;
+    transition: background-color 0.3s;
+    border: 2px solid transparent;
+}
+
+.step-indicator.active {
+    background-color: var(--color-progress-fill);
+    border-color: var(--color-text-light);
+    box-shadow: 0 0 8px var(--color-progress-fill);
+}
+
+/* ========================================================== */
+/* 7. DEVICE TOGGLE Y COLOR (Se mantiene)                     */
+/* ========================================================== */
+
+.device-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.device-row:last-of-type {
+    border-bottom: none;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15); 
+  transition: .4s;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 3px;
+  background-color: var(--color-text-light);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--color-primary-blue); 
+  box-shadow: 0 0 5px var(--color-primary-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modern-color-input-container {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid var(--color-border-glass);
+    padding: 5px;
+}
+
+.modern-color-input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 6px;
+}
+
+.modern-color-input::-webkit-color-swatch {
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.modern-color-input::-moz-color-swatch {
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.color-code {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 10px;
+    color: var(--color-text-light);
+    padding-right: 5px;
+}
+
+.summary-list strong {
+    color: var(--color-primary-blue);
+    font-weight: 700;
+    display: inline-block;
+    width: 100px;
+}
+
+
+/* ========================================================== */
+/* 8. ESTILOS DE PROGRAMACIÓN (NUEVOS)                     */
+/* ========================================================== */
+
+.day-selector-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 20px;
+    padding: 5px 0;
+}
+
+.day-button {
+    /* Estilo Glassy base */
+    background: rgba(45, 50, 90, 0.2); 
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+    /* Forma y Contenido */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: var(--color-text-faded);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.day-button:hover:not(.selected) {
+    background: rgba(45, 50, 90, 0.4); 
+    color: var(--color-text-light);
+}
+
+.day-button.selected {
+    background: var(--color-primary-blue); 
+    border-color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-light);
+    box-shadow: 0 0 8px rgba(92, 151, 242, 0.7); 
+    transform: translateY(-1px);
+}
+
+/* Ajuste para que el input type="time" se vea bien */
+.form-input[type="time"] {
+    /* Aseguramos que se vea igual que el input text */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 12px 15px;
+    height: auto; /* Anula cualquier altura forzada por el navegador */
+}
+
+/* ========================================================== */
+/* ESTILOS SVG PARA ESTADO ACTIVO/INACTIVO                    */
+/* ========================================================== */
+
+/* Estilo por defecto (Inactivo o apagado) */
+.svgInactive svg {
+    stroke: var(--color-text-faded, #B0B3CC); /* Color tenue para inactivo */
+}
+
+/* Estilo Activo (Cuando el toggle está ON) */
+.svgActive svg {
+    /* Color principal brillante para activo (lo mismo que luces y chorros en Detalle) */
+    stroke: var(--color-primary-blue, #5C97F2); 
+    filter: drop-shadow(0 0 4px rgba(92, 151, 242, 0.6)); /* Efecto neón/brillo */
+}
+
+
+/* ========================================================== */
+/* 9. RESPONSIVE                                              */
+/* ========================================================== */
+@media (max-width: 768px) {
+    .edit-container {
+        padding: 70px 16px 80px;
+    }
+    
+    .flecha {
+        left: 16px;
+    }
+
+    .form-card {
+        padding: 20px;
+        max-width: 100%;
+    }
+    
+    /* 🏆 CLAVE RESPONSIVE: Reducción del título en móvil */
+    .edit-title {
+        margin-top: 20px;
+        font-size: 2rem; 
+    }
+    
+    .progress-bar-container {
+        margin-bottom: 30px;
+    }
+    
+    .btn-nav {
+        padding: 10px 15px;
+    }
+    
+    .day-selector-container {
+        /* Permite que los botones sean un poco más flexibles en móvil */
+        gap: 3px;
+    }
+    .day-button {
+        width: 38px;
+        height: 38px;
+        font-size: 0.8rem;
+    }
+}

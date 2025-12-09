@@ -25,7 +25,7 @@ body {
   /* Ajuste de tamaño y posición */
   background-size: cover; 
   background-repeat: no-repeat;
-  background-position: center bottom; 
+  background-position: center ; 
   
   /* Propiedades de Scroll y Ancho */
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -136,15 +136,15 @@ body {
 
   width: 90%; 
   margin: 0 auto; 
-  margin-bottom: 120px;
+  padding-bottom: 200px;
   /* Compensación para la ola y el título (Ajusta este valor si es necesario) */
   padding-top: 20px; 
-  
   /* Estilos de lista */
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
+
 
 .flecha{
   position: fixed;

@@ -1,181 +1,163 @@
-/* VARIABLES DE COLOR (Basadas en la imagen de referencia oscura) */
 :root {
-  /* Fondo general muy oscuro (casi negro azulado) */
-  --color-app-background: #191E3B; 
-  /* Fondo de las cards y contenedores internos (azul oscuro) */
-  --color-card-background: #2D325A;
-  /* Azul principal para botones y acentos (más claro) */
-  --color-primary-blue: #5C97F2; 
-  /* Tono para botones/acento más oscuros (como el botón EDIT de la referencia) */
-  --color-button-dark: #3F4470;
-  
-  /* Textos */
-  --color-text-light: #F0F0F0;
-  --color-text-faded: #B0B3CC;
-
-  /* Colores de estado (tonos de azul y gris) */
-  --color-on: #5C97F2; 
-  --color-off: #404365; 
   --color-delete: #F65959; 
+  /* Agregando variables necesarias si no están definidas en otro lado */
+  --color-app-background: #191E3B;
+  --color-text-light: #F0F0F0;
+  --color-primary-blue: #5C97F2; 
+  --color-text-faded: #B0B3CC;
 }
-
-/* CONTENEDOR PRINCIPAL Y FONDO */
-
+/* --- 1. CONTENEDORES PRINCIPALES --- */
 .detalleContainer {
   min-height: 100vh;
   padding: 0;
   display: flex;
-  justify-content: center;
+  flex-direction: column; 
+  align-items: center; 
 }
 
-/* CONTENEDOR QUE LIMITA EL ANCHO (SOLUCIÓN AL 60%) */
-.centerWrapper {
+
+.detalleNavWrapper {
     width: 100%;
-    /* Límite del 60% en pantallas grandes */
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    padding-top: 25px; 
+    z-index: 10;
+}
+
+.headerTitleWrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 20px; 
+}
+
+/* 🏆 CLAVE: REDUCCIÓN DE TAMAÑO Y MARGEN DEL TÍTULO DINÁMICO */
+.headerTitleWrapper h1 {
+    /* 🛑 Ajuste de tamaño de fuente a un valor mediano/grande */
+    font-size: 2rem; 
+    /* 🛑 Eliminar o anular márgenes problemáticos */
+    margin-top: 0 !important; 
+    margin-bottom: 0 !important; 
+    text-align: center;
+    line-height: 1.1;
+    padding: 0 16px; /* Asegurar que no toque los bordes */
+}
+
+.centerWrapper {
+    width: 90%;
     max-width: 60%; 
-    min-width: 450px; 
-    padding-bottom: 80px;
+    margin-top: 0; 
 }
 
-/* LOADING Y ERROR STATES */
-.loadingMsg,
-.errorMsg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  color: var(--color-text-faded);
-}
-
-/* HEADER */
 .detalleHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0; 
-  background: rgba(45, 50, 90, 0.8); 
-  backdrop-filter: blur(8px);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3); 
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  width: 90%; 
+  max-width: 60%;
+  padding-right: 10%; 
+  background: transparent; 
+  backdrop-filter: none;
+  box-shadow: none; 
+  position: relative;
 }
 
-.btnBack,
-.btnEdit {
-  background: transparent;
-  border: none;
-  font-size: 1rem;
+/* --- 2. BOTONES DE NAVEGACIÓN (Glassy) --- */
+.btnBackNav,
+.btnEdit, .btnBigPlay {
+  /* 🏆 ESTILO GLASSY BASE */
+  background: rgba(45, 50, 90, 0.4); /* Fondo semi-transparente */
+  backdrop-filter: blur(8px); /* Desenfoque */
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
+  
+  /* Estilos funcionales */
+  font-size: 0.95rem;
   font-weight: 600;
-  color: var(--color-text-faded);
+ color: whitesmoke;
   cursor: pointer;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 8px 14px;
+  border-radius: 12px;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.btnBack:hover,
-.btnEdit:hover {
-  background: rgba(255, 255, 255, 0.05);
+.btnBackNav img {
+    filter: invert(1); 
+    width: 20px;
+    height: 20px;
 }
-
-/* HERO SECTION */
-.detalleHero {
-  padding: 40px 0 50px;
-  text-align: center;
-  background: transparent;
-}
-
-.detalleHero h1 {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: var(--color-text-light);
-  margin: 0 0 10px 0;
-  letter-spacing: -0.04em;
-}
-
-.detalleDesc {
-  font-size: 1rem;
-  color: var(--color-text-faded);
-  margin: 0 0 40px 0;
-  line-height: 1.5;
-}
-
-/* BOTÓN GRANDE DE ACTIVAR (Menos circular) */
-.btnBigPlay {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  background: var(--color-primary-blue);
-  color: var(--color-app-background); 
-  border: none;
-  /* Menos circular, más parecido al de la referencia */
-  border-radius: 12px; 
-  padding: 16px 35px; /* Menos padding */
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(92, 151, 242, 0.3);
-  transition: all 0.3s ease;
-}
-
-.btnBigPlay:hover {
+.btnBackNav:hover,
+.btnEdit:hover, .btnBigPlay:hover {
+  background: rgba(45, 50, 90, 0.6); /* Más opaco al hacer hover */
   transform: translateY(-1px);
-  background: #73a9f8;
-  box-shadow: 0 6px 16px rgba(92, 151, 242, 0.4);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.playIcon {
-    font-size: 1rem;
+.iconBack,
+.iconEdit {
+    font-size: 1.1rem;
 }
 
-/* CARDS GENÉRICAS */
+/* --- 3. CARDS Y LISTAS --- */
 .detalleCard {
-  background: var(--color-card-background);
-  backdrop-filter: blur(10px);
+  background: rgba(45, 50, 90, 0.4); 
+  backdrop-filter: blur(10px); 
   border-radius: 18px; 
   padding: 24px;
-  width: 100%;
-    margin: auto;
+  color: whitesmoke;
+  width: 90%;
+  box-sizing: border-box; 
   margin: 20px 0 0;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4); 
-  border: none; 
+  border: 1px solid rgba(255, 255, 255, 0.1); 
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
 }
 
-.cardTitle {
-  font-size: 1rem; 
-  font-weight: 700;
-  color: var(--color-text-light); 
-  margin: 0 0 20px 0;
-  opacity: 0.8; 
+.detalleHero{
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    flex-direction: column; 
+    text-align: center; 
+    margin-bottom: 20px;
+    color: whitesmoke;
+}
+svg{
+    width: 24px;
+    height: 24px;
 }
 
-/* LISTA DE DISPOSITIVOS */
+.activeWater svg {
+  color: #3b9fff; 
+  filter: drop-shadow(0 0 4px #3b9fff); 
+}
+
+.activeLight svg {
+  color: var(--scene-color, #FFF88C); 
+  filter: drop-shadow(0 0 6px var(--scene-color, #FFF88C)); 
+}
+
 .deviceListItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 0; 
+  padding: 12px 0; 
   border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
 }
 
-.deviceListItem:last-child {
-  border-bottom: none;
+.deviceIconAndLabel {
+    display: flex;
+    align-items: center;
+    gap: 10px; 
+    flex-shrink: 0; 
 }
 
-.deviceLabel {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--color-text-light);
+.deviceIcon {
+    flex-shrink: 0; 
 }
 
 .lightStatus {
@@ -184,118 +166,77 @@
     gap: 10px;
 }
 
-/* STATUS BADGES */
-.statusBadge {
-  display: inline-block;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-}
-
-.statusBadge.on {
-  background: rgba(92, 151, 242, 0.2); 
-  color: var(--color-primary-blue); 
-}
-
-.statusBadge.off {
-  background: var(--color-off); 
-  color: var(--color-text-faded);
-}
-
-.colorPreviewDot {
-  width: 20px; 
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid var(--color-text-light);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
-}
-
-/* DÍAS Y HORARIOS */
-.scheduleRow {
-  background: var(--color-off);
-  border-radius: 12px;
-  border: none; 
-  padding: 16px;
-}
-
-.scheduleIcon {
-  font-size: 2rem;
-  line-height: 1;
-  color: var(--color-primary-blue);
-}
-
-.scheduleTitle {
-  color: var(--color-text-light);
-}
-
-.scheduleText {
-  color: var(--color-text-faded);
-}
-
-/* HISTORIAL */
-.historyList li {
-  padding: 16px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.historyDate {
-  color: var(--color-text-light);
-}
-
-.historyType.manual {
-  background: rgba(92, 151, 242, 0.15);
-  color: var(--color-primary-blue);
-}
-
-.historyType.auto {
-  background: rgba(120, 130, 180, 0.15);
-  color: var(--color-text-faded);
-}
-
-/* ZONA DE PELIGRO */
+/* --- 4. BOTÓN DE ELIMINAR (Danger Zone) --- */
 .dangerZone {
-  padding: 20px 0;
+    margin-top: 40px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 .btnDelete {
-  width: 100%;
-  background: var(--color-card-background);
-  color: var(--color-delete);
-  border: 1px solid rgba(255, 255, 255, 0.05); 
-  border-radius: 18px;
-  padding: 16px 20px;
-  font-size: 1.05rem;
+  /* 🏆 ESTILO GLASSY PARA ELIMINAR */
+  background: rgba(246, 89, 89, 0.2); /* Rojo semi-transparente */
+  backdrop-filter: blur(8px); 
+  border: 1px solid rgba(246, 89, 89, 0.4); /* Borde rojo */
+  box-shadow: 0 4px 10px rgba(246, 89, 89, 0.3);
+  
+  color: var(--color-delete); 
   font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 12px;
   cursor: pointer;
-  transition: all 0.25s ease;
+  transition: all 0.2s ease;
 }
 
 .btnDelete:hover {
-  background: rgba(246, 89, 89, 0.1);
-  border-color: var(--color-delete);
+  background: rgba(246, 89, 89, 0.4);
+  transform: translateY(-1px);
 }
 
-/* RESPONSIVE */
+
+/* --- 5. RESPONSIVE --- */
 @media (max-width: 768px) {
-  .centerWrapper {
-      max-width: 100%; 
-      padding: 0 16px 80px;
-      min-width: 0;
-      
-  }
   
-  .detalleHeader {
-      padding: 16px 16px;
+  /* Botones: Se aplica el padding lateral aquí */
+  .detalleNavWrapper {
+      padding: 25px 16px 0; 
   }
 
+  .detalleHeader {
+      max-width: 100%;
+      min-width: 0; 
+      padding-right: 0; /* Aseguramos que no haya padding extra en móvil */
+  }
+  
+  /* Título: Se aplica el padding lateral aquí */
+  .headerTitleWrapper {
+      padding: 0 16px 20px;
+      margin-top: 50px;
+  }
+  
+  /* 🏆 CLAVE RESPONSIVE: Reducción adicional del título dinámico en móvil */
+  .headerTitleWrapper h1 {
+      font-size: 1.5rem; /* Tamaño más pequeño en móviles */
+      padding: 0 10px;
+  }
+
+
+  /* Contenido: Se mantiene el padding lateral y eliminamos anchos mínimos */
+  .centerWrapper {
+      max-width: 100%; 
+      padding: 0 16px 80px; 
+      margin-bottom: 70px;
+      min-width: 0; 
+  }
+  
   .detalleCard {
     margin: 16px 0 0;
     padding: 20px;
+    width: 100%; /* Ocupa todo el ancho en móvil */
   }
   
   .btnBigPlay {
-    padding: 14px 25px; /* Ajuste para móvil */
+    padding: 14px 25px; 
   }
 }

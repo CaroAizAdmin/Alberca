@@ -1,0 +1,477 @@
+/* ========================================================== */
+/* VARIABLES DE COLOR (Mismas que Detalle)                    */
+/* ========================================================== */
+:root {
+  --color-app-background: #191E3B; 
+  --color-card-background-glass: rgba(45, 50, 90, 0.4); 
+  --color-primary-blue: #5C97F2; 
+  --color-text-light: #F0F0F0;
+  --color-text-faded: #B0B3CC;
+  --color-success: #34c759;
+  --color-danger: #F65959; 
+  --color-border-glass: rgba(255, 255, 255, 0.1);
+  --color-progress-fill: #5C97F2; 
+}
+
+/* ========================================================== */
+/* 1. CONTENEDOR Y TÍTULO                                     */
+/* ========================================================== */
+
+.editContainer { /* Nombre modificado para evitar conflicto con 'edit-container' si existía globalmente */
+    min-height: 100vh;
+    padding: 0;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    padding: 30px 20px 80px; 
+    box-sizing: border-box;
+}
+
+/* 🏆 ESTILO DEL TÍTULO PRINCIPAL GRANDE */
+.editTitle {
+    font-size: 2.5rem; 
+    font-weight: 800; 
+    text-align: center;
+    margin: 50px 0 30px; 
+    line-height: 1.1;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); 
+    color: var(--color-text-light); /* Aseguramos que el color sea claro */
+}
+
+
+/* ========================================================== */
+/* 2. TARJETA PRINCIPAL (Form Card)                           */
+/* ========================================================== */
+
+.formCard {
+    background: var(--color-card-background-glass); 
+    backdrop-filter: blur(10px); 
+    border-radius: 18px; 
+    padding: 30px;
+    color: var(--color-text-light);
+    width: 100%;
+    max-width: 500px; 
+    box-sizing: border-box;
+    border: 1px solid var(--color-border-glass); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+}
+
+.formTitle {
+    color: var(--color-primary-blue);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-border-glass);
+    padding-bottom: 10px;
+}
+
+/* ========================================================== */
+/* 3. CAMPOS DE FORMULARIO                                    */
+/* ========================================================== */
+
+.formGroup {
+    margin-bottom: 25px;
+}
+
+.formLabel {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.formInput, 
+.formTextarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border-glass);
+    background: rgba(0, 0, 0, 0.3); 
+    color: var(--color-text-light);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.formInput:focus, 
+.formTextarea:focus {
+    outline: none;
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 2px rgba(92, 151, 242, 0.5); 
+}
+
+.formTextarea {
+    resize: vertical;
+}
+
+.errorMsg {
+    color: var(--color-danger);
+    margin-top: 8px;
+    font-size: 0.85rem;
+}
+
+
+/* ========================================================== */
+/* 4. BARRA DE PROGRESO (4 Pasos)                             */
+/* ========================================================== */
+
+.progressBarContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    margin-bottom: 40px;
+}
+
+.progressLine {
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.15);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.progressFill {
+    position: absolute;
+    height: 3px;
+    background-color: var(--color-progress-fill);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: width 0.3s ease-in-out;
+}
+
+.stepIndicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-text-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    z-index: 3;
+    transition: background-color 0.3s;
+    border: 2px solid transparent;
+}
+
+.stepIndicator.active {
+    background-color: var(--color-progress-fill);
+    border-color: var(--color-text-light);
+    box-shadow: 0 0 8px var(--color-progress-fill);
+}
+
+/* ========================================================== */
+/* 5. DISPOSITIVOS Y TOGGLES                                  */
+/* ========================================================== */
+
+.deviceRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.deviceRow:last-of-type {
+    border-bottom: none;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+}
+.switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15); 
+  transition: .4s;
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 4px;
+  bottom: 3px;
+  background-color: var(--color-text-light);
+  transition: .4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--color-primary-blue); 
+  box-shadow: 0 0 5px var(--color-primary-blue);
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.colorPickerWrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.modernColorInputContainer {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid var(--color-border-glass);
+    padding: 5px;
+}
+
+.modernColorInput {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 30px;
+    height: 30px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 6px;
+}
+
+.modernColorInput::-webkit-color-swatch {
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.modernColorInput::-moz-color-swatch {
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.colorCode {
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 10px;
+    color: var(--color-text-light);
+    padding-right: 5px;
+}
+
+/* ========================================================== */
+/* 6. ESTILOS DE PROGRAMACIÓN (Horarios y Días)               */
+/* ========================================================== */
+
+.daySelectorContainer {
+    display: flex;
+    justify-content: space-between;
+    gap: 5px;
+    margin-bottom: 20px;
+    padding: 5px 0;
+}
+
+.dayButton {
+    /* Estilo Glassy base */
+    background: rgba(45, 50, 90, 0.2); 
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    
+    /* Forma y Contenido */
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    color: var(--color-text-faded);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+}
+
+.dayButton:hover:not(.selected) {
+    background: rgba(45, 50, 90, 0.4); 
+    color: var(--color-text-light);
+}
+
+.dayButton.selected {
+    background: var(--color-primary-blue); 
+    border-color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-light);
+    box-shadow: 0 0 8px rgba(92, 151, 242, 0.7); 
+    transform: translateY(-1px);
+}
+
+/* Ajuste para input type="time" */
+.formInput[type="time"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 12px 15px;
+    height: auto; 
+    
+    /* 🎨 ESTILOS AÑADIDOS/MODIFICADOS PARA VISIBILIDAD */
+    color: var(--color-text-light); /* Asegura texto blanco en el campo */
+    background: rgba(0, 0, 0, 0.4); /* Fondo más oscuro para contraste */
+}
+
+/* --- ESTILOS ADICIONALES PARA EL INPUT DE HORA --- */
+
+/* Estiliza los pseudo-elementos del input de tiempo (funciona en Chrome/Edge) */
+.formInput[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Invierte el color del icono de reloj para que sea blanco */
+    cursor: pointer;
+}
+
+/* Nota: Los estilos para el menú desplegable (popup) del selector de hora
+   son muy limitados y varían entre navegadores (por ejemplo, el fondo azul 
+   de la lista no se puede cambiar con CSS estándar). 
+   Con esta modificación, el campo de texto del input ya se verá blanco. */
+
+
+/* ========================================================== */
+/* 7. BOTONES DE NAVEGACIÓN Y ACCIÓN (GLASSY)                 */
+/* ========================================================== */
+
+.buttonsContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+ .btnNav {
+    flex-grow: 1;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    color: var(--color-text-light);
+} 
+
+
+/* Botón Atrás (Prev) */
+.btnPrev {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-light);
+}
+.btnPrev:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* 🏆 Botón Siguiente/Guardar (Next - Glassy Azul/Verde) */
+.btnNext {
+    /* Base Glassy Azul */
+    background: rgba(92, 151, 242, 0.2); 
+    backdrop-filter: blur(8px); 
+    border: 1px solid rgba(92, 151, 242, 0.4); 
+    box-shadow: 0 4px 10px rgba(92, 151, 242, 0.3);
+}
+
+/* Efecto hover */
+.btnNext:hover:not(:disabled) {
+    background: rgba(92, 151, 242, 0.4); 
+    transform: translateY(-1px);
+    opacity: 1; 
+}
+
+/* Estilo para cuando está deshabilitado */
+.btnNext[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    background: rgba(92, 151, 242, 0.1); 
+    border-color: rgba(92, 151, 242, 0.2); 
+}
+
+/* AJUSTE PARA EL COLOR VERDE (Guardar Cambios) */
+/* El JSX usa style={{backgroundColor: 'var(--color-success)'}} para activarlo */
+.btnNext[style*="--color-success"] {
+    background: rgba(52, 199, 89, 0.2) !important; 
+    border-color: rgba(52, 199, 89, 0.4) !important;
+    box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3) !important;
+}
+
+.btnNext[style*="--color-success"]:hover:not(:disabled) {
+    background: rgba(52, 199, 89, 0.4) !important; 
+}
+
+
+/* ========================================================== */
+/* 8. ESTILOS SVG Y RESUMEN                                   */
+/* ========================================================== */
+
+/* Estilo por defecto (Inactivo o apagado) */
+.svgInactive svg {
+    stroke: var(--color-text-faded, #B0B3CC); 
+}
+
+/* Estilo Activo (Cuando el toggle está ON) */
+.svgActive svg {
+    stroke: var(--color-primary-blue, #5C97F2); 
+    filter: drop-shadow(0 0 4px rgba(92, 151, 242, 0.6)); 
+}
+
+.summaryList strong {
+    color: var(--color-primary-blue);
+    font-weight: 700;
+    display: inline-block;
+    width: 100px;
+}
+
+/* ========================================================== */
+/* 9. RESPONSIVE                                              */
+/* ========================================================== */
+@media (max-width: 768px) {
+    .editContainer {
+        padding: 20px 16px 80px;
+    }
+
+    .formCard {
+        padding: 20px;
+        max-width: 100%;
+    }
+    
+    .editTitle {
+        margin-top: 20px;
+        font-size: 2rem; 
+    }
+    
+    .progressBarContainer {
+        margin-bottom: 30px;
+    }
+    
+    .btnNav {
+        padding: 10px 15px;
+    }
+    
+    .daySelectorContainer {
+        gap: 3px;
+    }
+    .dayButton {
+        width: 38px;
+        height: 38px;
+        font-size: 0.8rem;
+    }
+}

@@ -2,16 +2,63 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
-import './GestorEscenas.css';
+import styles from './GestorEscenas.module.css';
+
+// ==========================================================
+// CONFIGURACIÓN GLOBAL (SIN CAMBIOS)
+// ==========================================================
+
+const DAYS_OF_WEEK = [
+    { key: 'mon', label: 'Lun' },
+    { key: 'tue', label: 'Mar' },
+    { key: 'wed', label: 'Mié' },
+    { key: 'thu', label: 'Jue' },
+    { key: 'fri', label: 'Vie' },
+    { key: 'sat', label: 'Sáb' },
+    { key: 'sun', label: 'Dom' },
+];
+
+// SVG para Chorros de Agua
+const CHORROS_SVG = (
+    <svg 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+        style={{ width: '24px', height: '24px' }} 
+    >
+        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+    </svg>
+);
+
+// SVG para Luces
+const LUCES_SVG = (
+    <svg 
+        viewBox="0 0 24 24" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        strokeLinecap="round" 
+        strokeLinejoin="round"
+        style={{ width: '24px', height: '24px' }} 
+    >
+        <line x1="12" y1="1" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="7.05" y2="7.05"></line><line x1="16.95" y1="16.95" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="7.05" y2="16.95"></line><line x1="16.95" y1="7.05" x2="19.78" y2="4.22"></line>
+    </svg>
+);
+
 
 const GestorEscenas = ({ escena, setEscenas }) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // --- LÓGICA DE MUTACIÓN (POST) SIN ASYNC/AWAIT ---
+  // --- LÓGICA DE MUTACIÓN (POST) ---
   const mutation = useMutation({
     mutationFn: (nuevaEscena) => {
-      // Retornamos directamente el fetch
       return fetch(`${URL_BASE}/escenas.json`, {
         method: 'POST',
         headers: {
@@ -20,7 +67,6 @@ const GestorEscenas = ({ escena, setEscenas }) => {
         body: JSON.stringify(nuevaEscena),
       })
       .then((response) => {
-        // Verificamos si la respuesta es correcta
         if (!response.ok) {
           throw new Error('Error al guardar la escena');
         }
@@ -28,21 +74,19 @@ const GestorEscenas = ({ escena, setEscenas }) => {
       });
     },
     onSuccess: () => {
-      // Si todo sale bien:
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
       alert("¡Escena guardada en la nube!");
       navigate('/escenas'); 
     },
     onError: (error) => {
-      // Si falla:
       alert(`Error: ${error.message}`);
     }
   });
 
 
-  // --- RESTO DEL COMPONENTE (Mismo código de UI y Pasos) ---
+  // --- ESTADOS DEL FORMULARIO ---
   const [step, setStep] = useState(1);
-  const [error, setError] = useState("");
+  const [errorLocal, setErrorLocal] = useState("");
 
   const [formData, setFormData] = useState({
     name: "",
@@ -53,25 +97,69 @@ const GestorEscenas = ({ escena, setEscenas }) => {
         estado: false,
         color: { r: 255, g: 255, b: 255 }
       }
+    },
+    schedule: {
+      enabled: false,
+      days: [], 
+      time: "19:00" 
     }
   });
 
+  // --- FUNCIONES DE AYUDA Y HANDLERS (SIN CAMBIOS) ---
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-    setError("");
+    setErrorLocal("");
   };
+
+  const handleScheduleChange = (key, value) => {
+      setFormData(prev => ({
+          ...prev,
+          schedule: {
+              ...prev.schedule,
+              [key]: value
+          }
+      }));
+      setErrorLocal("");
+  };
+
+  const handleDayToggle = (dayKey) => {
+      setFormData(prev => {
+          const { days } = prev.schedule;
+          const newDays = days.includes(dayKey)
+              ? days.filter(d => d !== dayKey) 
+              : [...days, dayKey]; 
+              
+          return {
+              ...prev,
+              schedule: {
+                  ...prev.schedule,
+                  days: newDays
+              }
+          };
+      });
+      setErrorLocal("");
+  };
+
 
   const handleNext = () => {
     if (step === 1) {
-      if (!formData.name.trim()) {
-        setError("El nombre de la escena es obligatorio.");
+      if (!formData.name || !formData.name.trim()) {
+        setErrorLocal("El nombre de la escena es obligatorio.");
         return;
       }
     }
+    if (step === 3) {
+      if (formData.schedule.enabled && formData.schedule.days.length === 0) {
+        setErrorLocal("Debes seleccionar al menos un día para la programación automática.");
+        return;
+      }
+    }
+    setErrorLocal("");
     setStep(step + 1);
   };
 
   const handleBack = () => {
+    setErrorLocal("");
     setStep(step - 1);
   };
 
@@ -93,8 +181,8 @@ const GestorEscenas = ({ escena, setEscenas }) => {
   };
 
 
-// 1. Convierte el objeto RGB {r,g,b} a string Hex "#RRGGBB" para el input
   const rgbToHex = (r, g, b) => {
+    if (r === undefined || g === undefined || b === undefined) return "#ffffff";
     const toHex = (c) => {
       const hex = c.toString(16);
       return hex.length === 1 ? "0" + hex : hex;
@@ -102,7 +190,6 @@ const GestorEscenas = ({ escena, setEscenas }) => {
     return "#" + toHex(r) + toHex(g) + toHex(b);
   };
 
-  // 2. Convierte string Hex "#RRGGBB" a objeto {r,g,b} para guardar en tu estado
   const hexToRgb = (hex) => {
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);
@@ -110,12 +197,10 @@ const GestorEscenas = ({ escena, setEscenas }) => {
     return { r, g, b };
   };
 
-  // --- NUEVO MANEJADOR DEL INPUT COLOR ---
   const handleColorPickerChange = (e) => {
     const hexColor = e.target.value;
     const { r, g, b } = hexToRgb(hexColor);
     
-    // Actualizamos el estado igual que antes
     setFormData(prev => ({
       ...prev,
       actions: { 
@@ -126,81 +211,109 @@ const GestorEscenas = ({ escena, setEscenas }) => {
   };
 
 
-
-
-
-  // Guardar usando la mutación
   const handleSave = () => {
     mutation.mutate(formData);
   };
 
+  // Clases condicionales para los SVGs
+  const chorrosIconClass = `${formData.actions.chorrosAgua ? styles.svgActive : styles.svgInactive}`;
+  const lucesIconClass = `${formData.actions.luces.estado ? styles.svgActive : styles.svgInactive}`;
+
+  // Para el resumen
+  const selectedDaysLabels = formData.schedule.days.map(key => 
+      DAYS_OF_WEEK.find(day => day.key === key)?.label || key
+  ).join(', ');
+
+  // Cálculo del progreso (4 pasos)
+  const progressWidth = step === 1 ? '0%' : 
+                        step === 2 ? '33%' : 
+                        step === 3 ? '66%' : '100%';
+
+
   return (
-    <div className="gestor-container">
-      
-      {/* BARRA DE PROGRESO */}
-      <div className="progress-bar-container">
-        <div className="progress-line"></div>
-        <div className="progress-fill" style={{ width: step === 1 ? '0%' : step === 2 ? '50%' : '100%' }}></div>
+    // 🏆 CLASE CORREGIDA: styles.editContainer
+    <div className={styles.editContainer}>
+
+      {/* BARRA DE PROGRESO (4 puntos) */}
+      <div className={styles.progressBarContainer}>
+        <div className={styles.progressLine}></div>
+        <div className={styles.progressFill} style={{ width: progressWidth }}></div>
         
-        <div className={`step-indicator ${step >= 1 ? 'active' : ''}`}>1</div>
-        <div className={`step-indicator ${step >= 2 ? 'active' : ''}`}>2</div>
-        <div className={`step-indicator ${step >= 3 ? 'active' : ''}`}>3</div>
+        <div className={`${styles.stepIndicator} ${step >= 1 ? styles.active : ''}`}>1</div>
+        <div className={`${styles.stepIndicator} ${step >= 2 ? styles.active : ''}`}>2</div>
+        <div className={`${styles.stepIndicator} ${step >= 3 ? styles.active : ''}`}>3</div>
+        <div className={`${styles.stepIndicator} ${step >= 4 ? styles.active : ''}`}>4</div>
       </div>
 
-      <div className="form-card">
+      {/* 🏆 CLASE CORREGIDA: styles.formCard */}
+      <div className={styles.formCard}>
         
         {/* PASO 1: Identidad */}
         {step === 1 && (
-          <div className="step-content">
-            <h2 className="form-title">Nombra tu Escena</h2>
-            <div className="form-group">
-              <label className="form-label">Nombre de la escena</label>
+          <div className={styles.stepContent}>
+            <h2 className={styles.formTitle}>1. Identidad</h2>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Nombre</label>
               <input 
-                type="text" name="name" className="form-input" 
-                placeholder="Ej. Relax Nocturno"
+                type="text" name="name" className={styles.formInput} 
+                placeholder="Ej. Fiesta Acuática"
                 value={formData.name} onChange={handleChange}
               />
-              {error && <p className="error-msg">{error}</p>}
+              {errorLocal && <p className={styles.errorMsg}>{errorLocal}</p>}
             </div>
-            <div className="form-group">
-              <label className="form-label">Descripción (Opcional)</label>
+            <div className={styles.formGroup}>
+              <label className={styles.formLabel}>Descripción</label>
               <textarea 
-                name="descripcion" className="form-textarea" rows="3"
-                placeholder="¿Qué hace esta escena?"
+                name="descripcion" className={styles.formTextarea} rows="3"
+                placeholder="Descripción opcional"
                 value={formData.descripcion} onChange={handleChange}
               ></textarea>
             </div>
           </div>
         )}
 
-        {/* PASO 2: Dispositivos */}
+        {/* PASO 2: Dispositivos (Con SVGs y estilos) */}
         {step === 2 && (
-          <div className="step-content">
-            <h2 className="form-title">Configura Dispositivos</h2>
-            <div className="device-row">
-              <span className="form-label" style={{margin:0}}>🌊 Chorros de Agua</span>
-              <label className="switch">
+          <div className={styles.stepContent}>
+            <h2 className={styles.formTitle}>2. Dispositivos</h2>
+            
+            {/* Fila Chorros */}
+            <div className={styles.deviceRow}>
+              <span className={styles.formLabel} style={{margin:0}}>
+                <span className={chorrosIconClass} style={{marginRight: '8px', verticalAlign: 'middle', display: 'inline-block'}}>
+                    {CHORROS_SVG}
+                </span>
+                Chorros
+              </span>
+              <label className={styles.switch}>
                 <input type="checkbox" checked={formData.actions.chorrosAgua} onChange={() => handleToggle('chorros')} />
-                <span className="slider"></span>
+                <span className={styles.slider}></span>
               </label>
             </div>
-            <div className="device-row">
-              <span className="form-label" style={{margin:0}}>💡 Luces Piscina</span>
-              <label className="switch">
+            
+            {/* Fila Luces */}
+            <div className={styles.deviceRow}>
+              <span className={styles.formLabel} style={{margin:0}}>
+                <span className={lucesIconClass} style={{marginRight: '8px', verticalAlign: 'middle', display: 'inline-block'}}>
+                    {LUCES_SVG}
+                </span>
+                Luces
+              </span>
+              <label className={styles.switch}>
                 <input type="checkbox" checked={formData.actions.luces.estado} onChange={() => handleToggle('luces')} />
-                <span className="slider"></span>
+                <span className={styles.slider}></span>
               </label>
             </div>
+
             {formData.actions.luces.estado && (
-                <div className="form-group" style={{marginTop: 20}}>
-                    <div className="color-picker-wrapper">
-                        <label className="form-label">Elige un color exacto:</label>
-                        
-                        <div className="modern-color-input-container">
+                <div className={styles.formGroup} style={{marginTop: 20}}>
+                    <div className={styles.colorPickerWrapper}>
+                        <label className={styles.formLabel}>Color:</label>
+                        <div className={styles.modernColorInputContainer}>
                             {/* Input de color nativo */}
                             <input 
                                 type="color" 
-                                className="modern-color-input"
+                                className={styles.modernColorInput}
                                 value={rgbToHex(
                                     formData.actions.luces.color.r, 
                                     formData.actions.luces.color.g, 
@@ -209,8 +322,8 @@ const GestorEscenas = ({ escena, setEscenas }) => {
                                 onChange={handleColorPickerChange}
                             />
                             
-                            {/* Texto que muestra el código Hex al lado (opcional) */}
-                            <span className="color-code">
+                            {/* Texto que muestra el código Hex al lado */}
+                            <span className={styles.colorCode}>
                                 {rgbToHex(
                                     formData.actions.luces.color.r, 
                                     formData.actions.luces.color.g, 
@@ -224,37 +337,104 @@ const GestorEscenas = ({ escena, setEscenas }) => {
           </div>
         )}
 
-        {/* PASO 3: Resumen */}
+        {/* 🏆 PASO 3: PROGRAMACIÓN */}
         {step === 3 && (
-          <div className="step-content">
-            <h2 className="form-title">Resumen</h2>
-            <div className="summary-list">
+            <div className={styles.stepContent}>
+                <h2 className={styles.formTitle}>3. Programación</h2>
+                
+                {/* Toggle de Programación */}
+                <div className={styles.deviceRow}>
+                    <span className={styles.formLabel} style={{margin:0}}>
+                        Activación Automática
+                    </span>
+                    <label className={styles.switch}>
+                        <input 
+                            type="checkbox" 
+                            checked={formData.schedule.enabled} 
+                            onChange={() => handleScheduleChange('enabled', !formData.schedule.enabled)} 
+                        />
+                        <span className={styles.slider}></span>
+                    </label>
+                </div>
+                
+                {formData.schedule.enabled && (
+                    <>
+                        {errorLocal && <p className={styles.errorMsg}>{errorLocal}</p>}
+
+                        {/* Selección de Días */}
+                        <div className={styles.formGroup} style={{marginTop: 25}}>
+                            <label className={styles.formLabel}>Días de la semana:</label>
+                            <div className={styles.daySelectorContainer}>
+                                {DAYS_OF_WEEK.map(day => (
+                                    <button
+                                        key={day.key}
+                                        // 🏆 CLASES CORREGIDAS
+                                        className={`${styles.dayButton} ${formData.schedule.days.includes(day.key) ? styles.selected : ''}`}
+                                        onClick={() => handleDayToggle(day.key)}
+                                    >
+                                        {day.label} 
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Selección de Hora */}
+                        <div className={styles.formGroup}>
+                            <label className={styles.formLabel}>Hora de inicio:</label>
+                            <input
+                                type="time"
+                                className={styles.formInput}
+                                value={formData.schedule.time}
+                                onChange={(e) => handleScheduleChange('time', e.target.value)}
+                            />
+                        </div>
+                    </>
+                )}
+            </div>
+        )}
+
+
+        {/* PASO 4: Resumen y Revisar */}
+        {step === 4 && (
+          <div className={styles.stepContent}>
+            <h2 className={styles.formTitle}>4. Resumen</h2>
+            <div className={styles.summaryList}>
                 <p><strong>Nombre:</strong> {formData.name}</p>
-                <p><strong>Descripción:</strong> {formData.descripcion || "Sin descripción"}</p>
-                <hr style={{margin: '15px 0', border: 'none', borderTop: '1px solid #eee'}}/>
-                <p><strong>Chorros:</strong> {formData.actions.chorrosAgua ? "✅ Encendidos" : "❌ Apagados"}</p>
-                <p><strong>Luces:</strong> {formData.actions.luces.estado ? "✅ Encendidas" : "❌ Apagadas"}</p>
+                <p><strong>Descripción:</strong> {formData.descripcion || "-"}</p>
+                <hr style={{margin: '15px 0', border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.1)'}}/>
+                <p><strong>Chorros:</strong> {formData.actions.chorrosAgua ? "ON" : "OFF"}</p>
+                <p><strong>Luces:</strong> {formData.actions.luces.estado ? `ON (${rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b)})` : "OFF"}</p>
+                <hr style={{margin: '15px 0', border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.1)'}}/>
+                <p><strong>Auto ON:</strong> {formData.schedule.enabled ? "Sí" : "No"}</p>
+                {formData.schedule.enabled && (
+                    <>
+                        <p><strong>Días:</strong> {selectedDaysLabels || "Ninguno"}</p>
+                        <p><strong>Hora:</strong> {formData.schedule.time}</p>
+                    </>
+                )}
             </div>
           </div>
         )}
 
+
         {/* BOTONES */}
-        <div className="buttons-container">
+        <div className={styles.buttonsContainer}>
           {step > 1 && (
-            <button className="btn-nav btn-prev" onClick={handleBack}>
+            <button className={`${styles.btnNav} ${styles.btnPrev}`} onClick={handleBack}>
               Atrás
             </button>
           )}
           
-          {step < 3 ? (
-            <button className="btn-nav btn-next" onClick={handleNext}>
+          {step < 4 ? (
+            <button className={`${styles.btnNav} ${styles.btnNext}`} onClick={handleNext}>
               Siguiente
             </button>
           ) : (
             <button 
-              className="btn-nav btn-next" 
+              className={`${styles.btnNav} ${styles.btnNext}`} 
               onClick={handleSave} 
-              style={{backgroundColor: '#34c759'}}
+              // Usamos el estilo en línea para activar la clase Glassy Verde
+              style={{backgroundColor: 'var(--color-success)'}} 
               disabled={mutation.isPending}
             >
               {mutation.isPending ? "Guardando..." : "Confirmar y Guardar"}
@@ -263,7 +443,7 @@ const GestorEscenas = ({ escena, setEscenas }) => {
         </div>
         
         {/* Mensaje de error si falla */}
-        {mutation.isError && <p className="error-msg" style={{textAlign:'center', marginTop:10}}>Error: {mutation.error.message}</p>}
+        {mutation.isError && <p className={styles.errorMsg} style={{textAlign:'center', marginTop:10}}>Error: {mutation.error.message}</p>}
 
       </div>
     </div>
