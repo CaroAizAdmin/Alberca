@@ -25,7 +25,7 @@ body {
   /* Ajuste de tamaño y posición */
   background-size: cover; 
   background-repeat: no-repeat;
-  background-position: center center; 
+  background-position: center bottom; 
   
   /* Propiedades de Scroll y Ancho */
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -79,17 +79,7 @@ body {
    3. MENÚ (BARRA DE NAVEGACIÓN INFERIOR)
    ========================================= */
 
-.menu {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: #ffffff;
-  border-top: 1px solid #e0e0e0;
-  z-index: 1000; 
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-}
+
 
 .navbar {
   margin: auto;

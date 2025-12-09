@@ -3,26 +3,36 @@
   --color-text-light: #F0F0F0;
 }
 
-/* 1. CONTENEDOR PRINCIPAL: Posicionamiento y Desplazamiento */
+/* 1. CONTENEDOR PRINCIPAL */
 .headerContainer {
-  /* Alineación y ancho */
-  width: 100%;
+    background-color: white;
+    display: flex;
+    top: -100px;
+    padding: 0 40px;
+/*   width: 100vw;
   display: flex;
-  justify-content: flex-start; /* Alineado a la izquierda */
+  justify-content: flex-start; 
   padding: 0 40px; 
-  
-  /* Desplazamiento hacia abajo (Ajusta este valor) */
-  margin-top: 150px; /* Ejemplo de margen superior para pasar la 'ola' */
-  margin-bottom: 30px;
+margin-bottom: 30px;
+top: -100px;
+
   position: relative; 
   z-index: 50; 
+  width: 100%; */
+  /* 🏆 CLAVE: IMAGEN DE FONDO */
+ /*  background-image: url('../assets/imagenes/fondo-header1.png');
+
+  background-repeat: no-repeat;
+  background-position: center center; 
+  
+  min-height: 350px;  */
 }
 
 /* 2. ESTILO DEL NOMBRE DINÁMICO */
 .dynamicTitle {
-  font-size: 2.5rem; /* Tamaño de título principal */
-  font-weight: 800;
+  font-size: 3rem; 
+  font-weight: 900; 
   color: var(--color-text-light);
-  margin: 0;
+  margin-top: 300px;
   padding: 0;
 }
