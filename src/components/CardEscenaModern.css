@@ -1,86 +1,82 @@
-.card {
-  position: relative;
-  padding: 24px;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+/* VARIABLES DE COLOR (Replicando la estética oscura y sobria) */
+:root {
+  --color-text-light: #F0F0F0;
+  --color-text-faded: #B0B3CC;
+  --color-separator: rgba(255, 255, 255, 0.08); /* Línea divisoria muy sutil */
+}
 
+/* CONTENEDOR PRINCIPAL DE LA TARJETA */
+.cardEscena {
+  /* Estilo base: una sola línea (Flexbox) y sin borde/relleno */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0; 
+  
+  /* Separación: solo una línea inferior */
+  border-bottom: 1px solid var(--color-separator); 
+  background-color: transparent; 
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-
-  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
-
-  /* Glow dinámico */
-  box-shadow: 0 0 25px var(--glow-color);
+  transition: background-color 0.2s ease;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 35px var(--glow-color), 0 4px 20px rgba(0,0,0,0.1);
+.cardEscena:hover {
+  background-color: rgba(255, 255, 255, 0.03); /* Fondo sutil al pasar el mouse */
 }
 
-/* ------------------------------ */
-/* HEADER */
-/* ------------------------------ */
-.header h3 {
-  margin: 0;
-  font-size: 1.4rem;
-  color: #123;
-  font-weight: 700;
+/* Contenedor de Información (Nombre y Descripción - Izquierda) */
+.infoWrapper {
+  flex-grow: 1; /* Ocupa el espacio restante */
+  min-width: 0;
+  padding-right: 20px;
 }
 
-.header p {
-  margin: 4px 0 14px;
-  font-size: 0.9rem;
-  color: #123a;
-}
-
-/* ------------------------------ */
-/* GRID */
-/* ------------------------------ */
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-  margin-top: 16px;
-}
-
-.item {
-  padding: 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.25);
-  backdrop-filter: blur(10px);
-  font-size: 0.9rem;
-  color: #123;
-  text-align: center;
-  font-weight: 500;
-  transition: background 0.2s ease;
-}
-
-.item:hover {
-  background: rgba(255, 255, 255, 0.4);
-}
-
-/* ------------------------------ */
-/* BOTÓN EDITAR */
-/* ------------------------------ */
-.editButton {
-  margin-top: 20px;
-  width: 100%;
-  padding: 10px;
-  border-radius: 14px;
-
-  background: #fff;
-  color: #123;
-  border: none;
+.escenaTitle {
+  font-size: 1.1rem;
   font-weight: 600;
-  cursor: pointer;
-
-  transition: background 0.2s ease, transform 0.2s ease;
+  color: var(--color-text-light);
+  margin: 0;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
 }
 
-.editButton:hover {
-  background: #e6f3ff;
-  transform: scale(1.02);
+.escenaDesc {
+  font-size: 0.85rem;
+  color: var(--color-text-faded);
+  margin: 4px 0 0;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+}
+
+/* Contenedor de Iconos (Centro/Derecha) */
+.iconosWrapper {
+  display: flex;
+  gap: 15px; /* Separación entre iconos */
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.iconItem {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deviceIcon {
+  width: 100%;
+  height: auto;
+  /* La opacidad está controlada por el JS para reflejar el estado */
+  transition: opacity 0.3s ease;
+}
+
+/* Flecha de Navegación (Extremo Derecho) */
+.arrow {
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: var(--color-text-faded);
 }

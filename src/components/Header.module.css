@@ -1,0 +1,28 @@
+/* VARIABLES DE COLOR */
+:root {
+  --color-text-light: #F0F0F0;
+}
+
+/* 1. CONTENEDOR PRINCIPAL: Posicionamiento y Desplazamiento */
+.headerContainer {
+  /* Alineación y ancho */
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* Alineado a la izquierda */
+  padding: 0 40px; 
+  
+  /* Desplazamiento hacia abajo (Ajusta este valor) */
+  margin-top: 150px; /* Ejemplo de margen superior para pasar la 'ola' */
+  margin-bottom: 30px;
+  position: relative; 
+  z-index: 50; 
+}
+
+/* 2. ESTILO DEL NOMBRE DINÁMICO */
+.dynamicTitle {
+  font-size: 2.5rem; /* Tamaño de título principal */
+  font-weight: 800;
+  color: var(--color-text-light);
+  margin: 0;
+  padding: 0;
+}
