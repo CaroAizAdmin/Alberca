@@ -94,14 +94,20 @@ const EditarEscena = () => {
     }
   });
 
-  // --- 3. EFECTO PARA RELLENAR EL FORMULARIO ---
+// --- 3. EFECTO PARA RELLENAR EL FORMULARIO ---
   useEffect(() => {
     if (escenaDatos) {
-        // Asegura que los campos schedule y actions existen si vienen incompletos de la API
+        // Asegura que los campos schedule y actions existen
         const initialData = {
             ...escenaDatos,
             actions: escenaDatos.actions || { chorrosAgua: false, luces: { estado: false, color: { r: 255, g: 255, b: 255 } } },
-            schedule: escenaDatos.schedule || { enabled: false, days: [], time: "19:00" }
+            // 🛑 AQUÍ ESTÁ EL CAMBIO CLAVE:
+            schedule: {
+                enabled: escenaDatos.schedule?.enabled || false,
+                // Si 'days' no existe en la BD, forzamos un array vacío []
+                days: escenaDatos.schedule?.days || [], 
+                time: escenaDatos.schedule?.time || "19:00"
+            }
         };
         setFormData(initialData);
     }
@@ -255,9 +261,9 @@ const EditarEscena = () => {
   const lucesIconClass = `${formData.actions.luces.estado ? styles.svgActive : styles.svgInactive}`;
 
   // Para el resumen
-  const selectedDaysLabels = formData.schedule.days.map(key => 
+  const selectedDaysLabels = formData.schedule.days?.map(key => 
       DAYS_OF_WEEK.find(day => day.key === key)?.label || key
-  ).join(', ');
+).join(', ') || "Ninguno";
   
   // Cálculo del progreso (4 pasos)
   const progressWidth = step === 1 ? '0%' : 
