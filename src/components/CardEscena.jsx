@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './CardEscena.module.css';
+// 👇 IMPORTANTE: Importa tus imágenes aquí.
+import imgChorros from '../assets/imagenes/chorros.png';
+import imgLuces from '../assets/imagenes/luces.png';
 
 const CardEscena = ({ id, escena }) => {
   const navigate = useNavigate();
@@ -10,7 +13,7 @@ const CardEscena = ({ id, escena }) => {
   const aguaOn = escena.actions?.chorrosAgua;
   const lucesOn = luces.estado;
   
-  // Normalización del color
+  // Normalización del color (Crucial para el borde dinámico)
   let colorRGB = "rgb(255, 255, 255)";
   if (luces.color) {
     if (typeof luces.color === 'string') {
@@ -21,54 +24,56 @@ const CardEscena = ({ id, escena }) => {
     }
   }
 
-  // 🏆 HANDLER DE NAVEGACIÓN
+  // Navegación al detalle
   const navigateToDetail = () => {
-    // Usamos el ID (clave de Firebase) para ir al detalle
     navigate(`/escenas/${id}`); 
   };
+
+  // 🏆 EJECUCIÓN RÁPIDA (Sin navegar)
+  const handleQuickRun = (e) => {
+    e.stopPropagation(); // 🛑 Evita entrar al detalle
+    alert(`🚀 Ejecutando escena: ${escena.name}`);
+    // Aquí iría tu lógica real de activación (mutación)
+  };
   
-  // --- ESTRUCTURA DE LÍNEA SIMPLE ---
   return (
     <div 
       className={styles.modernCardLine} 
-      onClick={navigateToDetail} // 🏆 CLAVE: El clic en toda la tarjeta navega
-      style={{ 
-        '--scene-color': colorRGB, // Necesario para los estilos neón
-      }}
+      onClick={navigateToDetail}
+      // Pasamos el color como variable CSS para usarlo en los bordes
+      style={{ '--scene-color': colorRGB }}
     >
       
       {/* 1. INFORMACIÓN (Izquierda) */}
       <div className={styles.infoWrapper}>
         <h3 className={styles.sceneTitle}>{escena.name}</h3>
-        <p className={styles.sceneDescription}>{escena.descripcion}</p>
+        <p className={styles.sceneDescription}>{escena.descripcion || "Sin descripción"}</p>
+        
+        {/* Badge de Horario (Si es automático) */}
+        {escena.schedule?.enabled && (
+             <span className={styles.autoBadge}>
+                ⏰ {escena.schedule.time}
+             </span>
+         )}
       </div>
 
-      {/* 2. ÍCONOS Y FLECHA (Derecha) */}
+      {/* 2. ÍCONOS Y CONTROLES (Derecha) */}
       <div className={styles.iconosWrapper}>
         
-        {/* Ícono de Luces */}
-        <div 
-          // Añadimos la clase 'activeLight' si está encendido
-          className={`${styles.iconItem} ${lucesOn ? styles.activeLight : ''}`}
-        >
-          {/* SVG de Luz */}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="1" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="7.05" y2="7.05"></line><line x1="16.95" y1="16.95" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="7.05" y2="16.95"></line><line x1="16.95" y1="7.05" x2="19.78" y2="4.22"></line>
-          </svg>
+        {/* Ícono de Luces (PNG) */}
+        <div className={`${styles.iconItem} ${lucesOn ? styles.activeLight : ''}`}>
+           <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
         </div>
         
-        {/* Ícono de Agua/Chorros */}
-        <div 
-          className={`${styles.iconItem} ${aguaOn ? styles.activeWater : ''}`}
-        >
-          {/* SVG de Agua */}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-          </svg>
+        {/* Ícono de Agua/Chorros (PNG) */}
+        <div className={`${styles.iconItem} ${aguaOn ? styles.activeWater : ''}`}>
+           <img src={imgChorros} alt="Chorros" className={styles.deviceImage} />
         </div>
+
+        {/* 🏆 BOTÓN PLAY RÁPIDO */}
+        <button className={styles.quickPlayBtn} onClick={handleQuickRun}>
+            ▶
+        </button>
         
         {/* Flecha de Detalle */}
         <div className={styles.arrow}>

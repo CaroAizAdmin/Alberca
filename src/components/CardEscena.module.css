@@ -1,122 +1,157 @@
-
-/* CONTENEDOR PRINCIPAL DE LA TARJETA (Clase: Línea) */
 .modernCardLine {
-  width: auto; 
+  /* Estilo base de la tarjeta horizontal */
   display: flex;
-  justify-content: space-between; 
-  align-items: center; 
-  
-  /* Altura Reducida */
-  padding: 12px 0; 
-  
-  /* Margen Lateral Consistente */
-  margin: 0 20px; 
-  
-  color: aliceblue;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05); /* Fondo muy sutil */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 15px 20px;
+  margin-bottom: 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  
-  /* EFECTO GLASSY */
-  background-color: rgba(255, 255, 255, 0.03); 
-  backdrop-filter: blur(5px); 
-  -webkit-backdrop-filter: blur(5px);
-  
-  /* Bordes curvados */
-  border-radius: 12px; 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
 }
 
 .modernCardLine:hover {
-  background-color: rgba(255, 255, 255, 0.08); 
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(5px); /* Pequeño movimiento al pasar el mouse */
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* -------------------------------------- */
-/* 1. INFORMACIÓN (IZQUIERDA) */
-/* -------------------------------------- */
+/* SECCIÓN IZQUIERDA: Texto */
 .infoWrapper {
-  flex-grow: 1; 
-  min-width: 0; 
-  padding-left: 20px; 
+  flex: 1; /* Toma el espacio disponible */
+  margin-right: 15px;
 }
 
 .sceneTitle {
-  margin: 0 0 2px 0;
+  margin: 0 0 5px 0;
   font-size: 1.1rem;
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; 
+  font-weight: 600;
+  color: white;
 }
 
 .sceneDescription {
   margin: 0;
-  font-size: 0.8rem;
-  opacity: 0.6;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
-/* -------------------------------------- */
-/* 2. ÍCONOS (DERECHA) */
-/* -------------------------------------- */
+/* Badge Automático */
+.autoBadge {
+  display: inline-block;
+  font-size: 0.75rem;
+  background: rgba(255,255,255,0.15);
+  padding: 2px 8px;
+  border-radius: 10px;
+  margin-top: 5px;
+  color: #ddd;
+}
+
+/* SECCIÓN DERECHA: Íconos */
 .iconosWrapper {
   display: flex;
   align-items: center;
-  gap: 12px; 
-  flex-shrink: 0;
-  margin-left: 15px; 
-  padding-right: 10px;
+  gap: 12px; /* Espacio entre íconos */
 }
 
+/* Contenedor base del ícono */
 .iconItem {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.iconItem svg {
-  width: 100%;
-  height: 100%;
-  stroke-width: 1.5;
-  /* Color por defecto: tenue */
-  color: rgba(255, 255, 255, 0.7); 
+  background: rgba(0, 0, 0, 0.2); 
+  border-radius: 50%;
+  padding: 5px;
   transition: all 0.3s ease;
 }
 
-/* 🏆 RE-ACTIVACIÓN DE ESTADOS ACTIVOS (COLORES NEÓN) */
-
-.activeWater svg {
-  color: #3b9fff; /* Azul neón para chorros activos */
-  filter: drop-shadow(0 0 4px #3b9fff); /* Sombra para efecto neón */
+/* --- ESTILOS DE LA IMAGEN PNG --- */
+.deviceImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  
+  /* ESTADO APAGADO (Por defecto) */
+  border: 2px solid transparent; 
+  opacity: 0.5; 
+  filter: grayscale(80%);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.activeLight svg {
-  /* Usamos la variable CSS --scene-color del JSX */
-  color: var(--scene-color, #FFF88C); 
-  filter: drop-shadow(0 0 6px var(--scene-color, #FFF88C)); /* Sombra neón dinámica */
+/* --- ANIMACIONES DE PULSO --- */
+@keyframes pulseWhite {
+  0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.6); }
+  50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.9); }
+  100% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.6); }
 }
 
-/* 4. FLECHA DE DETALLE */
+@keyframes pulseColor {
+  0% { box-shadow: 0 0 5px var(--scene-color); }
+  50% { box-shadow: 0 0 15px var(--scene-color); }
+  100% { box-shadow: 0 0 5px var(--scene-color); }
+}
+
+/* --- MAGIA: ESTADOS ENCENDIDOS --- */
+
+/* Chorros de Agua ENCENDIDOS */
+.activeWater .deviceImage {
+  opacity: 1;
+  filter: none;
+  border-color: white; /* Borde BLANCO */
+  transform: scale(1.05);
+  animation: pulseWhite 2s infinite ease-in-out; /* Animación */
+}
+
+/* Luces ENCENDIDAS */
+.activeLight .deviceImage {
+  opacity: 1;
+  filter: none;
+  border-color: var(--scene-color, white); /* Borde DINÁMICO */
+  transform: scale(1.05);
+  animation: pulseColor 2s infinite ease-in-out; /* Animación */
+}
+
+/* --- BOTÓN PLAY RÁPIDO --- */
+.quickPlayBtn {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  margin-left: 5px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.quickPlayBtn:hover {
+  background: #4cd964; /* Verde al pasar el mouse */
+  color: black;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px #4cd964;
+}
+
+.quickPlayBtn:active {
+  transform: scale(0.95);
+}
+
+/* Flecha final */
 .arrow {
   font-size: 1.2rem;
-  font-weight: 300;
   color: rgba(255, 255, 255, 0.4);
-  flex-shrink: 0;
-}
-
-/* -------------------------------------- */
-/* RESPONSIVE */
-/* -------------------------------------- */
-@media (max-width: 600px) {
-  .modernCardLine {
-      margin: 0 10px; 
-  }
-  
-  .infoWrapper {
-      padding-left: 15px;
-  }
-  
-  .iconosWrapper {
-      padding-right: 5px;
-  }
+  margin-left: 5px;
 }
