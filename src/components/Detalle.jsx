@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'; // 1. Importar useState
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
@@ -7,11 +7,13 @@ import imgFlecha from '../assets/imagenes/flechaAtras.png';
 import imgChorros from '../assets/imagenes/chorros.png'; 
 import imgLuces from '../assets/imagenes/luces.png';
 import { useTitulo } from '../hooks/useTitulo'; 
+import ModalExito from './ModalExito'; // 2. Importar Modal
 
 const Detalle = () => { 
   const { id } = useParams(); 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const [showModal, setShowModal] = useState(false); // 3. Estado del Modal
 
   // --- OBTENER DATOS (GET) ---
   const { data: escena, isLoading, error } = useQuery({
@@ -25,7 +27,7 @@ const Detalle = () => {
     },
   });
 
-  // 🏆 TÍTULO DINÁMICO
+  // TÍTULO DINÁMICO
   useTitulo(escena ? escena.name : "Cargando escena...");
 
   // --- MUTACIÓN PARA ELIMINAR (DELETE) ---
@@ -39,17 +41,24 @@ const Detalle = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
-      alert("Escena eliminada correctamente");
+      // Aquí podrías usar otro modal si quisieras, pero el alert nativo está bien para avisar antes de redirigir
+      alert("Escena eliminada correctamente"); 
       navigate('/escenas'); 
     },
     onError: () => alert("Hubo un error al intentar eliminar.")
   });
 
   const handleEdit = () => navigate(`/editar-escena/${id}`);
+  
   const handleDelete = () => {
     if (window.confirm("¿Eliminar escena?")) deleteMutation.mutate();
   };
-  const handleExecute = () => alert(`¡Ejecutando escena: ${escena?.name}!`);
+
+  // 🏆 EJECUCIÓN CON MODAL
+  const handleExecute = () => {
+      // Aquí iría tu lógica real
+      setShowModal(true);
+  };
 
   if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando...</div>;
   if (error) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>Error: {error.message}</div>;
@@ -71,13 +80,19 @@ const Detalle = () => {
   const chorrosIconClass = `${styles.deviceIcon} ${actions.chorrosAgua ? styles.activeWater : ''}`;
   const lucesIconClass = `${styles.deviceIcon} ${luces.estado ? styles.activeLight : ''}`;
   
-  // Estilo para ajustar las imágenes PNG dentro del contenedor
   const imgIconStyle = { width: '100%', height: '100%', objectFit: 'contain' };
   const iconNavStyle = { width: '24px', height: '24px', objectFit: 'contain' };
 
   return (
     <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
       
+      {/* 4. RENDERIZAR MODAL */}
+      <ModalExito 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)}
+        mensaje={`La escena "${escena.name}" se está ejecutando.`}
+      />
+
       {/* 1. NAVEGACIÓN */}
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>

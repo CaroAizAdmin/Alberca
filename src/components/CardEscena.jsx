@@ -1,19 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react'; // 1. Importar useState
 import { useNavigate } from 'react-router-dom';
 import styles from './CardEscena.module.css';
-// 👇 IMPORTANTE: Importa tus imágenes aquí.
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
+import ModalExito from './ModalExito'; // 2. Importar Modal
 
 const CardEscena = ({ id, escena }) => {
   const navigate = useNavigate();
+  const [showModal, setShowModal] = useState(false); // 3. Estado del Modal
 
   // Acceso seguro a las acciones
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const aguaOn = escena.actions?.chorrosAgua;
   const lucesOn = luces.estado;
   
-  // Normalización del color (Crucial para el borde dinámico)
+  // Normalización del color
   let colorRGB = "rgb(255, 255, 255)";
   if (luces.color) {
     if (typeof luces.color === 'string') {
@@ -24,61 +25,68 @@ const CardEscena = ({ id, escena }) => {
     }
   }
 
-  // Navegación al detalle
   const navigateToDetail = () => {
     navigate(`/escenas/${id}`); 
   };
 
-  // 🏆 EJECUCIÓN RÁPIDA (Sin navegar)
+  // 🏆 EJECUCIÓN RÁPIDA CON MODAL
   const handleQuickRun = (e) => {
-    e.stopPropagation(); // 🛑 Evita entrar al detalle
-    alert(`🚀 Ejecutando escena: ${escena.name}`);
-    // Aquí iría tu lógica real de activación (mutación)
+    e.stopPropagation(); // Evita entrar al detalle
+    
+    // Aquí iría tu lógica real de activación (fetch/mutation)
+    
+    // Mostramos el modal de éxito
+    setShowModal(true);
   };
   
   return (
-    <div 
-      className={styles.modernCardLine} 
-      onClick={navigateToDetail}
-      // Pasamos el color como variable CSS para usarlo en los bordes
-      style={{ '--scene-color': colorRGB }}
-    >
-      
-      {/* 1. INFORMACIÓN (Izquierda) */}
-      <div className={styles.infoWrapper}>
-        <h3 className={styles.sceneTitle}>{escena.name}</h3>
-        <p className={styles.sceneDescription}>{escena.descripcion || "Sin descripción"}</p>
-        
-        {/* Badge de Horario (Si es automático) */}
-        {escena.schedule?.enabled && (
-             <span className={styles.autoBadge}>
-                ⏰ {escena.schedule.time}
-             </span>
-         )}
-      </div>
+    <>
+      {/* 4. Renderizar Modal */}
+      <ModalExito 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)}
+        mensaje={`La escena "${escena.name}" se ha activado correctamente.`}
+      />
 
-      {/* 2. ÍCONOS Y CONTROLES (Derecha) */}
-      <div className={styles.iconosWrapper}>
+      <div 
+        className={styles.modernCardLine} 
+        onClick={navigateToDetail}
+        style={{ '--scene-color': colorRGB }}
+      >
         
-        {/* Ícono de Luces (PNG) */}
-        <div className={`${styles.iconItem} ${lucesOn ? styles.activeLight : ''}`}>
-           <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
-        </div>
-        
-        {/* Ícono de Agua/Chorros (PNG) */}
-        <div className={`${styles.iconItem} ${aguaOn ? styles.activeWater : ''}`}>
-           <img src={imgChorros} alt="Chorros" className={styles.deviceImage} />
+        {/* 1. INFORMACIÓN */}
+        <div className={styles.infoWrapper}>
+          <h3 className={styles.sceneTitle}>{escena.name}</h3>
+          <p className={styles.sceneDescription}>{escena.descripcion || "Sin descripción"}</p>
+          
+          {escena.schedule?.enabled && (
+               <span className={styles.autoBadge}>
+                  ⏰ {escena.schedule.time}
+               </span>
+           )}
         </div>
 
-        {/* 🏆 BOTÓN PLAY RÁPIDO */}
-        <button className={styles.quickPlayBtn} onClick={handleQuickRun}>
-            ▶
-        </button>
-        
+        {/* 2. ÍCONOS Y CONTROLES */}
+        <div className={styles.iconosWrapper}>
+          
+          <div className={`${styles.iconItem} ${lucesOn ? styles.activeLight : ''}`}>
+             <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
+          </div>
+          
+          <div className={`${styles.iconItem} ${aguaOn ? styles.activeWater : ''}`}>
+             <img src={imgChorros} alt="Chorros" className={styles.deviceImage} />
+          </div>
 
+          {/* BOTÓN PLAY RÁPIDO */}
+          <button className={styles.quickPlayBtn} onClick={handleQuickRun}>
+              ▶
+          </button>
+          
         
+          
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
