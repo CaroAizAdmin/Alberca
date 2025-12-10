@@ -7,6 +7,8 @@ import styles from './EditarEscena.module.css';
 import { useTitulo } from '../hooks/useTitulo'; 
 import imgChorros from '../assets/imagenes/chorros.png'; 
 import imgLuces from '../assets/imagenes/luces.png';
+// 1. IMPORTAR MODAL
+import ModalExito from './ModalExito';
 
 const DAYS_OF_WEEK = [
     { key: 'mon', label: 'Lunes' },
@@ -36,6 +38,8 @@ const EditarEscena = () => {
   // --- ESTADOS ---
   const [step, setStep] = useState(1);
   const [errorLocal, setErrorLocal] = useState("");
+  // 2. ESTADO DEL MODAL
+  const [showModal, setShowModal] = useState(false);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -47,7 +51,7 @@ const EditarEscena = () => {
     schedule: { enabled: false, days: [], time: "19:00" }
   });
 
-  // --- EFECTO RELLENO (CON PROTECCIÓN) ---
+  // --- EFECTO RELLENO ---
   useEffect(() => {
     if (escenaDatos) {
         const initialData = {
@@ -78,11 +82,18 @@ const EditarEscena = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
       queryClient.invalidateQueries({ queryKey: ['escena', id] });
-      alert("¡Cambios guardados correctamente!");
-      navigate('/escenas'); 
+      
+      // 3. EN LUGAR DE NAVEGAR, MOSTRAMOS EL MODAL
+      setShowModal(true);
     },
     onError: (error) => alert(`Error al editar: ${error.message}`)
   });
+
+  // 4. FUNCIÓN PARA CERRAR MODAL Y NAVEGAR
+  const handleCloseModal = () => {
+      setShowModal(false);
+      navigate('/escenas'); // Navegamos recién cuando el usuario acepta
+  };
 
   // --- HANDLERS ---
   const handleChange = (e) => {
@@ -185,6 +196,13 @@ const EditarEscena = () => {
 
   return (
     <>
+    {/* 5. INSERTAR MODAL */}
+    <ModalExito 
+        isOpen={showModal} 
+        onClose={handleCloseModal}
+        mensaje="¡La escena se ha actualizado correctamente!"
+    />
+
     <div className={styles.flecha}>
       <button className={styles.btnBackNav} onClick={() => navigate(-1)}>
         <img src={imgFlecha} alt="Atrás" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
@@ -226,8 +244,8 @@ const EditarEscena = () => {
             <h2 className={styles['form-title']}>2. Dispositivos</h2>
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{margin:0}}>
-                <span className={chorrosIconClass}><img src={imgChorros} alt="Chorros" style={imgStyle} /></span>
-                Chorros
+                <img src={imgChorros} alt="Chorros" style={imgStyle} />
+                <span className={chorrosIconClass}>Chorros</span>
               </span>
               <label className={styles.switch}>
                 <input type="checkbox" checked={formData.actions.chorrosAgua} onChange={() => handleToggle('chorros')} />
@@ -237,8 +255,8 @@ const EditarEscena = () => {
             
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{margin:0}}>
-                <span className={lucesIconClass}><img src={imgLuces} alt="Luces" style={imgStyle} /></span>
-                Luces
+                <img src={imgLuces} alt="Luces" style={imgStyle} />
+                <span className={lucesIconClass}>Luces</span>
               </span>
               <label className={styles.switch}>
                 <input type="checkbox" checked={formData.actions.luces.estado} onChange={() => handleToggle('luces')} />
@@ -329,10 +347,16 @@ const EditarEscena = () => {
           {step > 1 && (
             <button className={`${styles['btn-nav']} ${styles['btn-prev']}`} onClick={handleBack}>Atrás</button>
           )}
+          
           {step < 4 ? (
             <button className={`${styles['btn-nav']} ${styles['btn-next']}`} onClick={handleNext}>Siguiente</button>
           ) : (
-            <button className={`${styles['btn-nav']} ${styles['btn-next']}`} onClick={handleUpdate} style={{backgroundColor: 'var(--color-success)'}} disabled={mutation.isPending}>
+            <button 
+              className={`${styles['btn-nav']} ${styles['btn-next']}`} 
+              onClick={handleUpdate} 
+              style={{backgroundColor: 'var(--color-success)'}} 
+              disabled={mutation.isPending}
+            >
               {mutation.isPending ? "Actualizando..." : "Guardar Cambios"}
             </button>
           )}

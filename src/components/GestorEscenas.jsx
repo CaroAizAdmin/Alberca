@@ -6,6 +6,8 @@ import styles from './GestorEscenas.module.css';
 import { useTitulo } from '../hooks/useTitulo'; 
 import imgChorros from '../assets/imagenes/chorros.png'; 
 import imgLuces from '../assets/imagenes/luces.png';
+// 1. IMPORTAR EL MODAL
+import ModalExito from './ModalExito';
 
 const DAYS_OF_WEEK = [
     { key: 'mon', label: 'Lun' },
@@ -25,6 +27,9 @@ const GestorEscenas = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
+  // 2. ESTADO PARA EL MODAL
+  const [showModal, setShowModal] = useState(false);
+
   // --- LÓGICA DE MUTACIÓN (POST) ---
   const mutation = useMutation({
     mutationFn: (nuevaEscena) => {
@@ -39,11 +44,18 @@ const GestorEscenas = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
-      alert("¡Escena guardada en la nube!");
-      navigate('/escenas'); 
+      
+      // 3. EN VEZ DE ALERT Y NAVIGATE, MOSTRAMOS EL MODAL
+      setShowModal(true);
     },
     onError: (error) => alert(`Error: ${error.message}`)
   });
+
+  // 4. FUNCIÓN PARA CERRAR Y NAVEGAR
+  const handleCloseModal = () => {
+      setShowModal(false);
+      navigate('/escenas');
+  };
 
   // --- ESTADOS DEL FORMULARIO ---
   const [step, setStep] = useState(1);
@@ -167,6 +179,13 @@ const GestorEscenas = () => {
 
   return (
     <div className={styles.editContainer}>
+
+      {/* 5. INSERTAR EL MODAL */}
+      <ModalExito 
+        isOpen={showModal} 
+        onClose={handleCloseModal}
+        mensaje="¡La escena se ha creado y guardado en la nube correctamente!"
+      />
 
       {/* BARRA DE PROGRESO */}
       <div className={styles.progressBarContainer}>
