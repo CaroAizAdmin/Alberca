@@ -131,14 +131,46 @@ svg{
     height: 24px;
 }
 
-.activeWater svg {
-  color: #3b9fff; 
-  filter: drop-shadow(0 0 4px #3b9fff); 
+/* Contenedor base del ícono */
+.deviceIcon {
+  width: 50px;       /* Ajusta el tamaño del cuadrado */
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1); /* Fondo grisaseo suave */
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  transition: all 0.3s ease;
 }
 
-.activeLight svg {
-  color: var(--scene-color, #FFF88C); 
-  filter: drop-shadow(0 0 6px var(--scene-color, #FFF88C)); 
+/* IMAGEN DENTRO DEL ÍCONO */
+.deviceIcon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: all 0.3s ease;
+  /* Por defecto (apagado) se ve gris y opaco */
+  opacity: 0.4;
+  filter: grayscale(100%);
+}
+
+/* --- ESTADO ENCENDIDO (CHORROS) --- */
+/* Cuando tiene la clase .activeWater, la imagen dentro cambia */
+.activeWater img {
+  opacity: 1;
+  filter: none; /* Recupera el color original */
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 5px #00bfff); /* Brillo azulado para agua */
+}
+
+/* --- ESTADO ENCENDIDO (LUCES) --- */
+.activeLight img {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.1);
+  /* Usamos la variable CSS --scene-color que definimos en el JS para el color del brillo */
+  filter: drop-shadow(0 0 8px var(--scene-color, white)); 
 }
 
 .deviceListItem {

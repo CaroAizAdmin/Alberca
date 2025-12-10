@@ -3,10 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
-import styles from './EditarEscena.module.css'; // Asegúrate que este archivo existe
-import { useTitulo } from '../hooks/useTitulo'; // 1. Importar el Hook
+import styles from './EditarEscena.module.css'; 
+import { useTitulo } from '../hooks/useTitulo'; 
+import imgChorros from '../assets/imagenes/chorros.png'; 
+import imgLuces from '../assets/imagenes/luces.png';
 
-// Días de la semana para el formulario
 const DAYS_OF_WEEK = [
     { key: 'mon', label: 'Lunes' },
     { key: 'tue', label: 'Martes' },
@@ -17,37 +18,22 @@ const DAYS_OF_WEEK = [
     { key: 'sun', label: 'Domingo' },
 ];
 
-// SVGs (Mismos que GestorEscenas)
-const CHORROS_SVG = (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px' }}>
-        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-    </svg>
-);
-
-const LUCES_SVG = (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ width: '24px', height: '24px' }}>
-        <line x1="12" y1="1" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="23"></line>
-        <line x1="4.22" y1="4.22" x2="7.05" y2="7.05"></line><line x1="16.95" y1="16.95" x2="19.78" y2="19.78"></line>
-        <line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line>
-        <line x1="4.22" y1="19.78" x2="7.05" y2="16.95"></line><line x1="16.95" y1="7.05" x2="19.78" y2="4.22"></line>
-    </svg>
-);
+const imgStyle = { width: '24px', height: '24px', marginRight: '8px', verticalAlign: 'middle' };
 
 const EditarEscena = () => {
   const { id } = useParams(); 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 2. USAR EL HOOK PARA EL TÍTULO
   useTitulo("Editar Escena");
 
-  // --- 1. CARGAR DATOS EXISTENTES (GET) ---
+  // --- OBTENER DATOS (GET) ---
   const { data: escenaDatos, isLoading, isError } = useQuery({
     queryKey: ['escena', id],
     queryFn: () => fetch(`${URL_BASE}/escenas/${id}.json`).then(res => res.json())
   });
 
-  // --- 2. ESTADOS DEL FORMULARIO ---
+  // --- ESTADOS ---
   const [step, setStep] = useState(1);
   const [errorLocal, setErrorLocal] = useState("");
   
@@ -61,7 +47,7 @@ const EditarEscena = () => {
     schedule: { enabled: false, days: [], time: "19:00" }
   });
 
-  // --- 3. EFECTO PARA RELLENAR EL FORMULARIO (CON PROTECCIÓN) ---
+  // --- EFECTO RELLENO (CON PROTECCIÓN) ---
   useEffect(() => {
     if (escenaDatos) {
         const initialData = {
@@ -69,7 +55,6 @@ const EditarEscena = () => {
             actions: escenaDatos.actions || { chorrosAgua: false, luces: { estado: false, color: { r: 255, g: 255, b: 255 } } },
             schedule: {
                 enabled: escenaDatos.schedule?.enabled || false,
-                // 🛡️ Protección contra arrays vacíos/undefined
                 days: escenaDatos.schedule?.days || [], 
                 time: escenaDatos.schedule?.time || "19:00"
             }
@@ -78,7 +63,7 @@ const EditarEscena = () => {
     }
   }, [escenaDatos]);
 
-  // --- 4. MUTACIÓN PARA ACTUALIZAR (PUT) ---
+  // --- MUTACIÓN (PUT) ---
   const mutation = useMutation({
     mutationFn: (datosActualizados) => {
       return fetch(`${URL_BASE}/escenas/${id}.json`, {
@@ -192,7 +177,6 @@ const EditarEscena = () => {
   const chorrosIconClass = `${formData.actions.chorrosAgua ? styles.svgActive : styles.svgInactive}`;
   const lucesIconClass = `${formData.actions.luces.estado ? styles.svgActive : styles.svgInactive}`;
 
-  // 🛡️ Protección visual para el map
   const selectedDaysLabels = formData.schedule.days?.map(key => 
       DAYS_OF_WEEK.find(day => day.key === key)?.label || key
   ).join(', ') || "Ninguno";
@@ -207,7 +191,6 @@ const EditarEscena = () => {
       </button>
     </div>  
 
-    {/* ⚠️ NOTA: Usamos styles['nombre-con-guion'] porque tu CSS de editar usa kebab-case */}
     <div className={styles['edit-container']}>
       
       <div className={styles['progress-bar-container']}>
@@ -243,7 +226,7 @@ const EditarEscena = () => {
             <h2 className={styles['form-title']}>2. Dispositivos</h2>
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{margin:0}}>
-                <span className={chorrosIconClass} style={{marginRight: '8px', verticalAlign: 'middle', display: 'inline-block'}}>{CHORROS_SVG}</span>
+                <span className={chorrosIconClass}><img src={imgChorros} alt="Chorros" style={imgStyle} /></span>
                 Chorros
               </span>
               <label className={styles.switch}>
@@ -254,7 +237,7 @@ const EditarEscena = () => {
             
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{margin:0}}>
-                <span className={lucesIconClass} style={{marginRight: '8px', verticalAlign: 'middle', display: 'inline-block'}}>{LUCES_SVG}</span>
+                <span className={lucesIconClass}><img src={imgLuces} alt="Luces" style={imgStyle} /></span>
                 Luces
               </span>
               <label className={styles.switch}>
@@ -346,16 +329,10 @@ const EditarEscena = () => {
           {step > 1 && (
             <button className={`${styles['btn-nav']} ${styles['btn-prev']}`} onClick={handleBack}>Atrás</button>
           )}
-          
           {step < 4 ? (
             <button className={`${styles['btn-nav']} ${styles['btn-next']}`} onClick={handleNext}>Siguiente</button>
           ) : (
-            <button 
-              className={`${styles['btn-nav']} ${styles['btn-next']}`} 
-              onClick={handleUpdate} 
-              style={{backgroundColor: 'var(--color-success)'}} 
-              disabled={mutation.isPending}
-            >
+            <button className={`${styles['btn-nav']} ${styles['btn-next']}`} onClick={handleUpdate} style={{backgroundColor: 'var(--color-success)'}} disabled={mutation.isPending}>
               {mutation.isPending ? "Actualizando..." : "Guardar Cambios"}
             </button>
           )}

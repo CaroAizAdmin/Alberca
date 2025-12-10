@@ -468,18 +468,27 @@ input:checked + .slider:before {
 /* ========================================================== */
 
 /* Estilo por defecto (Inactivo o apagado) */
-.svgInactive svg {
-    stroke: var(--color-text-faded, #B0B3CC); /* Color tenue para inactivo */
+/* En tus archivos .module.css */
+
+/* --- ESTILOS PARA IMÁGENES PNG (Editar) --- */
+
+.svgInactive {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
 }
 
-/* Estilo Activo (Cuando el toggle está ON) */
-.svgActive svg {
-    /* Color principal brillante para activo (lo mismo que luces y chorros en Detalle) */
-    stroke: var(--color-primary-blue, #5C97F2); 
-    filter: drop-shadow(0 0 4px rgba(92, 151, 242, 0.6)); /* Efecto neón/brillo */
+.svgActive {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+  transform: scale(1.1);
+  transition: all 0.3s ease;
 }
 
-
+/* Aseguramos que la imagen dentro respete el tamaño */
+.svgActive img, .svgInactive img {
+  display: block; /* Elimina espacios fantasma */
+}
 /* ========================================================== */
 /* 9. RESPONSIVE                                              */
 /* ========================================================== */

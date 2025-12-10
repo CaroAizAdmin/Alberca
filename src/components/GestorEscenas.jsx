@@ -3,13 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
 import styles from './GestorEscenas.module.css';
-import { useTitulo } from '../hooks/useTitulo'; // 1. Importar
-
-
-  // ... resto del código
-// ==========================================================
-// CONFIGURACIÓN GLOBAL (SIN CAMBIOS)
-// ==========================================================
+import { useTitulo } from '../hooks/useTitulo'; 
+import imgChorros from '../assets/imagenes/chorros.png'; 
+import imgLuces from '../assets/imagenes/luces.png';
 
 const DAYS_OF_WEEK = [
     { key: 'mon', label: 'Lun' },
@@ -21,42 +17,9 @@ const DAYS_OF_WEEK = [
     { key: 'sun', label: 'Dom' },
 ];
 
-// SVG para Chorros de Agua
-const CHORROS_SVG = (
-    <svg 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
-        style={{ width: '24px', height: '24px' }} 
-    >
-        <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
-    </svg>
-);
+const imgStyle = { width: '24px', height: '24px', marginRight: '8px', verticalAlign: 'middle' };
 
-// SVG para Luces
-const LUCES_SVG = (
-    <svg 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
-        style={{ width: '24px', height: '24px' }} 
-    >
-        <line x1="12" y1="1" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="23"></line>
-        <line x1="4.22" y1="4.22" x2="7.05" y2="7.05"></line><line x1="16.95" y1="16.95" x2="19.78" y2="19.78"></line>
-        <line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line>
-        <line x1="4.22" y1="19.78" x2="7.05" y2="16.95"></line><line x1="16.95" y1="7.05" x2="19.78" y2="4.22"></line>
-    </svg>
-);
-
-
-const GestorEscenas = ({ escena, setEscenas }) => {
-  // 2. ¡Esta línea es la que falta o está fallando!
+const GestorEscenas = () => {
   useTitulo("Crear Nueva Escena");
   
   const navigate = useNavigate();
@@ -67,15 +30,10 @@ const GestorEscenas = ({ escena, setEscenas }) => {
     mutationFn: (nuevaEscena) => {
       return fetch(`${URL_BASE}/escenas.json`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nuevaEscena),
-      })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Error al guardar la escena');
-        }
+      }).then((response) => {
+        if (!response.ok) throw new Error('Error al guardar la escena');
         return response.json();
       });
     },
@@ -84,11 +42,8 @@ const GestorEscenas = ({ escena, setEscenas }) => {
       alert("¡Escena guardada en la nube!");
       navigate('/escenas'); 
     },
-    onError: (error) => {
-      alert(`Error: ${error.message}`);
-    }
+    onError: (error) => alert(`Error: ${error.message}`)
   });
-
 
   // --- ESTADOS DEL FORMULARIO ---
   const [step, setStep] = useState(1);
@@ -99,19 +54,12 @@ const GestorEscenas = ({ escena, setEscenas }) => {
     descripcion: "",
     actions: {
       chorrosAgua: false,
-      luces: {
-        estado: false,
-        color: { r: 255, g: 255, b: 255 }
-      }
+      luces: { estado: false, color: { r: 255, g: 255, b: 255 } }
     },
-    schedule: {
-      enabled: false,
-      days: [], 
-      time: "19:00" 
-    }
+    schedule: { enabled: false, days: [], time: "19:00" }
   });
 
-  // --- FUNCIONES DE AYUDA Y HANDLERS (SIN CAMBIOS) ---
+  // --- HANDLERS ---
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrorLocal("");
@@ -120,10 +68,7 @@ const GestorEscenas = ({ escena, setEscenas }) => {
   const handleScheduleChange = (key, value) => {
       setFormData(prev => ({
           ...prev,
-          schedule: {
-              ...prev.schedule,
-              [key]: value
-          }
+          schedule: { ...prev.schedule, [key]: value }
       }));
       setErrorLocal("");
   };
@@ -134,18 +79,13 @@ const GestorEscenas = ({ escena, setEscenas }) => {
           const newDays = days.includes(dayKey)
               ? days.filter(d => d !== dayKey) 
               : [...days, dayKey]; 
-              
           return {
               ...prev,
-              schedule: {
-                  ...prev.schedule,
-                  days: newDays
-              }
+              schedule: { ...prev.schedule, days: newDays }
           };
       });
       setErrorLocal("");
   };
-
 
   const handleNext = () => {
     if (step === 1) {
@@ -186,9 +126,8 @@ const GestorEscenas = ({ escena, setEscenas }) => {
     }
   };
 
-
   const rgbToHex = (r, g, b) => {
-    if (r === undefined || g === undefined || b === undefined) return "#ffffff";
+    if (r === undefined) return "#ffffff";
     const toHex = (c) => {
       const hex = c.toString(16);
       return hex.length === 1 ? "0" + hex : hex;
@@ -204,9 +143,7 @@ const GestorEscenas = ({ escena, setEscenas }) => {
   };
 
   const handleColorPickerChange = (e) => {
-    const hexColor = e.target.value;
-    const { r, g, b } = hexToRgb(hexColor);
-    
+    const { r, g, b } = hexToRgb(e.target.value);
     setFormData(prev => ({
       ...prev,
       actions: { 
@@ -216,79 +153,57 @@ const GestorEscenas = ({ escena, setEscenas }) => {
     }));
   };
 
+  const handleSave = () => mutation.mutate(formData);
 
-  const handleSave = () => {
-    mutation.mutate(formData);
-  };
-
-  // Clases condicionales para los SVGs
+  // Clases condicionales
   const chorrosIconClass = `${formData.actions.chorrosAgua ? styles.svgActive : styles.svgInactive}`;
   const lucesIconClass = `${formData.actions.luces.estado ? styles.svgActive : styles.svgInactive}`;
 
-  // Para el resumen
   const selectedDaysLabels = formData.schedule.days.map(key => 
       DAYS_OF_WEEK.find(day => day.key === key)?.label || key
   ).join(', ');
 
-  // Cálculo del progreso (4 pasos)
-  const progressWidth = step === 1 ? '0%' : 
-                        step === 2 ? '33%' : 
-                        step === 3 ? '66%' : '100%';
-
+  const progressWidth = step === 1 ? '0%' : step === 2 ? '33%' : step === 3 ? '66%' : '100%';
 
   return (
-    // 🏆 CLASE CORREGIDA: styles.editContainer
     <div className={styles.editContainer}>
 
-      {/* BARRA DE PROGRESO (4 puntos) */}
+      {/* BARRA DE PROGRESO */}
       <div className={styles.progressBarContainer}>
         <div className={styles.progressLine}></div>
         <div className={styles.progressFill} style={{ width: progressWidth }}></div>
-        
         <div className={`${styles.stepIndicator} ${step >= 1 ? styles.active : ''}`}>1</div>
         <div className={`${styles.stepIndicator} ${step >= 2 ? styles.active : ''}`}>2</div>
         <div className={`${styles.stepIndicator} ${step >= 3 ? styles.active : ''}`}>3</div>
         <div className={`${styles.stepIndicator} ${step >= 4 ? styles.active : ''}`}>4</div>
       </div>
 
-      {/* 🏆 CLASE CORREGIDA: styles.formCard */}
       <div className={styles.formCard}>
         
-        {/* PASO 1: Identidad */}
+        {/* PASO 1 */}
         {step === 1 && (
           <div className={styles.stepContent}>
             <h2 className={styles.formTitle}>1. Identidad</h2>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Nombre</label>
-              <input 
-                type="text" name="name" className={styles.formInput} 
-                placeholder="Ej. Fiesta Acuática"
-                value={formData.name} onChange={handleChange}
-              />
+              <input type="text" name="name" className={styles.formInput} placeholder="Ej. Fiesta Acuática" value={formData.name} onChange={handleChange} />
               {errorLocal && <p className={styles.errorMsg}>{errorLocal}</p>}
             </div>
             <div className={styles.formGroup}>
               <label className={styles.formLabel}>Descripción</label>
-              <textarea 
-                name="descripcion" className={styles.formTextarea} rows="3"
-                placeholder="Descripción opcional"
-                value={formData.descripcion} onChange={handleChange}
-              ></textarea>
+              <textarea name="descripcion" className={styles.formTextarea} rows="3" placeholder="Descripción opcional" value={formData.descripcion} onChange={handleChange}></textarea>
             </div>
           </div>
         )}
 
-        {/* PASO 2: Dispositivos (Con SVGs y estilos) */}
+        {/* PASO 2 */}
         {step === 2 && (
           <div className={styles.stepContent}>
             <h2 className={styles.formTitle}>2. Dispositivos</h2>
             
-            {/* Fila Chorros */}
             <div className={styles.deviceRow}>
               <span className={styles.formLabel} style={{margin:0}}>
-                <span className={chorrosIconClass} style={{marginRight: '8px', verticalAlign: 'middle', display: 'inline-block'}}>
-                    {CHORROS_SVG}
-                </span>
+                <span className={chorrosIconClass}><img src={imgChorros} alt="Chorros" style={imgStyle} /></span>
                 Chorros
               </span>
               <label className={styles.switch}>
@@ -297,12 +212,9 @@ const GestorEscenas = ({ escena, setEscenas }) => {
               </label>
             </div>
             
-            {/* Fila Luces */}
             <div className={styles.deviceRow}>
               <span className={styles.formLabel} style={{margin:0}}>
-                <span className={lucesIconClass} style={{marginRight: '8px', verticalAlign: 'middle', display: 'inline-block'}}>
-                    {LUCES_SVG}
-                </span>
+                <span className={lucesIconClass}><img src={imgLuces} alt="Luces" style={imgStyle} /></span>
                 Luces
               </span>
               <label className={styles.switch}>
@@ -316,25 +228,12 @@ const GestorEscenas = ({ escena, setEscenas }) => {
                     <div className={styles.colorPickerWrapper}>
                         <label className={styles.formLabel}>Color:</label>
                         <div className={styles.modernColorInputContainer}>
-                            {/* Input de color nativo */}
-                            <input 
-                                type="color" 
-                                className={styles.modernColorInput}
-                                value={rgbToHex(
-                                    formData.actions.luces.color.r, 
-                                    formData.actions.luces.color.g, 
-                                    formData.actions.luces.color.b
-                                )}
+                            <input type="color" className={styles.modernColorInput}
+                                value={rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b)}
                                 onChange={handleColorPickerChange}
                             />
-                            
-                            {/* Texto que muestra el código Hex al lado */}
                             <span className={styles.colorCode}>
-                                {rgbToHex(
-                                    formData.actions.luces.color.r, 
-                                    formData.actions.luces.color.g, 
-                                    formData.actions.luces.color.b
-                                ).toUpperCase()}
+                                {rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b).toUpperCase()}
                             </span>
                         </div>
                     </div>
@@ -343,22 +242,14 @@ const GestorEscenas = ({ escena, setEscenas }) => {
           </div>
         )}
 
-        {/* 🏆 PASO 3: PROGRAMACIÓN */}
+        {/* PASO 3 */}
         {step === 3 && (
             <div className={styles.stepContent}>
                 <h2 className={styles.formTitle}>3. Programación</h2>
-                
-                {/* Toggle de Programación */}
                 <div className={styles.deviceRow}>
-                    <span className={styles.formLabel} style={{margin:0}}>
-                        Activación Automática
-                    </span>
+                    <span className={styles.formLabel} style={{margin:0}}>Activación Automática</span>
                     <label className={styles.switch}>
-                        <input 
-                            type="checkbox" 
-                            checked={formData.schedule.enabled} 
-                            onChange={() => handleScheduleChange('enabled', !formData.schedule.enabled)} 
-                        />
+                        <input type="checkbox" checked={formData.schedule.enabled} onChange={() => handleScheduleChange('enabled', !formData.schedule.enabled)} />
                         <span className={styles.slider}></span>
                     </label>
                 </div>
@@ -366,15 +257,11 @@ const GestorEscenas = ({ escena, setEscenas }) => {
                 {formData.schedule.enabled && (
                     <>
                         {errorLocal && <p className={styles.errorMsg}>{errorLocal}</p>}
-
-                        {/* Selección de Días */}
                         <div className={styles.formGroup} style={{marginTop: 25}}>
                             <label className={styles.formLabel}>Días de la semana:</label>
                             <div className={styles.daySelectorContainer}>
                                 {DAYS_OF_WEEK.map(day => (
-                                    <button
-                                        key={day.key}
-                                        // 🏆 CLASES CORREGIDAS
+                                    <button key={day.key}
                                         className={`${styles.dayButton} ${formData.schedule.days.includes(day.key) ? styles.selected : ''}`}
                                         onClick={() => handleDayToggle(day.key)}
                                     >
@@ -383,24 +270,16 @@ const GestorEscenas = ({ escena, setEscenas }) => {
                                 ))}
                             </div>
                         </div>
-
-                        {/* Selección de Hora */}
                         <div className={styles.formGroup}>
                             <label className={styles.formLabel}>Hora de inicio:</label>
-                            <input
-                                type="time"
-                                className={styles.formInput}
-                                value={formData.schedule.time}
-                                onChange={(e) => handleScheduleChange('time', e.target.value)}
-                            />
+                            <input type="time" className={styles.formInput} value={formData.schedule.time} onChange={(e) => handleScheduleChange('time', e.target.value)} />
                         </div>
                     </>
                 )}
             </div>
         )}
 
-
-        {/* PASO 4: Resumen y Revisar */}
+        {/* PASO 4 */}
         {step === 4 && (
           <div className={styles.stepContent}>
             <h2 className={styles.formTitle}>4. Resumen</h2>
@@ -422,33 +301,20 @@ const GestorEscenas = ({ escena, setEscenas }) => {
           </div>
         )}
 
-
         {/* BOTONES */}
         <div className={styles.buttonsContainer}>
           {step > 1 && (
-            <button className={`${styles.btnNav} ${styles.btnPrev}`} onClick={handleBack}>
-              Atrás
-            </button>
+            <button className={`${styles.btnNav} ${styles.btnPrev}`} onClick={handleBack}>Atrás</button>
           )}
-          
           {step < 4 ? (
-            <button className={`${styles.btnNav} ${styles.btnNext}`} onClick={handleNext}>
-              Siguiente
-            </button>
+            <button className={`${styles.btnNav} ${styles.btnNext}`} onClick={handleNext}>Siguiente</button>
           ) : (
-            <button 
-              className={`${styles.btnNav} ${styles.btnNext}`} 
-              onClick={handleSave} 
-              // Usamos el estilo en línea para activar la clase Glassy Verde
-              style={{backgroundColor: 'var(--color-success)'}} 
-              disabled={mutation.isPending}
-            >
+            <button className={`${styles.btnNav} ${styles.btnNext}`} onClick={handleSave} style={{backgroundColor: 'var(--color-success)'}} disabled={mutation.isPending}>
               {mutation.isPending ? "Guardando..." : "Confirmar y Guardar"}
             </button>
           )}
         </div>
         
-        {/* Mensaje de error si falla */}
         {mutation.isError && <p className={styles.errorMsg} style={{textAlign:'center', marginTop:10}}>Error: {mutation.error.message}</p>}
 
       </div>

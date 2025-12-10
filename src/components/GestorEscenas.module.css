@@ -423,14 +423,32 @@ input:checked + .slider:before {
 /* ========================================================== */
 
 /* Estilo por defecto (Inactivo o apagado) */
-.svgInactive svg {
-    stroke: var(--color-text-faded, #B0B3CC); 
+/* En tus archivos .module.css */
+
+/* --- ESTILOS PARA IMÁGENES PNG --- */
+
+/* Cuando está APAGADO (Inactive) */
+.svgInactive {
+  /* No afecta al contenedor, pero sí a la imagen dentro si usamos selectores descendientes, 
+     o aplicamos la opacidad directo al contenedor */
+  opacity: 0.5;                /* Se ve medio transparente */
+  filter: grayscale(100%);     /* Se pone en blanco y negro */
+  transition: all 0.3s ease;   /* Animación suave */
 }
 
-/* Estilo Activo (Cuando el toggle está ON) */
-.svgActive svg {
-    stroke: var(--color-primary-blue, #5C97F2); 
-    filter: drop-shadow(0 0 4px rgba(92, 151, 242, 0.6)); 
+/* Cuando está ENCENDIDO (Active) */
+.svgActive {
+  opacity: 1;                  /* Se ve full color */
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6)); /* Un brillo exterior */
+  transform: scale(1.1);       /* Se agranda un poquito */
+  transition: all 0.3s ease;
+}
+
+/* Ajuste para que la imagen no se deforme */
+.svgActive img, .svgInactive img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 .summaryList strong {
