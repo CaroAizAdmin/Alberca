@@ -2,33 +2,16 @@ import { useQuery } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
 import ListadoEscenas from "./ListadoEscenas.jsx";
 
+import { useTitulo } from '../hooks/useTitulo'; 
+// otros imports...
 
-const Inicio = () => {
-
-/* 
-  const { data: escenas, isLoading, error } = useQuery({
-  queryKey: ["escenas"],
-  queryFn: () =>
-    fetch(`${URL_BASE}/escenas.json`)
-      .then((res) => res.json()),
-});
-
-  
-  if (isLoading) return <p>Cargando...</p>;
-  if (error) return <p>Error al cargar la escena</p>;
-
- */
+const Inicio = ({ escena, setEscenas }) => {
+  // ✅ Una sola línea para definir el título
+  useTitulo("Mis Escenas"); 
 
   return (
-    <>
-    <ListadoEscenas />
-
-
-{/* ACA VA EL LISTADO DE ESCENAS */}
-    </>
-
-
-  )
+     // TU JSX YA LIMPIO (Sin <Header> ni <Menu>)
+     <ListadoEscenas /> 
+  );
 }
-
-export default Inicio
+export default Inicio;

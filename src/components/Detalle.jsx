@@ -2,40 +2,20 @@ import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
-import styles from './Detalle.module.css'; // Asegúrate que la ruta sea correcta
-import Header from '../components/Header'; // Asegúrate que la ruta sea correcta
+import styles from './Detalle.module.css'; 
+// 🗑️ BORRAMOS: import Header from '../components/Header'; (Ya no se necesita)
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
+import { useTitulo } from '../hooks/useTitulo'; // ✅ IMPORTANTE: El hook
 
-// ==========================================================
-// 🏆 1. DEFINICIÓN DE SVGS CORREGIDA: Sin div envolvente ni comentarios externos.
-// ==========================================================
-
-// SVG para Chorros de Agua
+// ... (Mantenemos tus SVGs CHORROS_SVG y LUCES_SVG igual que antes) ...
 const CHORROS_SVG = (
-    <svg 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
-    >
-        {/* SVG de Agua (Corazón estilizado o Gota) */}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
     </svg>
 );
 
-// SVG para Luces
 const LUCES_SVG = (
-    <svg 
-        viewBox="0 0 24 24" 
-        fill="none" 
-        stroke="currentColor" 
-        strokeWidth="2" 
-        strokeLinecap="round" 
-        strokeLinejoin="round"
-    >
-        {/* SVG de Luz (Sol o Brillo) */}
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <line x1="12" y1="1" x2="12" y2="5"></line><line x1="12" y1="19" x2="12" y2="23"></line>
         <line x1="4.22" y1="4.22" x2="7.05" y2="7.05"></line><line x1="16.95" y1="16.95" x2="19.78" y2="19.78"></line>
         <line x1="1" y1="12" x2="5" y2="12"></line><line x1="19" y1="12" x2="23" y2="12"></line>
@@ -46,7 +26,7 @@ const LUCES_SVG = (
 // ==========================================================
 // 2. COMPONENTE PRINCIPAL (Detalle)
 // ==========================================================
-const Detalle = () => {
+const Detalle = () => { // Ya no necesitamos props aquí porque usamos useQuery
   const { id } = useParams(); 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -56,24 +36,24 @@ const Detalle = () => {
     queryKey: ["escena", id],
     queryFn: async () => {
       const response = await fetch(`${URL_BASE}/escenas/${id}.json`);
-      if (!response.ok) {
-          throw new Error('Error de conexión con el servidor.');
-      }
+      if (!response.ok) throw new Error('Error de conexión.');
       const data = await response.json();
-      if (!data) {
-          throw new Error('La escena no existe o fue eliminada.');
-      }
+      if (!data) throw new Error('La escena no existe.');
       return data;
     },
   });
+
+  // 🏆 AQUI ESTA LA MAGIA (Implementación de Zustand)
+  // Si 'escena' tiene datos, ponemos su nombre. Si no, mostramos cargando.
+  useTitulo(escena ? escena.name : "Cargando escena...");
 
   // --- MUTACIÓN PARA ELIMINAR (DELETE) ---
   const deleteMutation = useMutation({
     mutationFn: () => {
       return fetch(`${URL_BASE}/escenas/${id}.json`, { method: 'DELETE' })
-      .then((response) => {
-        if (!response.ok) { return Promise.reject("No se pudo eliminar la escena"); }
-        return response.json();
+      .then((res) => {
+        if (!res.ok) return Promise.reject("Error al eliminar");
+        return res.json();
       });
     },
     onSuccess: () => {
@@ -81,124 +61,87 @@ const Detalle = () => {
       alert("Escena eliminada correctamente");
       navigate('/escenas'); 
     },
-    onError: () => {
-      alert("Hubo un error al intentar eliminar.");
-    }
+    onError: () => alert("Hubo un error al intentar eliminar.")
   });
 
-  // --- HANDLERS y LÓGICA DE DATOS ---
   const handleEdit = () => navigate(`/editar-escena/${id}`);
   const handleDelete = () => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar esta escena? No se puede deshacer.")) {
-      deleteMutation.mutate();
-    }
+    if (window.confirm("¿Eliminar escena?")) deleteMutation.mutate();
   };
   const handleExecute = () => alert(`¡Ejecutando escena: ${escena?.name}!`);
 
-  if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando detalle...</div>;
+  if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando...</div>;
   if (error) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>Error: {error.message}</div>;
 
+  // Lógica de estilos (sin cambios)
   const actions = escena.actions || {};
   const luces = actions.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   
-  // Normalización y cálculo del color RGB para el neón dinámico
   let colorRGB = "rgb(255, 255, 255)";
   if (luces.color) {
-      if (typeof luces.color === 'string') {
-          colorRGB = luces.color;
-      } else {
+      if (typeof luces.color === 'string') colorRGB = luces.color;
+      else {
           const { r, g, b } = luces.color;
           colorRGB = `rgb(${r || 0}, ${g || 0}, ${b || 0})`;
       }
   }
 
-  // Objeto de estilo para inyectar la variable CSS --scene-color
-  const lightStyle = {
-    // Solo inyectamos el color si las luces están ENCENDIDAS
-    ...(luces.estado && {'--scene-color': colorRGB}),
-  };
-
-  // Clases condicionales
+  const lightStyle = { ...(luces.estado && {'--scene-color': colorRGB}) };
   const chorrosIconClass = `${styles.deviceIcon} ${actions.chorrosAgua ? styles.activeWater : ''}`;
   const lucesIconClass = `${styles.deviceIcon} ${luces.estado ? styles.activeLight : ''}`;
   
-  // Estilo del ícono
-  const iconStyle = {
-    width: '24px',
-    height: '24px',
-    objectFit: 'contain' 
-  };
-
+  const iconStyle = { width: '24px', height: '24px', objectFit: 'contain' };
 
   return (
     <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
       
-      {/* 1. WRAPPER DE NAVEGACIÓN (Botones Volver/Editar) */}
+      {/* 1. WRAPPER DE NAVEGACIÓN */}
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
-        
-          {/* 🏆 BOTÓN DE VOLVER (Flecha Glassy, reemplaza el div.flecha anterior) */}
           <button className={styles.btnBackNav} onClick={() => navigate('/escenas')}>
-            <img src={imgFlecha} alt="Flecha atras" style={iconStyle} />
+            <img src={imgFlecha} alt="Atrás" style={iconStyle} />
           </button>
-             
           <button className={styles.btnEdit} onClick={handleEdit}>
              Editar
           </button>
         </div>
       </div>
       
-      {/* 2. HEADER DINÁMICO (Título de la Escena) */}
-      <div className={styles.headerTitleWrapper}>
-        <Header nombre={escena.name} />
-      </div>
+      {/* 🗑️ HEMOS ELIMINADO EL DIV 'headerTitleWrapper' Y EL COMPONENTE <Header> 
+          PORQUE AHORA ESTÁ EN EL LAYOUT */}
 
-      {/* 3. CONTENEDOR CENTRAL LIMITADO: Contenido principal */}
+      {/* 2. CONTENEDOR CENTRAL */}
       <div className={styles.centerWrapper}>
 
-        {/* HERO (Descripción y Botón Activar) */}
         <div className={styles.detalleHero}>
-          <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción disponible."}</p>
-          
+          <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
           <button className={styles.btnBigPlay} onClick={handleExecute}>
             <div className={styles.playIcon}>&#x25B6;</div>
             <span>ACTIVAR AHORA</span>
           </button>
         </div>
 
-        {/* SECCIÓN 1: DISPOSITIVOS (CON SVG y NEÓN CONDICIONAL) */}
+        {/* TARJETAS DE DISPOSITIVOS (Sin cambios) */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
           
-          {/* Fila Chorros */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
-                {/* 🏆 Aplicamos la clase condicional para Chorros */}
-                <div className={chorrosIconClass}>
-                    {CHORROS_SVG}
-                </div>
+                <div className={chorrosIconClass}>{CHORROS_SVG}</div>
                 <span className={styles.deviceLabel}>Chorros de agua</span>
             </div>
-            
             <span className={`${styles.statusBadge} ${actions.chorrosAgua ? styles.on : styles.off}`}>
               {actions.chorrosAgua ? 'ENCENDIDOS' : 'APAGADOS'}
             </span>
           </div>
 
-          {/* Fila Luces */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
-                {/* 🏆 Aplicamos la clase condicional y el estilo dinámico para Luces */}
-                <div className={lucesIconClass} style={lightStyle}>
-                    {LUCES_SVG}
-                </div>
+                <div className={lucesIconClass} style={lightStyle}>{LUCES_SVG}</div>
                 <span className={styles.deviceLabel}>Luces Piscina</span>
             </div>
-            
             <div className={styles.lightStatus}>
-              {luces.estado && (
-                  <div className={styles.colorPreviewDot} style={{backgroundColor: colorRGB}}></div>
-              )}
+              {luces.estado && <div className={styles.colorPreviewDot} style={{backgroundColor: colorRGB}}></div>}
               <span className={`${styles.statusBadge} ${luces.estado ? styles.on : styles.off}`}>
                   {luces.estado ? 'ENCENDIDAS' : 'APAGADAS'}
               </span>
@@ -206,30 +149,20 @@ const Detalle = () => {
           </div>
         </div>
 
-        {/* SECCIÓN 2: DÍAS Y HORARIOS */}
+        {/* HORARIOS */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Días y Horarios</h3>
           <div className={styles.scheduleRow}>
-             
               <div className={styles.scheduleContent}>
-                  <strong className={styles.scheduleTitle}>Lunes, Miércoles y Viernes</strong>
-                  <p className={styles.scheduleText}>Inicio automático: 19:00 hs</p>
+                  <strong className={styles.scheduleTitle}>Programación</strong>
+                  {/* Pequeña mejora: Mostrar los días reales si existen */}
+                  <p className={styles.scheduleText}>
+                    {escena.schedule?.enabled 
+                        ? `Días: ${escena.schedule.days?.join(', ') || 'N/A'} - ${escena.schedule.time}` 
+                        : "Apagado automático desactivado"}
+                  </p>
               </div>
           </div>
-        </div>
-
-        {/* SECCIÓN 3: HISTORIAL */}
-        <div className={styles.detalleCard}>
-          <h3 className={styles.cardTitle}>Historial de Ejecución</h3>
-          <ul className={styles.historyList}>
-              <li>
-                  <span className={styles.historyDate}>Hoy, 10:30 AM</span>
-                  <span className={`${styles.historyType} ${styles.manual}`}>Manual</span>
-              </li>
-              <li>
-                  <span className={`${styles.historyType} ${styles.auto}`}>Automático</span>
-              </li>
-          </ul>
         </div>
 
         {/* ZONA DE PELIGRO */}
