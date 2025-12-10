@@ -1,3 +1,6 @@
+/* ========================================================== */
+/* 1. TARJETA BASE Y GENERAL                                  */
+/* ========================================================== */
 .modernCardLine {
   /* Estilo base de la tarjeta horizontal */
   display: flex;
@@ -19,10 +22,15 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* SECCIÓN IZQUIERDA: Texto */
+/* ========================================================== */
+/* 2. SECCIÓN IZQUIERDA: Texto (infoWrapper)                  */
+/* ========================================================== */
 .infoWrapper {
-  flex: 1; /* Toma el espacio disponible */
+  /* Limitamos el espacio para dejar sitio a los íconos */
+  flex: 1; 
   margin-right: 15px;
+  /* Asegura que el contenido se ajuste sin desbordar */
+  min-width: 0; 
 }
 
 .sceneTitle {
@@ -36,10 +44,11 @@
   margin: 0;
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.6);
+  /* Truncamiento de texto en una línea */
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 200px;
+  max-width: 100%; /* El max-width debe ser 100% del contenedor padre (.infoWrapper) */
 }
 
 /* Badge Automático */
@@ -53,11 +62,14 @@
   color: #ddd;
 }
 
-/* SECCIÓN DERECHA: Íconos */
+/* ========================================================== */
+/* 3. SECCIÓN DERECHA: Íconos y Botones (iconosWrapper)       */
+/* ========================================================== */
 .iconosWrapper {
   display: flex;
   align-items: center;
-  gap: 12px; /* Espacio entre íconos */
+  gap: 12px; 
+  flex-shrink: 0; /* Asegura que los íconos no se encojan */
 }
 
 /* Contenedor base del ícono */
@@ -134,8 +146,8 @@
   align-items: center;
   justify-content: center;
   transition: all 0.2s;
-  margin-left: 5px;
   border: 1px solid rgba(255,255,255,0.2);
+  /* Se elimina el margin-left: 5px para integrarlo mejor con el gap de iconosWrapper */
 }
 
 .quickPlayBtn:hover {
@@ -147,11 +159,4 @@
 
 .quickPlayBtn:active {
   transform: scale(0.95);
-}
-
-/* Flecha final */
-.arrow {
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.4);
-  margin-left: 5px;
 }

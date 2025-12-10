@@ -15,7 +15,7 @@ const Layout = () => {
 
       {/* 3. Contenedor principal con padding para evitar solapamiento */}
       {/* Ajusta '100px' según la altura real de tu Header y Menu */}
-      <main style={{ paddingTop: '100px', paddingBottom: '100px', minHeight: '100vh' }}>
+      <main style={{ paddingTop: '30px', paddingBottom: '100px', minHeight: '100vh' }}>
         {/* Aquí se renderizan tus páginas (Inicio, Gestor, etc.) */}
         <Outlet />
       </main>

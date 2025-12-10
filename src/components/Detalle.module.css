@@ -41,8 +41,8 @@
     margin-top: 0 !important; 
     margin-bottom: 0 !important; 
     text-align: center;
-    line-height: 1.1;
-    padding: 0 16px; /* Asegurar que no toque los bordes */
+   width: 100%; /* Ejemplo de corrección, puedes ajustar el valor si es necesario */
+   line-height: 1.1;
 }
 
 .centerWrapper {

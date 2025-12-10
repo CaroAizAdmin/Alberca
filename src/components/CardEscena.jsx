@@ -75,10 +75,7 @@ const CardEscena = ({ id, escena }) => {
             ▶
         </button>
         
-        {/* Flecha de Detalle */}
-        <div className={styles.arrow}>
-          &gt;
-        </div>
+
         
       </div>
     </div>

@@ -30,9 +30,10 @@ top: -100px;
 
 /* 2. ESTILO DEL NOMBRE DINÁMICO */
 .dynamicTitle {
-  font-size: 3rem; 
+  font-size: 2rem; 
   font-weight: 900; 
   color: var(--color-text-light);
   margin-top: 100px;
+  width: 90%;
   padding: 0;
 }
