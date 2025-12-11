@@ -85,9 +85,10 @@ const CardEscena = ({ id, escena }) => {
   // --- 2. PREPARACIÓN VISUAL ---
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const aguaOn = escena.actions?.chorrosAgua || false;
-  const musicaOn = escena.actions?.musica || false; // Ajustado para soportar boolean simple
+  // Normalización para soportar booleano simple o { estado: true }
+  const musicaOn = escena.actions?.musica === true || escena.actions?.musica?.estado === true; 
   const temperaturaOn = escena.actions?.temperatura?.estado || false; // Ajustado para objeto
-  const limpiezaOn = escena.actions?.limpieza || false;
+  const limpiezaOn = escena.actions?.limpieza === true || escena.actions?.limpieza?.estado === true;
   
   const lucesConfiguradas = luces.estado;
   const isSceneActive = escena.active === true;

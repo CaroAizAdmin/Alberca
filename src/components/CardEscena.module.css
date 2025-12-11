@@ -61,8 +61,7 @@
   color: #ddd;
 }
 
-/* 🏆 CONTENEDOR PARA LOS ÍCONOS DE RESUMEN (Asegura que estén debajo) */
-/* El contenedor .summaryIconsWrapper queda sin la propiedad 'size' no válida: */
+/* 🏆 CONTENEDOR PARA LOS ÍCONOS DE RESUMEN */
 .summaryIconsWrapper {
     display: flex;
     align-items: center;
@@ -169,8 +168,6 @@
 }
 
 /* 2. CHORROS DE AGUA ENCENDIDOS */
-
-/* Grande */
 .activeWater .deviceImage {
   /* Copiando activeStyle */
   opacity: 1;
@@ -238,6 +235,8 @@
     transform: scale(1.05);
     
     border-color: cyan; /* Color para Música */
+    /* 🟢 CORRECCIÓN APLICADA: Añadir animación */
+    animation: pulseSmall 2s infinite ease-in-out;
 }
 
 /* Pequeño - TEMPERATURA */
@@ -248,6 +247,8 @@
     transform: scale(1.05);
     
     border-color: #ff4500; /* Color para Temperatura (rojo/naranja) */
+    /* 🟢 CORRECCIÓN APLICADA: Añadir animación */
+    animation: pulseSmall 2s infinite ease-in-out;
 }
 
 /* Pequeño - LIMPIEZA */
@@ -258,6 +259,8 @@
     transform: scale(1.05);
     
     border-color: #34c759; /* Color para Limpieza (verde) */
+    /* 🟢 CORRECCIÓN APLICADA: Añadir animación */
+    animation: pulseSmall 2s infinite ease-in-out;
 }
 
 

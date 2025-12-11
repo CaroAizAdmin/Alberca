@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // 👈 Importamos useEffect
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
@@ -14,7 +14,7 @@ import { useTitulo } from '../hooks/useTitulo';
 // MODALES
 import ModalExito from './ModalExito';
 import ModalConfirmacion from './ModalConfirmacion';
-import ModalError from './ModalError'; // Ya creado en el paso anterior
+import ModalError from './ModalError'; 
 
 // Función auxiliar para formatear días
 const formatDaysFull = (days) => {
@@ -45,12 +45,16 @@ const Detalle = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   
+  // 🟢 CORRECCIÓN: Subir el scroll al inicio al montar el componente.
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []); // El array vacío [] asegura que solo se ejecute al montar.
+  
   // --- ESTADOS DE MODALES ---
   const [showModalExito, setShowModalExito] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
   
   const [showModalStop, setShowModalStop] = useState(false);
-  // 🏆 ESTADO CLAVE PARA LA ELIMINACIÓN
   const [showModalDelete, setShowModalDelete] = useState(false); 
   
   const [showModalError, setShowModalError] = useState(false);
@@ -70,7 +74,8 @@ const Detalle = () => {
     },
   });
 
-  useTitulo(escena ? escena.name : "Cargando escena...");
+  const pageTitle = escena ? "Detalle de:" : "Cargando detalle...";
+  useTitulo(pageTitle);
 
   // --- MUTACIÓN ELIMINAR (SIN ALERTS) ---
   const deleteMutation = useMutation({
@@ -78,9 +83,9 @@ const Detalle = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
       setMensajeExito("La escena ha sido eliminada correctamente.");
-      setRedirectOnClose(true); // Redirige al listado al cerrar el modal
+      setRedirectOnClose(true); 
       setShowModalExito(true);
-      setShowModalDelete(false); // Cierra el modal de confirmación
+      setShowModalDelete(false); 
     },
     onError: () => {
       setMensajeError("No se pudo eliminar la escena. Intenta de nuevo.");
@@ -156,12 +161,10 @@ const Detalle = () => {
   // --- HANDLERS ---
   const handleEdit = () => navigate(`/editar-escena/${id}`);
   
-  // 🏆 1. BOTÓN ELIMINAR: Abre el modal de confirmación
   const handleDelete = () => { 
     setShowModalDelete(true); 
   };
   
-  // 🏆 2. CONFIRMACIÓN: Lanza la mutación real
   const confirmDelete = () => {
     deleteMutation.mutate(); 
   };
@@ -186,9 +189,8 @@ const Detalle = () => {
   const luces = actions.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const chorrosOn = actions.chorrosAgua === true; 
   
-  let musica = { estado: false };
-  if (typeof actions.musica === 'boolean') musica.estado = actions.musica;
-  else if (actions.musica) musica = actions.musica;
+  // Normalización de Música/Limpieza (booleano simple o en objeto)
+  const musica = { estado: actions.musica === true || actions.musica?.estado === true };
 
   let temperatura = { estado: false, grados: 25 };
   if (actions.temperatura) {
@@ -198,9 +200,7 @@ const Detalle = () => {
       };
   }
 
-  let limpieza = { estado: false };
-  if (typeof actions.limpieza === 'boolean') limpieza.estado = actions.limpieza;
-  else if (actions.limpieza) limpieza = actions.limpieza;
+  const limpieza = { estado: actions.limpieza === true || actions.limpieza?.estado === true };
 
   const isSceneActive = escena.active === true;
   const diasTexto = formatDaysFull(escena.schedule?.days);
@@ -220,6 +220,7 @@ const Detalle = () => {
   }
 
   const lightStyle = { ...(luces.estado && { '--scene-color': colorRGB }) };
+  // Clases dinámicas
   const chorrosIconClass = `${styles.deviceIcon} ${chorrosOn ? styles.activeWater : ''}`;
   const lucesIconClass = `${styles.deviceIcon} ${luces.estado ? styles.activeLight : ''}`;
   const musicaIconClass = `${styles.deviceIcon} ${musica.estado ? styles.activeMusic : ''}`;
@@ -258,7 +259,7 @@ const Detalle = () => {
         textoBotonConfirmar="Sí, detener"
       />
 
-      {/* 🏆 4. Confirmar Eliminar (¡El que necesitabas!) */}
+      {/* 4. Confirmar Eliminar */}
       <ModalConfirmacion 
         isOpen={showModalDelete}
         onClose={() => setShowModalDelete(false)}
