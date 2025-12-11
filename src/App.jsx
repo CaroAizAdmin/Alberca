@@ -9,6 +9,7 @@ import GestorEscenas from "./components/GestorEscenas";
 import Detalle from "./components/Detalle";
 import EditarEscena from "./components/EditarEscena";
 import Error404 from "./components/Error404";
+import Configuracion1 from "./components/Configuracion1";
 
 function App() {
   // Estado global de escenas (si lo necesitas compartir entre componentes sin fetch)
@@ -21,7 +22,7 @@ function App() {
         
         {/* Pasamos props si tus componentes las necesitan, o limpiamos si usas React Query */}
         <Route path='/' element={<Inicio escena={escenas} setEscenas={setEscenas} />} />
-        <Route path='/escenas' element={<Inicio escena={escenas} setEscenas={setEscenas} />} />
+        <Route path='/configuracion' element={<Configuracion1 escena={escenas} setEscenas={setEscenas}/>}/>
         
         <Route path='/crearEscena' element={<GestorEscenas escena={escenas} setEscenas={setEscenas} />} />
         

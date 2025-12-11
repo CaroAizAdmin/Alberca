@@ -19,11 +19,11 @@ const Menu = () => {
                 
                 {/* 1. Enlace a /escenas */}
                 <NavLink 
-                    to="/escenas"
+                    to="/configuracion"
                     // 🏆 Agrega la clase modular .navLinkActive si isActive es true
                     className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
                 >
-                    <img src={imgEscenas} alt="Escenas" style={iconStyle} />
+                    <img src={imgEscenas} alt="configuracion" style={iconStyle} />
                 </NavLink>
 
                 {/* 2. Enlace a / (Inicio) - Activo por defecto */}
