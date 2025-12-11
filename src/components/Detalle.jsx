@@ -272,7 +272,7 @@ const Detalle = () => {
       {/* HEADER NAV */}
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
-          <button className={styles.btnBackNav} onClick={() => navigate('/escenas')}>
+          <button className={styles.btnBackNav} onClick={() => navigate('/')}>
             <img src={imgFlecha} alt="Atrás" style={iconNavStyle} />
           </button>
           <button className={styles.btnEdit} onClick={handleEdit}>

@@ -1,0 +1,310 @@
+/* ========================================================== */
+/* VARIABLES DE COLOR (Centralizadas para el Formulario)      */
+/* ========================================================== */
+:root {
+  --color-card-background-glass: rgba(45, 50, 90, 0.4); 
+  --color-primary-blue: #5C97F2; 
+  --color-text-light: #F0F0F0;
+  --color-text-faded: #B0B3CC;
+  --color-success: #34c759;
+  --color-danger: #F65959; 
+  --color-border-glass: rgba(255, 255, 255, 0.1);
+  --color-progress-fill: #5C97F2; 
+}
+
+/* ========================================================== */
+/* 1. TARJETA PRINCIPAL (Form Card)                           */
+/* ========================================================== */
+
+.form-card {
+    background: var(--color-card-background-glass); 
+    backdrop-filter: blur(10px); 
+    border-radius: 18px; 
+    padding: 30px;
+    color: var(--color-text-light);
+    width: 100%;
+    max-width: 500px; /* Ancho máximo de la tarjeta */
+    box-sizing: border-box;
+    border: 1px solid var(--color-border-glass); 
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+    margin: 0 auto; /* Centrar la tarjeta si se usa sin un contenedor padre que centre */
+}
+
+.form-title {
+    color: var(--color-primary-blue);
+    font-size: 1.5rem;
+    margin-top: 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid var(--color-border-glass);
+    padding-bottom: 10px;
+}
+
+/* ========================================================== */
+/* 2. CAMPOS DE FORMULARIO                                    */
+/* ========================================================== */
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--color-text-light);
+}
+
+.form-input, 
+.form-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border-glass);
+    background: rgba(0, 0, 0, 0.3); 
+    color: var(--color-text-light);
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus, 
+.form-textarea:focus {
+    outline: none;
+    border-color: var(--color-primary-blue);
+    box-shadow: 0 0 0 2px rgba(92, 151, 242, 0.5); 
+}
+
+.form-textarea {
+    resize: vertical;
+}
+
+.error-msg {
+    color: var(--color-danger);
+    margin-top: 8px;
+    font-size: 0.85rem;
+}
+
+/* Ajuste para el input type="time" */
+.form-input[type="time"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding: 12px 15px;
+    height: auto; 
+    color: var(--color-text-light); 
+    background: rgba(0, 0, 0, 0.4); 
+}
+.form-input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); 
+    cursor: pointer;
+}
+
+/* ========================================================== */
+/* 3. BARRA DE PROGRESO                                       */
+/* ========================================================== */
+
+.progress-bar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+    position: relative;
+    margin: 0 auto 40px auto; /* Centrar y margen inferior */
+}
+
+.progress-line {
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.15);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
+}
+
+.progress-fill {
+    position: absolute;
+    height: 3px;
+    background-color: var(--color-progress-fill);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    transition: width 0.3s ease-in-out;
+}
+
+.step-indicator {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: var(--color-text-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+    z-index: 3;
+    transition: background-color 0.3s;
+    border: 2px solid transparent;
+}
+
+.step-indicator.active {
+    background-color: var(--color-progress-fill);
+    border-color: var(--color-text-light);
+    box-shadow: 0 0 8px var(--color-progress-fill);
+}
+
+/* ========================================================== */
+/* 4. DEVICE TOGGLE, COLOR & DÍAS                             */
+/* ========================================================== */
+
+.device-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    gap: 15px;
+}
+.device-row:last-of-type {
+    border-bottom: none;
+}
+/* Estilos del Switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
+  flex-shrink: 0;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15); transition: .4s; border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.slider:before {
+  position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 3px;
+  background-color: var(--color-text-light); transition: .4s; border-radius: 50%;
+}
+input:checked + .slider { background-color: var(--color-primary-blue); box-shadow: 0 0 5px var(--color-primary-blue); }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* Selector de Color */
+.color-picker-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.modern-color-input-container {
+    display: flex; align-items: center; background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px; border: 1px solid var(--color-border-glass); padding: 5px;
+}
+.modern-color-input {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    width: 30px; height: 30px; background: transparent; border: none;
+    cursor: pointer; padding: 0; border-radius: 6px;
+}
+.modern-color-input::-webkit-color-swatch, .modern-color-input::-moz-color-swatch {
+    border-radius: 6px; border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.color-code {
+    font-size: 0.9rem; font-weight: 500; margin-left: 10px;
+    color: var(--color-text-light); padding-right: 5px;
+}
+
+/* Selector de Días */
+.day-selector-container {
+    display: flex; justify-content: space-between; gap: 5px;
+    margin-bottom: 20px; padding: 5px 0;
+}
+.day-button {
+    background: rgba(45, 50, 90, 0.2); backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 40px; height: 40px; display: flex; align-items: center;
+    justify-content: center; border-radius: 8px; color: var(--color-text-faded);
+    font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+    font-size: 0.85rem; text-transform: uppercase;
+}
+.day-button:hover:not(.selected) { background: rgba(45, 50, 90, 0.4); color: var(--color-text-light); }
+.day-button.selected {
+    background: var(--color-primary-blue); border-color: rgba(255, 255, 255, 0.5);
+    color: var(--color-text-light); box-shadow: 0 0 8px rgba(92, 151, 242, 0.7); 
+    transform: translateY(-1px);
+}
+
+/* Resumen */
+.summary-list strong {
+    color: var(--color-primary-blue); font-weight: 700;
+    display: inline-block; width: 100px;
+}
+
+/* ========================================================== */
+/* 5. BOTONES DE NAVEGACIÓN (Siguiente/Atrás)                 */
+/* ========================================================== */
+
+.buttons-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+.btn-nav {
+    flex-grow: 1; padding: 12px 20px; border: none; border-radius: 10px;
+    font-weight: 700; cursor: pointer; transition: all 0.2s ease;
+    font-size: 1rem; color: var(--color-text-light);
+} 
+
+.btn-prev {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-light);
+}
+.btn-prev:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+}
+
+/* Botón Siguiente/Guardar (Glassy Azul/Verde) */
+.btn-next {
+    background: rgba(92, 151, 242, 0.2); 
+    backdrop-filter: blur(8px); 
+    border: 1px solid rgba(92, 151, 242, 0.4); 
+    box-shadow: 0 4px 10px rgba(92, 151, 242, 0.3);
+}
+.btn-next:hover:not(:disabled) {
+    background: rgba(92, 151, 242, 0.4); 
+    transform: translateY(-1px);
+    opacity: 1; 
+}
+.btn-next[disabled] {
+    opacity: 0.5; cursor: not-allowed; box-shadow: none;
+    background: rgba(92, 151, 242, 0.1); border-color: rgba(92, 151, 242, 0.2); 
+}
+/* Estilo para Guardar Cambios (Verde) */
+.btn-next[style*="--color-success"] {
+    background: rgba(52, 199, 89, 0.2) !important; 
+    border-color: rgba(52, 199, 89, 0.4) !important;
+    box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3) !important;
+}
+.btn-next[style*="--color-success"]:hover:not(:disabled) {
+    background: rgba(52, 199, 89, 0.4) !important; 
+}
+
+
+/* ========================================================== */
+/* 6. ESTILOS SVG (Compartidos para Iconos)                   */
+/* ========================================================== */
+
+.svgInactive {
+  opacity: 0.5;
+  filter: grayscale(100%);
+  transition: all 0.3s ease;
+}
+
+.svgActive {
+  opacity: 1;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.6));
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}

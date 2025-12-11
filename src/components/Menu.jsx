@@ -2,6 +2,7 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import imgEscenas from '../assets/imagenes/home.png'
 import imgMas from '../assets/imagenes/mas.png' 
+import imgConfi from '../assets/imagenes/configuracion.png' 
 import styles from "./Menu.module.css"; // Importa los estilos modulares
 
 const Menu = () => {
@@ -23,7 +24,7 @@ const Menu = () => {
                     // 🏆 Agrega la clase modular .navLinkActive si isActive es true
                     className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
                 >
-                    <img src={imgEscenas} alt="configuracion" style={iconStyle} />
+                    <img src={imgConfi} alt="configuracion" style={iconStyle} />
                 </NavLink>
 
                 {/* 2. Enlace a / (Inicio) - Activo por defecto */}
