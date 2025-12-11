@@ -4,6 +4,10 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
 import styles from './CardEscena.module.css';
 
+// 🟢 IMPORTAR EL COMPONENTE DE BOTÓN REUTILIZABLE
+// Asegúrate de que esta ruta sea correcta en tu proyecto
+import BtnQuickPlay from './BotonesGenerales/BotonPlay/BotonPlay'; 
+
 // IMÁGENES
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
@@ -157,13 +161,13 @@ const CardEscena = ({ id, escena }) => {
         </div>
 
         <div className={styles.iconosWrapper}>
-          <button 
-              className={`${styles.quickPlayBtn} ${isSceneActive ? styles.btnActive : ''}`} 
-              onClick={handleQuickRun}
-              disabled={activateMutation.isPending}
-          >
-              {activateMutation.isPending ? "..." : (isSceneActive ? "■" : "▶")}
-          </button>
+          {/* 🏆 USO DEL COMPONENTE REUTILIZABLE 🏆 */}
+          <BtnQuickPlay 
+              styles={styles} 
+              isSceneActive={isSceneActive}
+              handleQuickRun={handleQuickRun}
+              activateMutation={activateMutation} 
+          />
         </div>
       </div>
     </>
