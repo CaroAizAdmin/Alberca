@@ -12,5 +12,5 @@ export const DAYS_OF_WEEK = [
     { key: 'do', label: 'Domingo' },
 ];
 
-export const MIN_TEMP = 15;
+export const MIN_TEMP = 10;
 export const MAX_TEMP = 40;
