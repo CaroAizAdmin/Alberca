@@ -7,6 +7,7 @@ import styles from './EditarEscena.module.css'; // Solo estilos de contenedor y 
 import Formulario from './Formulario/Formulario';
 import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
+import Botones from './BotonesGenerales/Botones/Botones'; // 💡 Importamos el componente Botones
 
 
 const EditarEscena = () => {
@@ -243,9 +244,14 @@ const EditarEscena = () => {
 
       {/* Botón de navegación (fuera del Formulario) */}
       <div className={styles.flecha}>
-        <button className={styles.btnBackNav} onClick={() => navigate(-1)}>
-          <img src={imgFlecha} alt="Atrás" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
-        </button>
+        {/* 💡 REEMPLAZADO: Usamos el componente Botones para que herede el estilo glassy y cuadrado */}
+        <Botones 
+            onClick={() => navigate(-1)} 
+            isIconOnly={true} // Aplica el estilo compacto y cuadrado definido en Botones.module.css
+        >
+          {/* El CSS de Botones.module.css se encarga de que esta imagen se vea blanca */}
+          <img src={imgFlecha} alt="Atrás" />
+        </Botones>
       </div>
 
       {/* Título de la página */}

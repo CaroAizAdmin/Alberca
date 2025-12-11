@@ -5,8 +5,11 @@ import ModalConfirmacion from './ModalConfirmacion';
 import ModalExito from './ModalExito';
 import ModalError from './ModalError';
 // Importa tus estilos. Renombra 'Configuracion.module.css' si usas otro nombre
- import styles from './Configuracion.module.css';  
+import styles from './Configuracion.module.css';  
 import { useTitulo } from '../hooks/useTitulo';
+
+// 💡 Importamos el componente Botones
+import Botones from './BotonesGenerales/Botones/Botones'; 
 
 const Configuracion1 = () => {
    const queryClient = useQueryClient();
@@ -18,7 +21,6 @@ const Configuracion1 = () => {
     const [mensajeError, setMensajeError] = useState("");
 
     // --- MUTACIÓN PARA ELIMINAR TODAS LAS ESCENAS ---
-    // Usamos el método PUT con un cuerpo de 'null' o '{}' para borrar todo el nodo /escenas en Firebase
     const deleteAllScenesMutation = useMutation({
         mutationFn: () => {
             return fetch(`${URL_BASE}/escenas.json`, { 
@@ -61,13 +63,16 @@ const Configuracion1 = () => {
                 <h3>Gestión de Escenas</h3>
                 <p>Presiona este botón para eliminar permanentemente todas las escenas configuradas por el usuario. Esta acción no se puede deshacer.</p>
                 
-                <button 
+                {/* 🟢 REEMPLAZAMOS por el componente Botones con variant="delete" */}
+                <Botones 
+                    variant="delete"
                     onClick={handleDeleteAllScenes} 
                     disabled={deleteAllScenesMutation.isPending}
-                    className={styles.btnDeleteAll}
+                    // Opcional: añadimos una clase de utilería para forzar el 100% de ancho si es necesario
+                    className={styles.btnFullWidth} 
                 >
                     {deleteAllScenesMutation.isPending ? "Eliminando..." : "BORRAR TODAS LAS ESCENAS"}
-                </button>
+                </Botones>
             </div>
             
             {/* MODAL DE CONFIRMACIÓN */}
@@ -98,4 +103,3 @@ const Configuracion1 = () => {
     );
 };
 export default Configuracion1;
-

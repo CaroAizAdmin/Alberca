@@ -34,9 +34,10 @@
 
 
 /* ========================================================== */
-/* 2. BOTÓN DE NAVEGACIÓN (Volver)                            */
+/* 2. BOTÓN DE NAVEGACIÓN (Solo posicionamiento)              */
 /* ========================================================== */
 
+/* Esta clase se encarga ÚNICAMENTE de la posición absoluta en la esquina. */
 .flecha {
     position: absolute;
     top: 25px;
@@ -44,42 +45,16 @@
     z-index: 20; 
 }
 
-.btnBackNav{
-  background: rgba(45, 50, 90, 0.4); 
-  backdrop-filter: blur(8px); 
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); 
-  
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: whitesmoke;
-  cursor: pointer;
-  padding: 8px 14px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btnBackNav:hover{
-  background: rgba(45, 50, 90, 0.6); 
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.btnBackNav img {
-    filter: invert(1); 
-    width: 20px;
-    height: 20px;
-}
+/* ❌ ELIMINADO: Se eliminan las clases .btnBackNav y sus estados (:hover, img) */
+/* ya que ahora el estilo Glassy viene del componente Botones.      */
 
 /* ========================================================== */
 /* 3. RESPONSIVE                                              */
 /* ========================================================== */
 @media (max-width: 768px) {
     .edit-container {
-        padding: 70px 16px 80px;
+        /* Aumentamos el padding superior para compensar el título y la flecha */
+        padding: 70px 16px 80px; 
     }
     
     .flecha {
@@ -87,6 +62,7 @@
     }
     
     .edit-title {
+        /* Reducimos el margen superior y el tamaño para móviles */
         margin-top: 20px;
         font-size: 2rem; 
     }

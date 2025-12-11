@@ -1,3 +1,5 @@
+/* src/components/Configuracion.module.css */
+
 .configuracionContainer {
 
     color: white;
@@ -29,28 +31,12 @@
     margin-bottom: 20px;
 }
 
-.btnDeleteAll {
-    background-color: #ff3b30; /* Rojo vibrante de iOS */
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.2s, transform 0.1s;
-    width: 100%; /* Ocupa todo el ancho */
+/* 💡 NUEVA CLASE: Simplemente asegura el 100% de ancho si el componente Botones no lo hace por defecto */
+.btnFullWidth {
+    width: 100%;
+    /* Ajuste de margen superior para separarlo del párrafo */
+    margin-top: 10px;
 }
 
-.btnDeleteAll:hover {
-    background-color: #ff4500;
-}
-
-.btnDeleteAll:active {
-    transform: scale(0.98);
-}
-
-.btnDeleteAll:disabled {
-    background-color: #630000;
-    cursor: not-allowed;
-}
+/* ❌ ELIMINADO: Se eliminan todas las reglas para .btnDeleteAll (background-color, hover, active, disabled) */
+/* ya que provienen de Botones.module.css (variant="delete") */
