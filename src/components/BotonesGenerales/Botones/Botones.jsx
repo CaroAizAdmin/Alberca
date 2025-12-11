@@ -1,4 +1,4 @@
-
+import React from 'react';
 import styles from './Botones.module.css'; 
 
 const Botones = ({ children, onClick, disabled, variant = 'default', className = '', type = 'button' }) => {

@@ -6,12 +6,6 @@
     display: flex;
     top: -50px;
     padding: 0 40px;
-  position: relative; 
-  z-index: 50; 
-  width: 100%;
-  background-repeat: no-repeat;
-  background-position: center center; 
-  min-height: 350px;
 }
 
 .dynamicTitle {

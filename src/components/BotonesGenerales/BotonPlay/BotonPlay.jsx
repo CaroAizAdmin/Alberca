@@ -1,3 +1,4 @@
+import React from 'react';
 import localStyles from './BotonPlay.module.css';
 
 const BotonPlay = ({ isSceneActive, handleQuickRun, activateMutation }) => {
