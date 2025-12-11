@@ -1,0 +1,56 @@
+.configuracionContainer {
+
+    color: white;
+    max-width: 600px;
+    margin: 0 auto;
+    width: 80%;
+}
+
+.configuracionContainer h1 {
+   font-size: 1.5rem;
+}
+
+.sectionCard {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+.sectionCard h3 {
+    color: #ff4500; /* Un color de advertencia */
+    margin-top: 0;
+}
+
+.sectionCard p {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+}
+
+.btnDeleteAll {
+    background-color: #ff3b30; /* Rojo vibrante de iOS */
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    width: 100%; /* Ocupa todo el ancho */
+}
+
+.btnDeleteAll:hover {
+    background-color: #ff4500;
+}
+
+.btnDeleteAll:active {
+    transform: scale(0.98);
+}
+
+.btnDeleteAll:disabled {
+    background-color: #630000;
+    cursor: not-allowed;
+}

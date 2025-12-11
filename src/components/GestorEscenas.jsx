@@ -73,7 +73,7 @@ const GestorEscenas = () => {
   // FUNCIÓN PARA CERRAR Y NAVEGAR
   const handleCloseModal = () => {
     setShowModal(false);
-    navigate('/escenas');
+    navigate('/');
   };
 
   // --- HANDLERS DE FORMULARIO Y NAVEGACIÓN ---

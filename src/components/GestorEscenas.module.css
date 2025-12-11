@@ -51,6 +51,7 @@
     color: var(--color-text-light);
     width: 100%;
     max-width: 500px; 
+    gap: 20px;
     box-sizing: border-box;
     border: 1px solid var(--color-border-glass); 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
@@ -60,9 +61,11 @@
     color: var(--color-primary-blue);
     font-size: 1.5rem;
     margin-top: 0;
-    margin-bottom: 25px;
+    /* 🟢 CORRECCIÓN APLICADA: Aumentar el margen inferior */
+    margin-bottom: 35px; /* Aumentado de 25px a 35px o 40px */
     border-bottom: 1px solid var(--color-border-glass);
     padding-bottom: 10px;
+
 }
 
 /* ========================================================== */
@@ -176,9 +179,18 @@
     align-items: center;
     padding: 15px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    /* 🟢 CORRECCIÓN APLICADA: Añadir espacio entre el texto y el control */
+    gap: 15px; 
 }
 .deviceRow:last-of-type {
     border-bottom: none;
+}
+
+/* 🟢 NUEVA REGLA: Asegura que el texto (si está en un span o div) tenga espacio */
+.deviceRow span, 
+.deviceRow div:first-child:not(.switch) { 
+    flex-shrink: 1; 
+    /* margin-right: 15px; <--- Ya no es necesario si usamos 'gap' en .deviceRow */
 }
 
 .switch {
@@ -186,6 +198,7 @@
   display: inline-block;
   width: 50px;
   height: 28px;
+  flex-shrink: 0; /* Evita que el switch se comprima */
 }
 .switch input { 
   opacity: 0;
@@ -231,6 +244,7 @@ input:checked + .slider:before {
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-shrink: 0; /* Evita que el color picker se comprima */
 }
 
 .modernColorInputContainer {
@@ -255,6 +269,15 @@ input:checked + .slider:before {
     border-radius: 6px;
 }
 
+.device-row{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    
+    
+}
 .modernColorInput::-webkit-color-swatch {
     border-radius: 6px;
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -340,12 +363,6 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
-/* Nota: Los estilos para el menú desplegable (popup) del selector de hora
-   son muy limitados y varían entre navegadores (por ejemplo, el fondo azul 
-   de la lista no se puede cambiar con CSS estándar). 
-   Con esta modificación, el campo de texto del input ya se verá blanco. */
-
-
 /* ========================================================== */
 /* 7. BOTONES DE NAVEGACIÓN Y ACCIÓN (GLASSY)                 */
 /* ========================================================== */
@@ -423,14 +440,11 @@ input:checked + .slider:before {
 /* ========================================================== */
 
 /* Estilo por defecto (Inactivo o apagado) */
-/* En tus archivos .module.css */
 
 /* --- ESTILOS PARA IMÁGENES PNG --- */
 
 /* Cuando está APAGADO (Inactive) */
 .svgInactive {
-  /* No afecta al contenedor, pero sí a la imagen dentro si usamos selectores descendientes, 
-     o aplicamos la opacidad directo al contenedor */
   opacity: 0.5;                /* Se ve medio transparente */
   filter: grayscale(100%);     /* Se pone en blanco y negro */
   transition: all 0.3s ease;   /* Animación suave */
