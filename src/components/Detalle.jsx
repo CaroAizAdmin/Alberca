@@ -1,10 +1,8 @@
-// src/components/Detalle.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
-import styles from './Detalle.module.css'; // Importa el CSS del detalle para usar flechaBlanca
+import styles from './Detalle.module.css';
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
@@ -17,7 +15,9 @@ import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
 import ModalConfirmacion from './ModalConfirmacion';
 import ModalError from './ModalError';
+// 🏆 IMPORTACIÓN DE BOTÓN (Asegúrate que la ruta sea correcta)
 import Botones from './BotonesGenerales/Botones/Botones'; 
+
 
 // Función auxiliar para formatear días
 const formatDaysFull = (days) => {
@@ -56,13 +56,10 @@ const Detalle = () => {
   // --- ESTADOS DE MODALES ---
   const [showModalExito, setShowModalExito] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
-
   const [showModalStop, setShowModalStop] = useState(false);
   const [showModalDelete, setShowModalDelete] = useState(false);
-
   const [showModalError, setShowModalError] = useState(false);
   const [mensajeError, setMensajeError] = useState("");
-
   const [redirectOnClose, setRedirectOnClose] = useState(false);
 
   // --- GET DATA ---
@@ -77,50 +74,97 @@ const Detalle = () => {
     },
   });
 
-  const pageTitle = escena ? "Detalle de:" : "Cargando detalle...";
-  useTitulo(pageTitle);
+  useTitulo(escena ? escena.name : "Cargando escena...");
 
-  // --- MUTACIONES (Definiciones simuladas - asumiendo que la lógica real existe) ---
+  // --- MUTACIÓN ELIMINAR ---
   const deleteMutation = useMutation({
-    mutationFn: async () => { /* Lógica de eliminación */ },
+    mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, { method: 'DELETE' }).then(res => res.json()),
     onSuccess: () => {
-      setMensajeExito("Escena eliminada correctamente.");
-      setRedirectOnClose(true);
+      queryClient.invalidateQueries({ queryKey: ['escenas'] });
+      setMensajeExito("La escena ha sido eliminada correctamente.");
+      setRedirectOnClose(true); // Redirección al listado al cerrar
       setShowModalDelete(false);
       setShowModalExito(true);
-      queryClient.invalidateQueries({ queryKey: ['escenas'] });
     },
     onError: () => {
-      setMensajeError("Error al eliminar la escena.");
+      setMensajeError("No se pudo eliminar la escena.");
       setShowModalError(true);
+      setShowModalDelete(false);
     }
   });
 
+  // 🏆 MUTACIÓN ACTIVAR (ON) - LÓGICA MUTEX (PUT)
   const activateMutation = useMutation({
-    mutationFn: async () => { /* Lógica de activación */ },
-    onSuccess: () => {
-      setMensajeExito("Escena activada correctamente.");
-      setShowModalExito(true);
-      queryClient.invalidateQueries({ queryKey: ['escena', id] });
+    mutationFn: () => {
+      // 1. Fetch de todas las escenas (para asegurar data fresca)
+      return fetch(`${URL_BASE}/escenas.json`)
+        .then(res => res.json())
+        .then(allScenes => {
+            const updates = {};
+            const historyId = Date.now().toString();
+            const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
+
+            if (allScenes) {
+                // 2. Iteración para activar SOLO la elegida y apagar el resto
+                Object.keys(allScenes).forEach((key) => {
+                    const currentScene = allScenes[key];
+                    if (key === id) {
+                        // LA ELEGIDA -> TRUE + HISTORIAL
+                        const prevHistory = currentScene.history || {};
+                        updates[key] = {
+                            ...currentScene,
+                            active: true,
+                            history: { ...prevHistory, [historyId]: newHistoryEntry }
+                        };
+                    } else {
+                        // LAS DEMÁS -> FALSE
+                        updates[key] = { 
+                            ...currentScene, 
+                            active: false 
+                        };
+                    }
+                });
+            }
+            // 3. PUT Masivo (Actualiza todo el nodo 'escenas')
+            return fetch(`${URL_BASE}/escenas.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updates),
+            });
+        })
+        .then(res => res.json());
     },
-    onError: () => {
-      setMensajeError("Error al activar la escena.");
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['escenas'] });
+      queryClient.invalidateQueries({ queryKey: ['escena', id] });
+      setMensajeExito(`¡La escena "${escena.name}" ha sido ACTIVADA con éxito!`);
+      setRedirectOnClose(false);
+      setShowModalExito(true);
+    },
+    onError: (err) => {
+      setMensajeError("Hubo un problema al activar la escena: verifica el servidor.");
       setShowModalError(true);
     }
   });
 
+  // --- MUTACIÓN DESACTIVAR (Stop) - Lógica de PATCH simple ---
   const deactivateMutation = useMutation({
-    mutationFn: async () => { /* Lógica de desactivación */ },
+    mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ active: false }),
+        }).then(res => res.json()),
     onSuccess: () => {
-      setShowModalStop(false);
-      setMensajeExito("Escena detenida correctamente.");
-      setShowModalExito(true);
-      queryClient.invalidateQueries({ queryKey: ['escena', id] });
+        queryClient.invalidateQueries({ queryKey: ['escenas'] });
+        queryClient.invalidateQueries({ queryKey: ['escena', id] });
+        setShowModalStop(false);
+        setMensajeExito("Escena detenida correctamente.");
+        setShowModalExito(true);
     },
     onError: () => {
-      setShowModalStop(false);
-      setMensajeError("Error al detener la escena.");
-      setShowModalError(true);
+       setShowModalStop(false);
+       setMensajeError("No se pudo apagar la escena.");
+       setShowModalError(true);
     }
   });
 
@@ -128,35 +172,37 @@ const Detalle = () => {
   const handleEdit = () => navigate(`/editar-escena/${id}`);
   const handleDelete = () => { setShowModalDelete(true); };
   const confirmDelete = () => { deleteMutation.mutate(); };
-  const handleExecute = () => { if (escena.active) setShowModalStop(true); else activateMutation.mutate(); };
+  
+  // Lógica del botón: Si está activo -> Pregunta para apagar. Si está inactivo -> Activa.
+  const handleExecute = () => { 
+    if (escena.active) setShowModalStop(true); 
+    else activateMutation.mutate(); 
+  };
+  
   const handleCloseExito = () => {
-    setShowModalExito(false);
-    if (redirectOnClose) {
-      navigate('/escenas');
-    }
+      setShowModalExito(false);
+      if (redirectOnClose) {
+          navigate('/escenas');
+      }
   };
 
   if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando...</div>;
   if (error) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>Error de conexión</div>;
 
-  // 🟢 PREPARACIÓN DATOS VISUALES 
+  // --- PREPARACIÓN DATOS VISUALES (NORMALIZACIÓN) ---
   const actions = escena.actions || {};
   const luces = actions.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
-  const chorrosOn = actions.chorrosAgua === true;
-
-  // Normalización de Música/Limpieza (booleano simple o en objeto)
-  const musica = { estado: actions.musica === true || actions.musica?.estado === true };
-
+  const chorrosOn = actions.chorrosAgua === true; 
+  
+  let musica = { estado: actions.musica === true || actions.musica?.estado === true };
   let temperatura = { estado: false, grados: 25 };
   if (actions.temperatura) {
-    temperatura = {
-      estado: actions.temperatura.estado || false,
-      grados: actions.temperatura.grados || 25
-    };
+      temperatura = {
+          estado: actions.temperatura.estado || false,
+          grados: actions.temperatura.grados || 25
+      };
   }
-
-  const limpieza = { estado: actions.limpieza === true || actions.limpieza?.estado === true };
-
+  let limpieza = { estado: actions.limpieza === true || actions.limpieza?.estado === true };
   const isSceneActive = escena.active === true;
   const diasTexto = formatDaysFull(escena.schedule?.days);
 
@@ -175,7 +221,6 @@ const Detalle = () => {
   }
 
   const lightStyle = { ...(luces.estado && { '--scene-color': colorRGB }) };
-  // Clases dinámicas
   const chorrosIconClass = `${styles.deviceIcon} ${chorrosOn ? styles.activeWater : ''}`;
   const lucesIconClass = `${styles.deviceIcon} ${luces.estado ? styles.activeLight : ''}`;
   const musicaIconClass = `${styles.deviceIcon} ${musica.estado ? styles.activeMusic : ''}`;
@@ -186,19 +231,19 @@ const Detalle = () => {
   
   return (
     <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
-
+      
       {/* --- ZONA DE MODALES --- */}
       <ModalExito
         isOpen={showModalExito}
         onClose={handleCloseExito}
         mensaje={mensajeExito}
       />
-      <ModalError
+      <ModalError 
         isOpen={showModalError}
         onClose={() => setShowModalError(false)}
         mensaje={mensajeError}
       />
-      <ModalConfirmacion
+      <ModalConfirmacion 
         isOpen={showModalStop}
         onClose={() => setShowModalStop(false)}
         onConfirm={() => deactivateMutation.mutate()}
@@ -206,7 +251,7 @@ const Detalle = () => {
         mensaje={`La escena "${escena.name}" está en ejecución. ¿Deseas detenerla?`}
         textoBotonConfirmar="Sí, detener"
       />
-      <ModalConfirmacion
+      <ModalConfirmacion 
         isOpen={showModalDelete}
         onClose={() => setShowModalDelete(false)}
         onConfirm={confirmDelete}
@@ -218,17 +263,15 @@ const Detalle = () => {
       {/* HEADER NAV */}
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
-          
-          {/* BOTÓN ATRÁS (CLAVE: variant="nav-icon" y clase flechaBlanca) */}
+          {/* BOTÓN ATRÁS */}
           <Botones onClick={() => navigate('/')} variant="nav-icon">
             <img 
               src={imgFlecha} 
               alt="Atrás" 
-              className={styles.flechaBlanca} // Aplica el filtro CSS aquí
+              className={styles.flechaBlanca}
             />
           </Botones>
-
-          {/* BOTÓN EDITAR (CLAVE: variant="nav-icon". El texto es blanco por CSS) */}
+          {/* BOTÓN EDITAR */}
           <Botones onClick={handleEdit} variant="nav-icon">
             Editar
           </Botones>
@@ -240,8 +283,8 @@ const Detalle = () => {
         <div className={styles.detalleHero} style={lightStyle}>
           <h1 className={styles.detalleTitle}>{escena.name}</h1>
           <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
-
-          {/* BOTÓN ACTIVAR AHORA (CLAVE: variant="success" para el VERDE) */}
+          
+          {/* BOTÓN GIGANTE */}
           <Botones
             variant="success" 
             isActive={isSceneActive}
@@ -256,7 +299,7 @@ const Detalle = () => {
         {/* DISPOSITIVOS */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
-
+          
           {/* LUCES */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
@@ -272,7 +315,6 @@ const Detalle = () => {
               </span>
             </div>
           </div>
-
           {/* CHORROS */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
@@ -285,8 +327,7 @@ const Detalle = () => {
               {chorrosOn ? 'ACTIVADOS' : 'APAGADOS'}
             </span>
           </div>
-
-          {/* MÚSICA */}
+          {/* MUSICA */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={musicaIconClass}>
@@ -298,8 +339,7 @@ const Detalle = () => {
               {musica.estado ? 'ON' : 'OFF'}
             </span>
           </div>
-          
-          {/* TEMPERATURA */}
+          {/* TEMP */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={tempIconClass}>
@@ -311,7 +351,6 @@ const Detalle = () => {
               {temperatura.estado ? `${temperatura.grados}°C` : 'APAGADA'}
             </span>
           </div>
-
           {/* LIMPIEZA */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
@@ -324,8 +363,7 @@ const Detalle = () => {
               {limpieza.estado ? 'EN CURSO' : 'INACTIVA'}
             </span>
           </div>
-
-        </div> {/* Cierre de div.detalleCard DISPOSITIVOS */}
+        </div>
 
         {/* HORARIOS */}
         <div className={styles.detalleCard}>
@@ -370,19 +408,14 @@ const Detalle = () => {
 
         {/* ZONA DE PELIGRO */}
         <div className={styles.dangerZone}>
-          {/* BOTÓN ELIMINAR (Componente Botones, variant="delete") */}
-          <Botones
-            variant="delete"
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
-          >
+          <Botones variant="delete" onClick={handleDelete} disabled={deleteMutation.isPending}>
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar Escena"}
           </Botones>
         </div>
 
-      </div> {/* Cierre de div.centerWrapper */}
-    </div> 
-  ); 
-}; 
+      </div>
+    </div>
+  );
+};
 
 export default Detalle;
