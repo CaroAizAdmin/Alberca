@@ -82,26 +82,26 @@ const GestorEscenas = () => {
 
   const handleNext = () => {
     if (step === 1 && (!formData.name || !formData.name.trim())) {
-        setErrorLocal("El nombre de la escena es obligatorio.");
-        return;
+      setErrorLocal("El nombre de la escena es obligatorio.");
+      return;
     }
     if (step === 2) {
-        const activeActions = Object.keys(formData.actions).some(key => {
-            const action = formData.actions[key];
-            if (typeof action === 'object' && action !== null) {
-              return action.estado;
-            }
-            return action;
-          });
-          if (!activeActions) {
-            setErrorLocal("Advertencia: No ha activado ningún dispositivo.");
-          } else {
-            setErrorLocal("");
-          }
+      const activeActions = Object.keys(formData.actions).some(key => {
+        const action = formData.actions[key];
+        if (typeof action === 'object' && action !== null) {
+          return action.estado;
+        }
+        return action;
+      });
+      if (!activeActions) {
+        setErrorLocal("Advertencia: No ha activado ningún dispositivo.");
+      } else {
+        setErrorLocal("");
+      }
     }
     if (step === 3 && formData.schedule.enabled && formData.schedule.days.length === 0) {
-        setErrorLocal("Debes seleccionar al menos un día para la programación automática.");
-        return;
+      setErrorLocal("Debes seleccionar al menos un día para la programación automática.");
+      return;
     }
     setErrorLocal("");
     setStep(step + 1);
@@ -121,15 +121,15 @@ const GestorEscenas = () => {
           newActions.chorrosAgua = !newActions.chorrosAgua;
           break;
         case 'luces':
-          newActions.luces = { 
-            ...newActions.luces, 
-            estado: !newActions.luces.estado 
+          newActions.luces = {
+            ...newActions.luces,
+            estado: !newActions.luces.estado
           };
           break;
-        case 'temperatura': 
-          newActions.temperatura = { 
-            ...newActions.temperatura, 
-            estado: !newActions.temperatura.estado 
+        case 'temperatura':
+          newActions.temperatura = {
+            ...newActions.temperatura,
+            estado: !newActions.temperatura.estado
           };
           break;
         case 'musica':
@@ -174,16 +174,16 @@ const GestorEscenas = () => {
         onClose={handleCloseModal}
         mensaje="¡La escena se ha creado y guardado en la nube correctamente!"
       />
-      
-     <Formulario
+
+      <Formulario
         formData={formData}
         step={step}
         errorLocal={errorLocal}
         mutation={mutation}
         mode="create"
-        
-        containerClassName={styles.editContainer} 
-        
+
+        containerClassName={styles.editContainer}
+
         handleChange={handleChange}
         handleScheduleChange={handleScheduleChange}
         handleDayToggle={handleDayToggle}
@@ -192,7 +192,7 @@ const GestorEscenas = () => {
         handleTempChange={handleTempChange}
         handleNext={handleNext}
         handleBack={handleBack}
-        handleAction={handleSave} 
+        handleAction={handleSave}
       />
 
     </div>

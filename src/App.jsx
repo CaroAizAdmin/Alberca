@@ -16,7 +16,7 @@ function App() {
     <Routes>
       <Route element={<Layout />}>
         <Route path='/' element={<Inicio escena={escenas} setEscenas={setEscenas} />} />
-        <Route path='/configuracion' element={<Configuracion1 escena={escenas} setEscenas={setEscenas}/>}/>
+        <Route path='/configuracion' element={<Configuracion1 escena={escenas} setEscenas={setEscenas} />} />
         <Route path='/crearEscena' element={<GestorEscenas escena={escenas} setEscenas={setEscenas} />} />
         <Route path='/escenas/:id' element={<Detalle escena={escenas} setEscenas={setEscenas} />} />
         <Route path='/editar-escena/:id' element={<EditarEscena escena={escenas} setEscenas={setEscenas} />} />

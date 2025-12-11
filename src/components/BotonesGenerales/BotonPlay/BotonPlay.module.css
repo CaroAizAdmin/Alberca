@@ -12,11 +12,11 @@
   justify-content: center;
   transition: all 0.2s;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.1); 
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .quickPlayBtn:hover {
-  background: #4cd964; 
+  background: #4cd964;
   color: black;
   transform: scale(1.1);
   box-shadow: 0 0 10px #4cd964;
@@ -27,19 +27,19 @@
 }
 
 .btnActive {
-    background: #4cd964; 
-  background: #4cd964; 
+  background: #4cd964;
+  background: #4cd964;
   color: black;
   box-shadow: 0 0 10px #4cd964;
   border-color: #4cd964;
-  transform: scale(1.05); 
+  transform: scale(1.05);
   opacity: 1;
 }
 
 .quickPlayBtn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-    background: rgba(255, 255, 255, 0.05);
+  opacity: 0.6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+  background: rgba(255, 255, 255, 0.05);
 }

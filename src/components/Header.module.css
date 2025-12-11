@@ -3,14 +3,14 @@
 }
 
 .headerContainer {
-    display: flex;
-    top: -50px;
-    padding: 0 40px;
+  display: flex;
+  top: -50px;
+  padding: 0 40px;
 }
 
 .dynamicTitle {
-  font-size: 2rem; 
-  font-weight: 900; 
+  font-size: 2rem;
+  font-weight: 900;
   color: var(--color-text-light);
   margin-top: 100px;
   width: 90%;

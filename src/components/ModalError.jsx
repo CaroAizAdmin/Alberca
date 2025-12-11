@@ -7,23 +7,23 @@ const ModalError = ({ isOpen, onClose, mensaje }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modalCard} style={{
-          borderColor: 'rgba(246, 89, 89, 0.5)' 
+        borderColor: 'rgba(246, 89, 89, 0.5)'
       }}>
 
-        <div className={styles.iconCircle} style={{ 
-            backgroundColor: 'rgba(246, 89, 89, 0.2)', 
-            color: '#F65959',
-            boxShadow: '0 0 15px rgba(246, 89, 89, 0.3)'
+        <div className={styles.iconCircle} style={{
+          backgroundColor: 'rgba(246, 89, 89, 0.2)',
+          color: '#F65959',
+          boxShadow: '0 0 15px rgba(246, 89, 89, 0.3)'
         }}>
           ✕
         </div>
         <h3 className={styles.title}>¡Error!</h3>
         <p className={styles.message}>{mensaje || "Ocurrió un error inesperado al conectar."}</p>
-        
-        <button 
-            className={styles.btnCerrar} 
-            onClick={onClose}
-            style={{ backgroundColor: '#F65959' }}
+
+        <button
+          className={styles.btnCerrar}
+          onClick={onClose}
+          style={{ backgroundColor: '#F65959' }}
         >
           Aceptar
         </button>

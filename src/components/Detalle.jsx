@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { URL_BASE, DAYS_OF_WEEK } from "../assets/constants/constants"; 
+import { URL_BASE, DAYS_OF_WEEK } from "../assets/constants/constants";
 import styles from './Detalle.module.css';
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
 import imgChorros from '../assets/imagenes/chorros.png';
@@ -13,14 +13,14 @@ import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
 import ModalConfirmacion from './ModalConfirmacion';
 import ModalError from './ModalError';
-import Botones from './BotonesGenerales/Botones/Botones'; 
+import Botones from './BotonesGenerales/Botones/Botones';
 
 const formatDaysFull = (days) => {
   if (!days || days.length === 0) return "Sin programación";
-  
+
   const dayMap = DAYS_OF_WEEK.reduce((map, day) => {
-      map[day.key] = day.label;
-      return map;
+    map[day.key] = day.label;
+    return map;
   }, {});
 
   if (days.length === 7) return "Todos los días";
@@ -67,7 +67,7 @@ const Detalle = () => {
     },
   });
 
-  useTitulo("Detalle de la escena"); 
+  useTitulo("Detalle de la escena");
 
   const deleteMutation = useMutation({
     mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, { method: 'DELETE' }).then(res => res.json()),
@@ -90,33 +90,33 @@ const Detalle = () => {
       return fetch(`${URL_BASE}/escenas.json`)
         .then(res => res.json())
         .then(allScenes => {
-            const updates = {};
-            const historyId = Date.now().toString();
-            const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
+          const updates = {};
+          const historyId = Date.now().toString();
+          const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
 
-            if (allScenes) {
-                Object.keys(allScenes).forEach((key) => {
-                    const currentScene = allScenes[key];
-                    if (key === id) {
-                        const prevHistory = currentScene.history || {};
-                        updates[key] = {
-                            ...currentScene,
-                            active: true,
-                            history: { ...prevHistory, [historyId]: newHistoryEntry }
-                        };
-                    } else {
-                        updates[key] = { 
-                            ...currentScene, 
-                            active: false 
-                        };
-                    }
-                });
-            }
-            return fetch(`${URL_BASE}/escenas.json`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(updates),
+          if (allScenes) {
+            Object.keys(allScenes).forEach((key) => {
+              const currentScene = allScenes[key];
+              if (key === id) {
+                const prevHistory = currentScene.history || {};
+                updates[key] = {
+                  ...currentScene,
+                  active: true,
+                  history: { ...prevHistory, [historyId]: newHistoryEntry }
+                };
+              } else {
+                updates[key] = {
+                  ...currentScene,
+                  active: false
+                };
+              }
             });
+          }
+          return fetch(`${URL_BASE}/escenas.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates),
+          });
         })
         .then(res => res.json());
     },
@@ -135,38 +135,38 @@ const Detalle = () => {
 
   const deactivateMutation = useMutation({
     mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ active: false }),
-        }).then(res => res.json()),
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ active: false }),
+    }).then(res => res.json()),
     onSuccess: () => {
-        queryClient.invalidateQueries({ queryKey: ['escenas'] });
-        queryClient.invalidateQueries({ queryKey: ['escena', id] });
-        setShowModalStop(false);
-        setMensajeExito("Escena detenida correctamente.");
-        setShowModalExito(true);
+      queryClient.invalidateQueries({ queryKey: ['escenas'] });
+      queryClient.invalidateQueries({ queryKey: ['escena', id] });
+      setShowModalStop(false);
+      setMensajeExito("Escena detenida correctamente.");
+      setShowModalExito(true);
     },
     onError: () => {
-       setShowModalStop(false);
-       setMensajeError("No se pudo apagar la escena.");
-       setShowModalError(true);
+      setShowModalStop(false);
+      setMensajeError("No se pudo apagar la escena.");
+      setShowModalError(true);
     }
   });
 
   const handleEdit = () => navigate(`/editar-escena/${id}`);
   const handleDelete = () => { setShowModalDelete(true); };
   const confirmDelete = () => { deleteMutation.mutate(); };
-  
-  const handleExecute = () => { 
-    if (escena.active) setShowModalStop(true); 
-    else activateMutation.mutate(); 
+
+  const handleExecute = () => {
+    if (escena.active) setShowModalStop(true);
+    else activateMutation.mutate();
   };
-  
+
   const handleCloseExito = () => {
-      setShowModalExito(false);
-      if (redirectOnClose) {
-          navigate('/');
-      }
+    setShowModalExito(false);
+    if (redirectOnClose) {
+      navigate('/');
+    }
   };
 
   if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando...</div>;
@@ -174,15 +174,15 @@ const Detalle = () => {
 
   const actions = escena.actions || {};
   const luces = actions.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
-  const chorrosOn = actions.chorrosAgua === true; 
-  
+  const chorrosOn = actions.chorrosAgua === true;
+
   let musica = { estado: actions.musica === true || actions.musica?.estado === true };
   let temperatura = { estado: false, grados: 25 };
   if (actions.temperatura) {
-      temperatura = {
-          estado: actions.temperatura.estado || false,
-          grados: actions.temperatura.grados || 25
-      };
+    temperatura = {
+      estado: actions.temperatura.estado || false,
+      grados: actions.temperatura.grados || 25
+    };
   }
   let limpieza = { estado: actions.limpieza === true || actions.limpieza?.estado === true };
   const isSceneActive = escena.active === true;
@@ -210,21 +210,21 @@ const Detalle = () => {
   const limpiezaIconClass = `${styles.deviceIcon} ${limpieza.estado ? styles.activeClean : ''}`;
 
   const imgIconStyle = { width: '100%', height: '100%', objectFit: 'contain' };
-  
+
   return (
     <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
-      
+
       <ModalExito
         isOpen={showModalExito}
         onClose={handleCloseExito}
         mensaje={mensajeExito}
       />
-      <ModalError 
+      <ModalError
         isOpen={showModalError}
         onClose={() => setShowModalError(false)}
         mensaje={mensajeError}
       />
-      <ModalConfirmacion 
+      <ModalConfirmacion
         isOpen={showModalStop}
         onClose={() => setShowModalStop(false)}
         onConfirm={() => deactivateMutation.mutate()}
@@ -232,7 +232,7 @@ const Detalle = () => {
         mensaje={`La escena "${escena.name}" está en ejecución. ¿Deseas detenerla?`}
         textoBotonConfirmar="Sí, detener"
       />
-      <ModalConfirmacion 
+      <ModalConfirmacion
         isOpen={showModalDelete}
         onClose={() => setShowModalDelete(false)}
         onConfirm={confirmDelete}
@@ -244,9 +244,9 @@ const Detalle = () => {
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
           <Botones onClick={() => navigate('/')} variant="nav-icon">
-            <img 
-              src={imgFlecha} 
-              alt="Atrás" 
+            <img
+              src={imgFlecha}
+              alt="Atrás"
               className={styles.flechaBlanca}
             />
           </Botones>
@@ -261,9 +261,9 @@ const Detalle = () => {
         <div className={styles.detalleHero} style={lightStyle}>
           <h1 className={styles.detalleTitle}>{escena.name}</h1>
           <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
-          
+
           <Botones
-            variant="success" 
+            variant="success"
             isActive={isSceneActive}
             onClick={handleExecute}
             disabled={activateMutation.isPending || deleteMutation.isPending || deactivateMutation.isPending}
@@ -275,7 +275,7 @@ const Detalle = () => {
 
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
-          
+
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={lucesIconClass} style={lightStyle}>
@@ -374,7 +374,7 @@ const Detalle = () => {
             </div>
           )}
         </div>
-        
+
         <div className={styles.dangerZone}>
           <Botones variant="delete" onClick={handleDelete} disabled={deleteMutation.isPending}>
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar Escena"}

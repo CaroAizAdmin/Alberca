@@ -228,13 +228,13 @@ const EditarEscena = () => {
       />
 
       <div className={styles.flecha}>
-      
-<Botones 
-    onClick={() => navigate(-1)} 
-    variant="nav-icon" 
->
-    <img src={imgFlecha} alt="Atrás" />
-</Botones>
+
+        <Botones
+          onClick={() => navigate(-1)}
+          variant="nav-icon"
+        >
+          <img src={imgFlecha} alt="Atrás" />
+        </Botones>
       </div>
 
       <h1 className={styles['edit-title']}>{formData.name || "Cargando..."}</h1>

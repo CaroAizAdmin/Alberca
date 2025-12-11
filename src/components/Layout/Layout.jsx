@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Header from '../Header'; 
-import Menu from '../Menu';    
+import Header from '../Header';
+import Menu from '../Menu';
 import { useTituloGlobal } from '../../store/useTituloGlobal';
 
 const Layout = () => {

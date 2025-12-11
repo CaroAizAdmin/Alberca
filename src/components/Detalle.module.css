@@ -1,8 +1,8 @@
 :root {
-  --color-delete: #F65959; 
+  --color-delete: #F65959;
   --color-app-background: #191E3B;
   --color-text-light: #F0F0F0;
-  --color-primary-blue: #5C97F2; 
+  --color-primary-blue: #5C97F2;
   --color-text-faded: #B0B3CC;
 }
 
@@ -10,70 +10,71 @@
   min-height: 100vh;
   padding: 0;
   display: flex;
-  flex-direction: column; 
-  align-items: center; 
+  flex-direction: column;
+  align-items: center;
 }
 
 .detalleNavWrapper {
-    width: 100%;
-    position: absolute;
-    top: 0;
-    display: flex;
-    justify-content: center;
-    padding-top: 25px; 
-    z-index: 10;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: 25px;
+  z-index: 10;
 }
 
 .centerWrapper {
-    width: 90%;
-    max-width: 60%; 
-    margin-top: 0; 
+  width: 90%;
+  max-width: 60%;
+  margin-top: 0;
 }
 
 .detalleHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 90%; 
+  width: 90%;
   max-width: 60%;
-  padding-right: 10%; 
-  background: transparent; 
+  padding-right: 10%;
+  background: transparent;
   backdrop-filter: none;
-  box-shadow: none; 
+  box-shadow: none;
   position: relative;
 }
 
 .detalleCard {
-  background: rgba(45, 50, 90, 0.4); 
-  backdrop-filter: blur(10px); 
-  border-radius: 18px; 
+  background: rgba(45, 50, 90, 0.4);
+  backdrop-filter: blur(10px);
+  border-radius: 18px;
   padding: 24px;
   color: whitesmoke;
   width: 90%;
-  box-sizing: border-box; 
+  box-sizing: border-box;
   margin: 20px 0 0;
-  border: 1px solid rgba(255, 255, 255, 0.1); 
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.detalleHero{
-    display: flex;
-    align-items: center; 
-    justify-content: center; 
-    flex-direction: column; 
-    text-align: center; 
-    margin-bottom: 20px;
-    color: whitesmoke;
+.detalleHero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  margin-bottom: 20px;
+  color: whitesmoke;
 }
-svg{
-    width: 24px;
-    height: 24px;
+
+svg {
+  width: 24px;
+  height: 24px;
 }
 
 .deviceIcon {
-  width: 50px;       
+  width: 50px;
   height: 50px;
-  background: rgba(255, 255, 255, 0.1); 
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -93,91 +94,91 @@ svg{
 
 .activeWater img {
   opacity: 1;
-  filter: none; 
+  filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 5px #00bfff); 
+  filter: drop-shadow(0 0 5px #00bfff);
 }
 
 .activeLight img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 8px var(--scene-color, white)); 
+  filter: drop-shadow(0 0 8px var(--scene-color, white));
 }
 
 .activeMusic img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 6px #d946ef); 
+  filter: drop-shadow(0 0 6px #d946ef);
 }
 
 .activeTemp img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 6px #f97316); 
+  filter: drop-shadow(0 0 6px #f97316);
 }
 
 .activeClean img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 6px #22c55e); 
+  filter: drop-shadow(0 0 6px #22c55e);
 }
 
 .deviceListItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0; 
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .deviceIconAndLabel {
-    display: flex;
-    align-items: center;
-    gap: 10px; 
-    flex-shrink: 0; 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
 
 .dangerZone {
-    margin-top: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
+  margin-top: 40px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 @media (max-width: 768px) {
-  
+
   .detalleNavWrapper {
-      padding: 25px 16px 0; 
+    padding: 25px 16px 0;
   }
 
   .detalleHeader {
-      max-width: 100%;
-      min-width: 0; 
-      padding-right: 0; 
+    max-width: 100%;
+    min-width: 0;
+    padding-right: 0;
   }
-  
+
   .centerWrapper {
-      max-width: 100%; 
-      padding: 0 16px 80px; 
-      margin-bottom: 70px;
-      min-width: 0; 
+    max-width: 100%;
+    padding: 0 16px 80px;
+    margin-bottom: 70px;
+    min-width: 0;
   }
-  
+
   .detalleCard {
     margin: 16px 0 0;
     padding: 20px;
-    width: 100%; 
+    width: 100%;
   }
 }
 
 .historyListContainer {
   margin-top: 15px;
-  max-height: 200px; 
-  overflow-y: auto;  
+  max-height: 200px;
+  overflow-y: auto;
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   padding: 10px;

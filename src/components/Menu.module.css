@@ -1,11 +1,11 @@
 .menuContainer {
-  display: flex;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  background-color: transparent; 
-  z-index: 1000; 
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: transparent;
+    z-index: 1000;
 }
 
 .navbarWrapper {
@@ -25,4 +25,3 @@
     z-index: 1000;
     min-width: 300px;
 }
-

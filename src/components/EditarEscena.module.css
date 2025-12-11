@@ -1,46 +1,46 @@
 :root {
-  --color-app-background: #191E3B; 
-  --color-primary-blue: #5C97F2; 
-  --color-text-light: #F0F0F0;
+    --color-app-background: #191E3B;
+    --color-primary-blue: #5C97F2;
+    --color-text-light: #F0F0F0;
 }
 
 .edit-container {
     min-height: 100vh;
     padding: 0;
-    flex-direction: column; 
-    align-items: center; 
-    padding: 30px 20px 80px; 
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 20px 80px;
     box-sizing: border-box;
 }
 
 .edit-title {
-    font-size: 2.5rem; 
-    font-weight: 800; 
+    font-size: 2.5rem;
+    font-weight: 800;
     text-align: center;
-    margin: 50px 0 30px; 
+    margin: 50px 0 30px;
     line-height: 1.1;
-    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); 
-    color: var(--color-text-light); 
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+    color: var(--color-text-light);
 }
 
 .flecha {
     position: absolute;
     top: 25px;
     left: 20px;
-    z-index: 20; 
+    z-index: 20;
 }
 
 @media (max-width: 768px) {
     .edit-container {
         padding: 70px 16px 80px;
     }
-    
+
     .flecha {
         left: 16px;
     }
-    
+
     .edit-title {
         margin-top: 20px;
-        font-size: 2rem; 
+        font-size: 2rem;
     }
 }

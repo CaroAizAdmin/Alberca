@@ -3,7 +3,7 @@ import styles from './Formulario.module.css';
 import imgChorros from '../../assets/imagenes/chorros.png';
 import imgLuces from '../../assets/imagenes/luces.png';
 import Botones from '../BotonesGenerales/Botones/Botones';
-import { DAYS_OF_WEEK, MIN_TEMP, MAX_TEMP } from '../../assets/constants/constants'; 
+import { DAYS_OF_WEEK, MIN_TEMP, MAX_TEMP } from '../../assets/constants/constants';
 
 const imgStyle = {
   width: '24px',
@@ -98,12 +98,12 @@ const Formulario = ({
           <div className={styles['step-content']}>
             <h2 className={styles['form-title']}>2. Dispositivos</h2>
             {errorLocal && <p className={styles['error-msg']}>{errorLocal}</p>}
-            
+
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgChorros} alt="Chorros" style={imgStyle} /><span className={chorrosIconClass}>Chorros de Agua</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.chorrosAgua} onChange={() => handleToggle('chorros')} /><span className={styles.slider}></span></label>
             </div>
-            
+
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Luces" style={imgStyle} /><span className={lucesIconClass}>Luces</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.luces.estado} onChange={() => handleToggle('luces')} /><span className={styles.slider}></span></label>
@@ -127,12 +127,12 @@ const Formulario = ({
                 </div>
               </div>
             )}
-            
+
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgChorros} alt="Música" style={imgStyle} /><span className={musicaIconClass}>Música Ambiente</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.musica} onChange={() => handleToggle('musica')} /><span className={styles.slider}></span></label>
             </div>
-            
+
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Temperatura" style={imgStyle} /><span className={tempIconClass}>Control de Temperatura</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.temperatura.estado} onChange={() => handleToggle('temperatura')} /><span className={styles.slider}></span></label>
@@ -146,7 +146,7 @@ const Formulario = ({
                 </div>
               </div>
             )}
-            
+
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Limpieza" style={imgStyle} /><span className={limpiezaIconClass}>Limpieza Programada</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.limpieza} onChange={() => handleToggle('limpieza')} /><span className={styles.slider}></span></label>
@@ -168,13 +168,13 @@ const Formulario = ({
                   <label className={styles['form-label']}>Días de la semana:</label>
                   <div className={styles['day-selector-container']}>
                     {DAYS_OF_WEEK.map(day => (
-                        <button 
-                            key={day.key} 
-                            className={`${styles['day-button']} ${formData.schedule.days.includes(day.key) ? styles.selected : ''}`} 
-                            onClick={() => handleDayToggle(day.key)}
-                        >
-                            {day.label.slice(0, 3)}
-                        </button>
+                      <button
+                        key={day.key}
+                        className={`${styles['day-button']} ${formData.schedule.days.includes(day.key) ? styles.selected : ''}`}
+                        onClick={() => handleDayToggle(day.key)}
+                      >
+                        {day.label.slice(0, 3)}
+                      </button>
                     ))}
                   </div>
                 </div>

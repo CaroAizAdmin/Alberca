@@ -1,27 +1,27 @@
 :root {
-  --color-dark-blue: #103C76; 
+  --color-dark-blue: #103C76;
   --color-header-blue: #213547;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-dark-blue); 
-  background-image: url('./assets/imagenes/fondo1.png'); 
-  background-attachment: fixed; 
-  background-size: cover; 
+  background-color: var(--color-dark-blue);
+  background-image: url('./assets/imagenes/fondo1.png');
+  background-attachment: fixed;
+  background-size: cover;
   background-repeat: no-repeat;
-  background-position: center ;
+  background-position: center;
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   width: 100%;
   max-width: 100%;
-  overflow-x: hidden; 
+  overflow-x: hidden;
 }
 
 #root {
   min-height: 100vh;
   width: 100%;
-  background-image: none; 
+  background-image: none;
   box-sizing: border-box;
 }
 
@@ -34,8 +34,8 @@ body {
   top: 0;
   left: 0;
   width: 100%;
-  z-index: 1000; 
-  box-sizing: border-box; 
+  z-index: 1000;
+  box-sizing: border-box;
   background-color: var(--color-header-blue);
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -53,7 +53,7 @@ body {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  max-width: 400px; 
+  max-width: 400px;
 }
 
 .logo {
@@ -62,9 +62,11 @@ body {
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -73,6 +75,7 @@ body {
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
@@ -92,9 +95,9 @@ body {
   color: #888;
 }
 
-.escena-list{
-  width: 90%; 
-  margin: 0 auto; 
+.escena-list {
+  width: 90%;
+  margin: 0 auto;
   padding-bottom: 200px;
   padding-top: 20px;
   display: flex;
@@ -102,7 +105,7 @@ body {
   gap: 30px;
 }
 
-.flecha{
+.flecha {
   position: fixed;
   top: 90px;
   left: 20px;

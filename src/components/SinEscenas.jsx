@@ -6,7 +6,7 @@ const SinEscenas = () => {
   const navigate = useNavigate();
 
   return (
-    <div className={styles.emptyStateContainer}> 
+    <div className={styles.emptyStateContainer}>
       <div className={styles.emptyIconWrapper}>
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 12h20"></path>
@@ -20,17 +20,17 @@ const SinEscenas = () => {
       <div className={styles.emptyTextContent}>
         <h3>No hay ningún modo/escena</h3>
         <p>
-          Aún no tienes escenas configuradas. 
+          Aún no tienes escenas configuradas.
           <br />
           Crea la primera para controlar chorros, luces y más.
         </p>
       </div>
 
-      <button 
-        className={styles.btnCreateFirst} 
+      <button
+        className={styles.btnCreateFirst}
         onClick={() => navigate('/crearEscena')}
       >
-        <span className={styles.plusIcon}>+</span> 
+        <span className={styles.plusIcon}>+</span>
         Crear mi primera escena
       </button>
     </div>

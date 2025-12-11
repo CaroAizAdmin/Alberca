@@ -9,7 +9,7 @@
     transition: all 0.2s ease;
     text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(5px);
-    color: white; 
+    color: white;
 }
 
 .btn:not(:disabled) {
@@ -27,39 +27,40 @@
 
 .nav-icon {
 
-    background: rgba(255, 255, 255, 0.1) !important; 
+    background: rgba(255, 255, 255, 0.1) !important;
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
-    border-radius: 8px !important; 
+    border-radius: 8px !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
-    padding: 6px 10px !important; 
-    color: white !important; 
-    font-size: 1.1rem !important; 
+    padding: 6px 10px !important;
+    color: white !important;
+    font-size: 1.1rem !important;
     line-height: 1 !important;
     text-shadow: none !important;
-    height: auto !important; 
+    height: auto !important;
     width: auto !important;
 }
 
 
 .nav-icon img {
     filter: invert(100%);
-    width: 20px; 
+    width: 20px;
     height: 20px;
     display: block;
 }
 
 .nav-icon:hover {
-    background: rgba(255, 255, 255, 0.2) !important; 
+    background: rgba(255, 255, 255, 0.2) !important;
     transform: none !important;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4) !important;
 }
 
 
 .default {
-    background: rgba(92, 151, 242, 0.35); 
-    border: 1px solid rgba(92, 151, 242, 0.5); 
+    background: rgba(92, 151, 242, 0.35);
+    border: 1px solid rgba(92, 151, 242, 0.5);
     box-shadow: 0 4px 10px rgba(92, 151, 242, 0.4);
 }
+
 .default:hover:not(:disabled) {
     background: rgba(92, 151, 242, 0.55);
     transform: translateY(-2px);
@@ -68,10 +69,11 @@
 
 
 .success {
-    background: rgba(52, 199, 89, 0.35); 
-    border: 1px solid rgba(52, 199, 89, 0.5); 
+    background: rgba(52, 199, 89, 0.35);
+    border: 1px solid rgba(52, 199, 89, 0.5);
     box-shadow: 0 4px 10px rgba(52, 199, 89, 0.4);
 }
+
 .success:hover:not(:disabled) {
     background: rgba(52, 199, 89, 0.55);
     transform: translateY(-2px);
@@ -80,10 +82,11 @@
 
 
 .delete {
-    background: rgba(255, 69, 0, 0.35); 
+    background: rgba(255, 69, 0, 0.35);
     border: 1px solid rgba(255, 69, 0, 0.5);
     box-shadow: 0 4px 10px rgba(255, 69, 0, 0.4);
 }
+
 .delete:hover:not(:disabled) {
     background: rgba(255, 69, 0, 0.55);
     transform: translateY(-2px);
