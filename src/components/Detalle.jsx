@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { URL_BASE } from "../assets/constants/constants";
+// Importamos DAYS_OF_WEEK desde las constantes (para formatDaysFull)
+import { URL_BASE, DAYS_OF_WEEK } from "../assets/constants/constants"; 
 import styles from './Detalle.module.css';
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
 import imgChorros from '../assets/imagenes/chorros.png';
@@ -15,18 +16,21 @@ import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
 import ModalConfirmacion from './ModalConfirmacion';
 import ModalError from './ModalError';
-// 🏆 IMPORTACIÓN DE BOTÓN (Asegúrate que la ruta sea correcta)
 import Botones from './BotonesGenerales/Botones/Botones'; 
 
 
-// Función auxiliar para formatear días
+// Función auxiliar para formatear días (Usa la constante DAYS_OF_WEEK)
 const formatDaysFull = (days) => {
   if (!days || days.length === 0) return "Sin programación";
-  const dayMap = {
-    mon: "Lunes", tue: "Martes", wed: "Miércoles", thu: "Jueves",
-    fri: "Viernes", sat: "Sábado", sun: "Domingo"
-  };
+  
+  // Creamos el mapeo {'lu': 'Lunes', 'ma': 'Martes', ...}
+  const dayMap = DAYS_OF_WEEK.reduce((map, day) => {
+      map[day.key] = day.label;
+      return map;
+  }, {});
+
   if (days.length === 7) return "Todos los días";
+  // Mapea las claves guardadas (e.g., ['lu', 'mi']) a las etiquetas completas
   return days.map(d => dayMap[d] || d).join(", ");
 };
 
@@ -48,7 +52,6 @@ const Detalle = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // Subir el scroll al inicio al montar el componente.
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -74,7 +77,8 @@ const Detalle = () => {
     },
   });
 
-  useTitulo(escena ? escena.name : "Cargando escena...");
+  // 🏆 CLAVE: Título estático re-insertado
+  useTitulo("Detalle de la escena"); 
 
   // --- MUTACIÓN ELIMINAR ---
   const deleteMutation = useMutation({
@@ -96,7 +100,6 @@ const Detalle = () => {
   // 🏆 MUTACIÓN ACTIVAR (ON) - LÓGICA MUTEX (PUT)
   const activateMutation = useMutation({
     mutationFn: () => {
-      // 1. Fetch de todas las escenas (para asegurar data fresca)
       return fetch(`${URL_BASE}/escenas.json`)
         .then(res => res.json())
         .then(allScenes => {
@@ -105,11 +108,9 @@ const Detalle = () => {
             const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
 
             if (allScenes) {
-                // 2. Iteración para activar SOLO la elegida y apagar el resto
                 Object.keys(allScenes).forEach((key) => {
                     const currentScene = allScenes[key];
                     if (key === id) {
-                        // LA ELEGIDA -> TRUE + HISTORIAL
                         const prevHistory = currentScene.history || {};
                         updates[key] = {
                             ...currentScene,
@@ -117,7 +118,6 @@ const Detalle = () => {
                             history: { ...prevHistory, [historyId]: newHistoryEntry }
                         };
                     } else {
-                        // LAS DEMÁS -> FALSE
                         updates[key] = { 
                             ...currentScene, 
                             active: false 
@@ -125,7 +125,6 @@ const Detalle = () => {
                     }
                 });
             }
-            // 3. PUT Masivo (Actualiza todo el nodo 'escenas')
             return fetch(`${URL_BASE}/escenas.json`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
@@ -173,7 +172,6 @@ const Detalle = () => {
   const handleDelete = () => { setShowModalDelete(true); };
   const confirmDelete = () => { deleteMutation.mutate(); };
   
-  // Lógica del botón: Si está activo -> Pregunta para apagar. Si está inactivo -> Activa.
   const handleExecute = () => { 
     if (escena.active) setShowModalStop(true); 
     else activateMutation.mutate(); 
@@ -182,7 +180,7 @@ const Detalle = () => {
   const handleCloseExito = () => {
       setShowModalExito(false);
       if (redirectOnClose) {
-          navigate('/escenas');
+          navigate('/');
       }
   };
 
@@ -281,6 +279,7 @@ const Detalle = () => {
       <div className={styles.centerWrapper}>
 
         <div className={styles.detalleHero} style={lightStyle}>
+          {/* 🏆 ESTE TÍTULO SÍ ES DINÁMICO */}
           <h1 className={styles.detalleTitle}>{escena.name}</h1>
           <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
           
@@ -296,6 +295,7 @@ const Detalle = () => {
           </Botones>
         </div>
 
+        {/* ... (Resto del contenido se mantiene igual) ... */}
         {/* DISPOSITIVOS */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
