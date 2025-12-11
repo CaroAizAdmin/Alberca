@@ -1,114 +1,37 @@
-import React, { useState } from 'react'; 
+import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
 import styles from './Detalle.module.css'; 
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
-import imgChorros from '../assets/imagenes/chorros.png'; 
+import imgChorros from '../assets/imagenes/chorros.png'; // Usado también como placeholder
 import imgLuces from '../assets/imagenes/luces.png';
+// 🏆 IMPORTACIONES NECESARIAS (Descomentar al tener los archivos)
+// import imgMusica from '../assets/imagenes/musica.png';
+// import imgTemperatura from '../assets/imagenes/temperatura.png';
+// import imgLimpieza from '../assets/imagenes/limpieza.png'; 
 import { useTitulo } from '../hooks/useTitulo'; 
-import ModalExito from './ModalExito'; 
-
-// Función para traducir días
-const formatDaysFull = (days) => {
-  if (!days || days.length === 0) return "No programado";
-  const dayMap = {
-    mon: "Lunes", tue: "Martes", wed: "Miércoles", thu: "Jueves", 
-    fri: "Viernes", sat: "Sábado", sun: "Domingo"
-  };
-  return days.map(d => dayMap[d] || d).join(', ');
-};
-
-// Función para formatear fecha y hora del historial
-const formatHistoryDate = (isoString) => {
-  if (!isoString) return "-";
-  const date = new Date(isoString);
-  return date.toLocaleString('es-ES', {
-    day: '2-digit', month: '2-digit', year: '2-digit',
-    hour: '2-digit', minute: '2-digit'
-  });
-};
 
 const Detalle = () => { 
   const { id } = useParams(); 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const [showModal, setShowModal] = useState(false);
 
-  // --- 1. GET DATA ---
+  // --- OBTENER DATOS (GET) ---
   const { data: escena, isLoading, error } = useQuery({
     queryKey: ["escena", id],
-    queryFn: () => {
-      return fetch(`${URL_BASE}/escenas/${id}.json`)
-        .then(res => {
-          if (!res.ok) throw new Error('Error de conexión.');
-          return res.json();
-        })
-        .then(data => {
-          if (!data) throw new Error('La escena no existe.');
-          return data;
-        });
+    queryFn: async () => {
+      const response = await fetch(`${URL_BASE}/escenas/${id}.json`);
+      if (!response.ok) throw new Error('Error de conexión.');
+      const data = await response.json();
+      if (!data) throw new Error('La escena no existe.');
+      return data;
     },
   });
 
   useTitulo(escena ? escena.name : "Cargando escena...");
 
-  // --- 2. ACTIVAR + REGISTRAR HISTORIAL (MANUAL) ---
-  const activateMutation = useMutation({
-    mutationFn: () => {
-      return fetch(`${URL_BASE}/escenas.json`)
-        .then(res => res.json())
-        .then(allScenes => {
-          const updates = {};
-          
-          // Creamos el registro de historial
-          const newHistoryEntry = {
-              date: new Date().toISOString(),
-              type: 'MANUAL' // Marcamos que fue activado por el usuario
-          };
-          // ID único para el historial (timestamp)
-          const historyId = Date.now().toString();
-
-          if (allScenes) {
-            Object.keys(allScenes).forEach(key => {
-              if (key === id) {
-                // Si es la escena elegida: ACTIVAR + AGREGAR HISTORIAL
-                const prevHistory = allScenes[key].history || {};
-                updates[key] = {
-                  ...allScenes[key],
-                  active: true,
-                  history: {
-                      ...prevHistory,
-                      [historyId]: newHistoryEntry
-                  }
-                };
-              } else {
-                // Si no es la elegida: DESACTIVAR (sin tocar su historial)
-                updates[key] = {
-                  ...allScenes[key],
-                  active: false
-                };
-              }
-            });
-          }
-          
-          return fetch(`${URL_BASE}/escenas.json`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updates),
-          });
-        })
-        .then(res => res.json());
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['escenas'] });
-      queryClient.invalidateQueries({ queryKey: ['escena', id] });
-      setShowModal(true);
-    },
-    onError: (err) => alert("Error al activar: " + err)
-  });
-
-  // --- DELETE ---
+  // --- MUTACIÓN PARA ELIMINAR (DELETE) ---
   const deleteMutation = useMutation({
     mutationFn: () => {
       return fetch(`${URL_BASE}/escenas/${id}.json`, { method: 'DELETE' })
@@ -119,25 +42,30 @@ const Detalle = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
-      alert("Escena eliminada correctamente"); 
+      alert("Escena eliminada correctamente");
       navigate('/escenas'); 
     },
     onError: () => alert("Hubo un error al intentar eliminar.")
   });
 
   const handleEdit = () => navigate(`/editar-escena/${id}`);
-  const handleDelete = () => { if (window.confirm("¿Eliminar escena?")) deleteMutation.mutate(); };
-  const handleExecute = () => { activateMutation.mutate(); };
+  const handleDelete = () => {
+    if (window.confirm("¿Eliminar escena?")) deleteMutation.mutate();
+  };
+  const handleExecute = () => alert(`¡Ejecutando escena: ${escena?.name}!`);
 
   if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando...</div>;
   if (error) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>Error: {error.message}</div>;
 
-  // --- PREPARACIÓN VISUAL ---
+  // Lógica de estilos y acciones
   const actions = escena.actions || {};
+  
+  // 🏆 LÓGICA DE ESTADO PARA TODOS LOS DISPOSITIVOS
   const luces = actions.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
-  const isSceneActive = escena.active === true;
-  const diasTexto = formatDaysFull(escena.schedule?.days);
-
+  const musica = actions.musica || { estado: false };
+  const temperatura = actions.temperatura || { estado: false };
+  const limpieza = actions.limpieza || { estado: false }; // Asumiendo que limpieza tiene un estado booleano
+  
   let colorRGB = "rgb(255, 255, 255)";
   if (luces.color) {
       if (typeof luces.color === 'string') colorRGB = luces.color;
@@ -150,53 +78,49 @@ const Detalle = () => {
   const lightStyle = { ...(luces.estado && {'--scene-color': colorRGB}) };
   const chorrosIconClass = `${styles.deviceIcon} ${actions.chorrosAgua ? styles.activeWater : ''}`;
   const lucesIconClass = `${styles.deviceIcon} ${luces.estado ? styles.activeLight : ''}`;
+  // 🏆 NUEVAS CLASES DINÁMICAS
+  const musicaIconClass = `${styles.deviceIcon} ${musica.estado ? styles.activeMusic : ''}`;
+  const tempIconClass = `${styles.deviceIcon} ${temperatura.estado ? styles.activeTemp : ''}`;
+  const limpiezaIconClass = `${styles.deviceIcon} ${limpieza.estado ? styles.activeClean : ''}`;
   
-  // 🏆 PROCESAR HISTORIAL PARA LA LISTA
-  // Convertimos objeto { id: {data}, id2: {data} } a array ordenado (más reciente primero)
-  const historyList = escena.history 
-      ? Object.values(escena.history).sort((a, b) => new Date(b.date) - new Date(a.date))
-      : [];
+  const imgIconStyle = { width: '100%', height: '100%', objectFit: 'contain' };
+  const iconNavStyle = { width: '24px', height: '24px', objectFit: 'contain' };
 
   return (
     <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
       
-      <ModalExito 
-        isOpen={showModal} 
-        onClose={() => setShowModal(false)}
-        mensaje={`La escena "${escena.name}" activada y registrada en historial.`}
-      />
-
+      {/* 1. NAVEGACIÓN */}
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
           <button className={styles.btnBackNav} onClick={() => navigate('/escenas')}>
-            <img src={imgFlecha} alt="Atrás" style={{ width: '24px', height: '24px', objectFit: 'contain' }} />
+            <img src={imgFlecha} alt="Atrás" style={iconNavStyle} />
           </button>
-          <button className={styles.btnEdit} onClick={handleEdit}>Editar</button>
+          <button className={styles.btnEdit} onClick={handleEdit}>
+             Editar
+          </button>
         </div>
       </div>
       
+      {/* 2. CONTENEDOR CENTRAL */}
       <div className={styles.centerWrapper}>
 
-        {/* HERO */}
         <div className={styles.detalleHero}>
           <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
-          <button 
-            className={`${styles.btnBigPlay} ${isSceneActive ? styles.btnBigPlayActive : ''}`} 
-            onClick={handleExecute}
-            disabled={activateMutation.isPending}
-          >
-            <div className={styles.playIcon}>{isSceneActive ? "■" : "\u25B6"}</div>
-            <span>{isSceneActive ? "ESCENA ACTIVA" : "ACTIVAR AHORA"}</span>
+          <button className={styles.btnBigPlay} onClick={handleExecute}>
+            <div className={styles.playIcon}>&#x25B6;</div>
+            <span>ACTIVAR AHORA</span>
           </button>
         </div>
 
-        {/* DISPOSITIVOS */}
+        {/* TARJETAS DE DISPOSITIVOS */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
+          
+          {/* CHORROS DE AGUA */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
                 <div className={chorrosIconClass}>
-                    <img src={imgChorros} alt="Chorros" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    <img src={imgChorros} alt="Chorros" style={imgIconStyle} />
                 </div>
                 <span className={styles.deviceLabel}>Chorros de agua</span>
             </div>
@@ -205,10 +129,11 @@ const Detalle = () => {
             </span>
           </div>
 
+          {/* LUCES PISCINA */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
                 <div className={lucesIconClass} style={lightStyle}>
-                    <img src={imgLuces} alt="Luces" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                    <img src={imgLuces} alt="Luces" style={imgIconStyle} />
                 </div>
                 <span className={styles.deviceLabel}>Luces Piscina</span>
             </div>
@@ -219,7 +144,56 @@ const Detalle = () => {
               </span>
             </div>
           </div>
-        </div>
+          
+          {/* 🏆 MÚSICA */}
+          {musica.estado !== undefined && (
+            <div className={styles.deviceListItem}>
+              <div className={styles.deviceIconAndLabel}>
+                  {/* Usamos imgChorros como placeholder si no tienes imgMusica importado */}
+                  <div className={musicaIconClass}>
+                      <img src={imgChorros} alt="Música" style={imgIconStyle} /> 
+                  </div>
+                  <span className={styles.deviceLabel}>Música Ambiente</span>
+              </div>
+              <span className={`${styles.statusBadge} ${musica.estado ? styles.on : styles.off}`}>
+                {musica.estado ? 'REPRODUCIENDO' : 'APAGADA'}
+              </span>
+            </div>
+          )}
+
+          {/* 🏆 TEMPERATURA */}
+          {temperatura.estado !== undefined && (
+            <div className={styles.deviceListItem}>
+              <div className={styles.deviceIconAndLabel}>
+                  {/* Usamos imgChorros como placeholder si no tienes imgTemperatura importado */}
+                  <div className={tempIconClass}>
+                      <img src={imgChorros} alt="Temperatura" style={imgIconStyle} /> 
+                  </div>
+                  <span className={styles.deviceLabel}>Temperatura</span>
+              </div>
+              <span className={`${styles.statusBadge} ${temperatura.estado ? styles.on : styles.off}`}>
+                {temperatura.estado ? 'ACTIVA' : 'INACTIVA'}
+              </span>
+            </div>
+          )}
+
+          {/* 🏆 LIMPIEZA */}
+          {limpieza.estado !== undefined && (
+            <div className={styles.deviceListItem}>
+              <div className={styles.deviceIconAndLabel}>
+                  {/* Usamos imgChorros como placeholder si no tienes imgLimpieza importado */}
+                  <div className={limpiezaIconClass}>
+                      <img src={imgChorros} alt="Limpieza" style={imgIconStyle} /> 
+                  </div>
+                  <span className={styles.deviceLabel}>Limpieza</span>
+              </div>
+              <span className={`${styles.statusBadge} ${limpieza.estado ? styles.on : styles.off}`}>
+                {limpieza.estado ? 'EN PROGRESO' : 'DETENIDA'}
+              </span>
+            </div>
+          )}
+
+        </div> {/* CIERRE CORRECTO: detalleCard */}
 
         {/* HORARIOS */}
         <div className={styles.detalleCard}>
@@ -229,38 +203,14 @@ const Detalle = () => {
                   <strong className={styles.scheduleTitle}>Programación</strong>
                   <p className={styles.scheduleText}>
                     {escena.schedule?.enabled 
-                        ? `Días: ${diasTexto} - ${escena.schedule.time}` 
+                        ? `Días: ${escena.schedule.days?.join(', ') || 'N/A'} - ${escena.schedule.time}` 
                         : "Apagado automático desactivado"}
                   </p>
               </div>
           </div>
         </div>
 
-        {/* 🏆 NUEVA CARD: HISTORIAL DE EJECUCIONES */}
-        <div className={styles.detalleCard}>
-          <h3 className={styles.cardTitle}>Historial de Ejecuciones</h3>
-          {historyList.length === 0 ? (
-              <p style={{color: 'rgba(255,255,255,0.5)', fontSize: '0.9rem', textAlign: 'center'}}>
-                  Sin registros recientes.
-              </p>
-          ) : (
-              <div className={styles.historyListContainer}>
-                  {historyList.map((entry, index) => (
-                      <div key={index} className={styles.historyItem}>
-                          <span className={styles.historyDate}>
-                              {formatHistoryDate(entry.date)}
-                          </span>
-                          {/* Detecta si es manual o auto para el color de la etiqueta */}
-                          <span className={`${styles.tagType} ${entry.type === 'MANUAL' ? styles.tagManual : styles.tagAuto}`}>
-                              {entry.type === 'MANUAL' ? 'Manual' : 'Automática'}
-                          </span>
-                      </div>
-                  ))}
-              </div>
-          )}
-        </div>
-
-        {/* DANGER ZONE */}
+        {/* ZONA DE PELIGRO */}
         <div className={styles.dangerZone}>
           <button 
               className={styles.btnDelete} 
@@ -271,7 +221,7 @@ const Detalle = () => {
           </button>
         </div>
 
-      </div>
+      </div> {/* CIERRE CORRECTO: centerWrapper */}
     </div>
   );
 };

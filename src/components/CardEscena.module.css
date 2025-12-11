@@ -26,10 +26,9 @@
 /* 2. SECCIÓN IZQUIERDA: Texto (infoWrapper)                  */
 /* ========================================================== */
 .infoWrapper {
-  /* Limitamos el espacio para dejar sitio a los íconos */
+  /* Hacemos que la infoWrapper contenga todos los elementos de la izquierda */
   flex: 1; 
   margin-right: 15px;
-  /* Asegura que el contenido se ajuste sin desbordar */
   min-width: 0; 
 }
 
@@ -48,7 +47,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 100%; /* El max-width debe ser 100% del contenedor padre (.infoWrapper) */
+  max-width: 100%;
 }
 
 /* Badge Automático */
@@ -62,17 +61,61 @@
   color: #ddd;
 }
 
+/* 🏆 CONTENEDOR PARA LOS ÍCONOS DE RESUMEN (Asegura que estén debajo) */
+/* El contenedor .summaryIconsWrapper queda sin la propiedad 'size' no válida: */
+.summaryIconsWrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px; 
+    margin-top: 18px; 
+}
 /* ========================================================== */
 /* 3. SECCIÓN DERECHA: Íconos y Botones (iconosWrapper)       */
 /* ========================================================== */
 .iconosWrapper {
+  /* Contiene solo los controles principales (Luces, Chorros y Botón Play) */
   display: flex;
   align-items: center;
   gap: 12px; 
-  flex-shrink: 0; /* Asegura que los íconos no se encojan */
+  flex-shrink: 0; 
 }
 
-/* Contenedor base del ícono */
+/* ------------------------------------------------------------- */
+/* 🏆 ESTILOS PARA ÍCONOS DE RESUMEN (PEQUEÑOS)                  */
+/* ------------------------------------------------------------- */
+
+.summaryIconItem {
+  /* Tamaño uniforme para todos */
+  width: 35px; /* <--- MODIFICA ESTE VALOR */
+  height: 35px; /* <--- MODIFICA ESTE VALOR */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent; 
+  border-radius: 50%;
+  padding: 0; 
+  transition: all 0.3s ease;
+}
+
+
+
+/* Estilo de imagen dentro de los íconos de resumen */
+.summaryIconItem .deviceImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
+  opacity: 0.3; /* Menos visible cuando está inactivo */
+  filter: grayscale(80%);
+  transition: all 0.3s ease;
+}
+
+
+/* ------------------------------------------------------------- */
+/* ESTILOS PARA ÍCONOS DE CONTROL (GRANDES - iconosWrapper)     */
+/* ------------------------------------------------------------- */
+
 .iconItem {
   width: 40px;
   height: 40px;
@@ -85,21 +128,19 @@
   transition: all 0.3s ease;
 }
 
-/* --- ESTILOS DE LA IMAGEN PNG --- */
+/* --- ESTILOS DE LA IMAGEN PNG (GRANDES) --- */
 .deviceImage {
   width: 100%;
   height: 100%;
   object-fit: contain;
   border-radius: 50%;
-  
-  /* ESTADO APAGADO (Por defecto) */
   border: 2px solid transparent; 
   opacity: 0.5; 
   filter: grayscale(80%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --- ANIMACIONES DE PULSO --- */
+/* --- ANIMACIONES --- */
 @keyframes pulseWhite {
   0% { box-shadow: 0 0 5px rgba(255, 255, 255, 0.6); }
   50% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.9); }
@@ -112,25 +153,113 @@
   100% { box-shadow: 0 0 5px var(--scene-color); }
 }
 
-/* --- MAGIA: ESTADOS ENCENDIDOS --- */
+@keyframes pulseSmall {
+  0% { box-shadow: 0 0 2px rgba(255, 255, 255, 0.4); }
+  50% { box-shadow: 0 0 8px rgba(255, 255, 255, 0.7); }
+  100% { box-shadow: 0 0 2px rgba(255, 255, 255, 0.4); }
+}
 
-/* Chorros de Agua ENCENDIDOS */
+/* --- MAGIA: ESTADOS ENCENDIDOS (SIN COMPOSES) --- */
+
+/* 1. ESTILO BASE ACTIVO (Propiedades de .activeStyle copiadas) */
+.deviceImage.isActive {
+    opacity: 1;
+    filter: none;
+    transform: scale(1.05);
+}
+
+/* 2. CHORROS DE AGUA ENCENDIDOS */
+
+/* Grande */
 .activeWater .deviceImage {
+  /* Copiando activeStyle */
   opacity: 1;
   filter: none;
-  border-color: white; /* Borde BLANCO */
   transform: scale(1.05);
-  animation: pulseWhite 2s infinite ease-in-out; /* Animación */
+  
+  border-color: white; 
+  animation: pulseWhite 2s infinite ease-in-out;
 }
 
-/* Luces ENCENDIDAS */
-.activeLight .deviceImage {
+/* Pequeño */
+.summaryIconItem.activeWater .deviceImage {
+  /* Copiando activeStyle */
   opacity: 1;
   filter: none;
-  border-color: var(--scene-color, white); /* Borde DINÁMICO */
   transform: scale(1.05);
-  animation: pulseColor 2s infinite ease-in-out; /* Animación */
+  
+  border-color: white; 
+  animation: pulseSmall 2s infinite ease-in-out; 
 }
+
+
+/* 3. LUCES ENCENDIDAS */
+
+/* Grande */
+.activeLight .deviceImage {
+  /* Copiando activeStyle */
+  opacity: 1;
+  filter: none;
+  transform: scale(1.05);
+  
+  border-color: var(--scene-color, white); 
+  animation: pulseColor 2s infinite ease-in-out;
+}
+
+/* Pequeño */
+.summaryIconItem.activeLight .deviceImage {
+  /* Copiando activeStyle */
+  opacity: 1;
+  filter: none;
+  transform: scale(1.05);
+  
+  border-color: var(--scene-color, white); 
+  animation: pulseSmall 2s infinite ease-in-out; 
+}
+
+
+/* 🏆 4. NUEVOS ESTADOS DE RESUMEN (Música, Temperatura, Limpieza) */
+
+/* Grande (Aunque estos irán solo en pequeño, mantenemos la consistencia) */
+.activeMusic .deviceImage,
+.activeTemp .deviceImage,
+.activeLimpieza .deviceImage {
+    /* Copiando activeStyle */
+    opacity: 1;
+    filter: none;
+    transform: scale(1.05);
+}
+
+/* Pequeño - MÚSICA */
+.summaryIconItem.activeMusic .deviceImage {
+    /* Copiando activeStyle */
+    opacity: 1;
+    filter: none;
+    transform: scale(2);
+    
+    border-color: cyan; /* Color para Música */
+}
+
+/* Pequeño - TEMPERATURA */
+.summaryIconItem.activeTemp .deviceImage {
+    /* Copiando activeStyle */
+    opacity: 1;
+    filter: none;
+    transform: scale(1.05);
+    
+    border-color: #ff4500; /* Color para Temperatura (rojo/naranja) */
+}
+
+/* Pequeño - LIMPIEZA */
+.summaryIconItem.activeLimpieza .deviceImage {
+    /* Copiando activeStyle */
+    opacity: 1;
+    filter: none;
+    transform: scale(1.05);
+    
+    border-color: #34c759; /* Color para Limpieza (verde) */
+}
+
 
 /* --- BOTÓN PLAY RÁPIDO --- */
 .quickPlayBtn {
@@ -147,7 +276,6 @@
   justify-content: center;
   transition: all 0.2s;
   border: 1px solid rgba(255,255,255,0.2);
-  /* Se elimina el margin-left: 5px para integrarlo mejor con el gap de iconosWrapper */
 }
 
 .quickPlayBtn:hover {

@@ -3,8 +3,15 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
 import styles from './CardEscena.module.css';
+
+// 💡 IMPORTACIONES DE IMÁGENES
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
+// Asumiendo que estas imágenes están en la misma carpeta o ruta:
+/* import imgMusica from '../assets/imagenes/musica.png'; 
+import imgTemperatura from '../assets/imagenes/temperatura.png';
+import imgLimpieza from '../assets/imagenes/limpieza.png';  */
+
 import ModalExito from './ModalExito';
 
 // Función auxiliar para formatear días
@@ -70,8 +77,12 @@ const CardEscena = ({ id, escena }) => {
 
   // --- 2. DATOS VISUALES ---
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
-  const aguaOn = escena.actions?.chorrosAgua;
+  const aguaOn = escena.actions?.chorrosAgua || false;
   const lucesConfiguradas = luces.estado;
+  const musicaOn = escena.actions?.musica?.estado || false;
+  const temperaturaOn = escena.actions?.temperatura?.estado || false;
+  const limpiezaOn = escena.actions?.limpieza?.estado || false;
+  
   const isSceneActive = escena.active === true;
   const diasTexto = formatDays(escena.schedule?.days);
 
@@ -107,23 +118,45 @@ const CardEscena = ({ id, escena }) => {
         onClick={navigateToDetail}
         style={{ '--scene-color': colorRGB }}
       >
+        {/* 1. SECCIÓN IZQUIERDA: Texto y 5 Íconos Pequeños (infoWrapper) */}
         <div className={styles.infoWrapper}>
           <h3 className={styles.sceneTitle}>{escena.name}</h3>
           <p className={styles.sceneDescription}>{escena.descripcion || "Sin descripción"}</p>
+          
+          {/* Badge Automático (si existe) */}
           {escena.schedule?.enabled && (
                <span className={styles.autoBadge}>
                   📅 {diasTexto} — ⏰ {escena.schedule.time}
                </span>
            )}
-        </div>
+           
+           {/* 🏆 CONTENEDOR DE LOS 5 ÍCONOS DE RESUMEN (TODOS JUNTOS) */}
+           <div className={styles.summaryIconsWrapper}>
+               {/* 1. ÍCONO LUCES */}
+               <div className={`${styles.summaryIconItem} ${lucesConfiguradas ? styles.activeLight : ''}`}>
+                  <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
+               </div>
+               {/* 2. ÍCONO CHORROS */}
+               <div className={`${styles.summaryIconItem} ${aguaOn ? styles.activeWater : ''}`}>
+                  <img src={imgChorros} alt="Chorros" className={styles.deviceImage} />
+               </div>
+               {/* 3. ÍCONO MÚSICA */}
+               <div className={`${styles.summaryIconItem} ${musicaOn ? styles.activeMusic : ''}`}>
+                  <img src={imgChorros} alt="Música" className={styles.deviceImage} /> 
+               </div>
+               {/* 4. ÍCONO TEMPERATURA */}
+               <div className={`${styles.summaryIconItem} ${temperaturaOn ? styles.activeTemp : ''}`}>
+                  <img src={imgChorros} alt="Temperatura" className={styles.deviceImage} />
+               </div>
+               {/* 5. ÍCONO LIMPIEZA */}
+               <div className={`${styles.summaryIconItem} ${limpiezaOn ? styles.activeLimpieza : ''}`}>
+                  <img src={imgChorros} alt="Limpieza" className={styles.deviceImage} />
+               </div>
+           </div>
+        </div> {/* Cierre de infoWrapper */}
 
+        {/* 2. SECCIÓN DERECHA: Solo Botón de Play (iconosWrapper) */}
         <div className={styles.iconosWrapper}>
-          <div className={`${styles.iconItem} ${lucesConfiguradas ? styles.activeLight : ''}`}>
-             <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
-          </div>
-          <div className={`${styles.iconItem} ${aguaOn ? styles.activeWater : ''}`}>
-             <img src={imgChorros} alt="Chorros" className={styles.deviceImage} />
-          </div>
           <button 
               className={`${styles.quickPlayBtn} ${isSceneActive ? styles.btnActive : ''}`} 
               onClick={handleQuickRun}
@@ -131,8 +164,8 @@ const CardEscena = ({ id, escena }) => {
           >
               {activateMutation.isPending ? "..." : (isSceneActive ? "■" : "▶")}
           </button>
-        </div>
-      </div>
+        </div> {/* Cierre de iconosWrapper */}
+      </div> {/* Cierre de modernCardLine */}
     </>
   )
 }
