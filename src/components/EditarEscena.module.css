@@ -46,15 +46,14 @@
 }
 
 /* ❌ ELIMINADO: Se eliminan las clases .btnBackNav y sus estados (:hover, img) */
-/* ya que ahora el estilo Glassy viene del componente Botones.      */
+/* ya que el estilo viene del componente Botones. */
 
 /* ========================================================== */
 /* 3. RESPONSIVE                                              */
 /* ========================================================== */
 @media (max-width: 768px) {
     .edit-container {
-        /* Aumentamos el padding superior para compensar el título y la flecha */
-        padding: 70px 16px 80px; 
+        padding: 70px 16px 80px;
     }
     
     .flecha {
@@ -62,7 +61,6 @@
     }
     
     .edit-title {
-        /* Reducimos el margen superior y el tamaño para móviles */
         margin-top: 20px;
         font-size: 2rem; 
     }

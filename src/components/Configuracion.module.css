@@ -1,5 +1,3 @@
-/* src/components/Configuracion.module.css */
-
 .configuracionContainer {
 
     color: white;
@@ -31,12 +29,10 @@
     margin-bottom: 20px;
 }
 
-/* 💡 NUEVA CLASE: Simplemente asegura el 100% de ancho si el componente Botones no lo hace por defecto */
+/* Clase de utilidad para que el botón ocupe todo el ancho de la tarjeta */
 .btnFullWidth {
     width: 100%;
-    /* Ajuste de margen superior para separarlo del párrafo */
     margin-top: 10px;
 }
 
-/* ❌ ELIMINADO: Se eliminan todas las reglas para .btnDeleteAll (background-color, hover, active, disabled) */
-/* ya que provienen de Botones.module.css (variant="delete") */
+/* ❌ Eliminada la clase .btnDeleteAll y sus estados. El estilo viene de Botones.module.css (variant="delete") */

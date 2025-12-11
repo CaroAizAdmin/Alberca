@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { URL_BASE } from "../assets/constants/constants";
-import styles from './Detalle.module.css';
+import styles from './Detalle.module.css'; // Importa el CSS del detalle para usar flechaBlanca
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
@@ -17,7 +17,7 @@ import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
 import ModalConfirmacion from './ModalConfirmacion';
 import ModalError from './ModalError';
-import Botones from './BotonesGenerales/Botones/Botones'; // ¡Importante!
+import Botones from './BotonesGenerales/Botones/Botones'; 
 
 // Función auxiliar para formatear días
 const formatDaysFull = (days) => {
@@ -219,13 +219,17 @@ const Detalle = () => {
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
           
-          {/* BOTÓN ATRÁS (Componente Botones con estilo de ícono) */}
-          <Botones onClick={() => navigate('/')} isIconOnly={true}>
-            <img src={imgFlecha} alt="Atrás" />
+          {/* BOTÓN ATRÁS (CLAVE: variant="nav-icon" y clase flechaBlanca) */}
+          <Botones onClick={() => navigate('/')} variant="nav-icon">
+            <img 
+              src={imgFlecha} 
+              alt="Atrás" 
+              className={styles.flechaBlanca} // Aplica el filtro CSS aquí
+            />
           </Botones>
 
-          {/* BOTÓN EDITAR (Componente Botones, variant="default") */}
-          <Botones onClick={handleEdit} variant="default">
+          {/* BOTÓN EDITAR (CLAVE: variant="nav-icon". El texto es blanco por CSS) */}
+          <Botones onClick={handleEdit} variant="nav-icon">
             Editar
           </Botones>
         </div>
@@ -237,9 +241,9 @@ const Detalle = () => {
           <h1 className={styles.detalleTitle}>{escena.name}</h1>
           <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
 
-          {/* BOTÓN ACTIVAR AHORA (Componente Botones, variant="play") */}
+          {/* BOTÓN ACTIVAR AHORA (CLAVE: variant="success" para el VERDE) */}
           <Botones
-            variant="play"
+            variant="success" 
             isActive={isSceneActive}
             onClick={handleExecute}
             disabled={activateMutation.isPending || deleteMutation.isPending || deactivateMutation.isPending}
@@ -377,8 +381,8 @@ const Detalle = () => {
         </div>
 
       </div> {/* Cierre de div.centerWrapper */}
-    </div> // Cierre de div.detalleContainer
-  ); // Cierre de return
-}; // Cierre de la función Detalle
+    </div> 
+  ); 
+}; 
 
 export default Detalle;

@@ -6,7 +6,7 @@
   --color-primary-blue: #5C97F2; 
   --color-text-light: #F0F0F0;
   --color-text-faded: #B0B3CC;
-  --color-success: #34c759;
+  --color-success: #34c759; /* Verde para Guardar/Éxito */
   --color-danger: #F65959; 
   --color-border-glass: rgba(255, 255, 255, 0.1);
   --color-progress-fill: #5C97F2; 
@@ -27,7 +27,7 @@
     box-sizing: border-box;
     border: 1px solid var(--color-border-glass); 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
-    margin: 0 auto; /* Centrar la tarjeta si se usa sin un contenedor padre que centre */
+    margin: 0 auto;
 }
 
 .form-title {
@@ -84,7 +84,6 @@
     font-size: 0.85rem;
 }
 
-/* Ajuste para el input type="time" */
 .form-input[type="time"] {
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -110,7 +109,7 @@
     width: 100%;
     max-width: 500px;
     position: relative;
-    margin: 0 auto 40px auto; /* Centrar y margen inferior */
+    margin: 0 auto 40px auto;
 }
 
 .progress-line {
@@ -240,7 +239,7 @@ input:checked + .slider:before { transform: translateX(20px); }
 }
 
 /* ========================================================== */
-/* 5. BOTONES DE NAVEGACIÓN (Siguiente/Atrás)                 */
+/* 5. BOTONES DE NAVEGACIÓN (Layout y Utilitarias)            */
 /* ========================================================== */
 
 .buttons-container {
@@ -250,47 +249,13 @@ input:checked + .slider:before { transform: translateX(20px); }
     gap: 15px;
 }
 
-.btn-nav {
-    flex-grow: 1; padding: 12px 20px; border: none; border-radius: 10px;
-    font-weight: 700; cursor: pointer; transition: all 0.2s ease;
-    font-size: 1rem; color: var(--color-text-light);
-} 
-
-.btn-prev {
-    background: rgba(255, 255, 255, 0.1);
-    color: var(--color-text-light);
-}
-.btn-prev:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateY(-1px);
+/* Clase de utilidad para que los botones crezcan y se repartan el espacio */
+.btn-flex-grow {
+    flex-grow: 1;
 }
 
-/* Botón Siguiente/Guardar (Glassy Azul/Verde) */
-.btn-next {
-    background: rgba(92, 151, 242, 0.2); 
-    backdrop-filter: blur(8px); 
-    border: 1px solid rgba(92, 151, 242, 0.4); 
-    box-shadow: 0 4px 10px rgba(92, 151, 242, 0.3);
-}
-.btn-next:hover:not(:disabled) {
-    background: rgba(92, 151, 242, 0.4); 
-    transform: translateY(-1px);
-    opacity: 1; 
-}
-.btn-next[disabled] {
-    opacity: 0.5; cursor: not-allowed; box-shadow: none;
-    background: rgba(92, 151, 242, 0.1); border-color: rgba(92, 151, 242, 0.2); 
-}
-/* Estilo para Guardar Cambios (Verde) */
-.btn-next[style*="--color-success"] {
-    background: rgba(52, 199, 89, 0.2) !important; 
-    border-color: rgba(52, 199, 89, 0.4) !important;
-    box-shadow: 0 4px 10px rgba(52, 199, 89, 0.3) !important;
-}
-.btn-next[style*="--color-success"]:hover:not(:disabled) {
-    background: rgba(52, 199, 89, 0.4) !important; 
-}
-
+/* ❌ Eliminadas clases .btn-nav, .btn-prev, .btn-next. El estilo viene de Botones.module.css */
+/* ❌ Eliminadas clases .btnPrimary y .btnSuccess. El estilo viene de Botones.module.css (variant="default" y variant="success") */
 
 /* ========================================================== */
 /* 6. ESTILOS SVG (Compartidos para Iconos)                   */

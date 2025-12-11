@@ -1,19 +1,16 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { URL_BASE } from "../assets/constants/constants"; // Asegúrate de que esta URL exista
+import { URL_BASE } from "../assets/constants/constants";
 import ModalConfirmacion from './ModalConfirmacion'; 
 import ModalExito from './ModalExito';
 import ModalError from './ModalError';
-// Importa tus estilos. Renombra 'Configuracion.module.css' si usas otro nombre
 import styles from './Configuracion.module.css';  
 import { useTitulo } from '../hooks/useTitulo';
-
-// 💡 Importamos el componente Botones
-import Botones from './BotonesGenerales/Botones/Botones'; 
+import Botones from './BotonesGenerales/Botones/Botones'; // 💡 Importado Botones
 
 const Configuracion1 = () => {
    const queryClient = useQueryClient();
-    useTitulo("Configuración"); // Establece el título de la página
+    useTitulo("Configuración");
 
     const [showConfirm, setShowConfirm] = useState(false);
     const [showExito, setShowExito] = useState(false);
@@ -26,12 +23,11 @@ const Configuracion1 = () => {
             return fetch(`${URL_BASE}/escenas.json`, { 
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                // Envía 'null' para eliminar completamente el nodo 'escenas' en Firebase
+                // Envía 'null' para eliminar completamente el nodo 'escenas'
                 body: JSON.stringify(null), 
             });
         },
         onSuccess: () => {
-            // Invalida la caché para que el listado de escenas se actualice
             queryClient.invalidateQueries({ queryKey: ['escenas'] });
             
             setShowConfirm(false);
@@ -63,19 +59,18 @@ const Configuracion1 = () => {
                 <h3>Gestión de Escenas</h3>
                 <p>Presiona este botón para eliminar permanentemente todas las escenas configuradas por el usuario. Esta acción no se puede deshacer.</p>
                 
-                {/* 🟢 REEMPLAZAMOS por el componente Botones con variant="delete" */}
+                {/* 🟢 Botón refactorizado con variant="delete" */}
                 <Botones 
                     variant="delete"
                     onClick={handleDeleteAllScenes} 
                     disabled={deleteAllScenesMutation.isPending}
-                    // Opcional: añadimos una clase de utilería para forzar el 100% de ancho si es necesario
-                    className={styles.btnFullWidth} 
+                    className={styles.btnFullWidth} // Clase para forzar 100% de ancho
                 >
                     {deleteAllScenesMutation.isPending ? "Eliminando..." : "BORRAR TODAS LAS ESCENAS"}
                 </Botones>
             </div>
             
-            {/* MODAL DE CONFIRMACIÓN */}
+            {/* MODALES (SIN CAMBIOS) */}
             <ModalConfirmacion
                 isOpen={showConfirm}
                 onClose={() => setShowConfirm(false)}
@@ -85,14 +80,12 @@ const Configuracion1 = () => {
                 textoBotonConfirmar="SÍ, BORRAR TODO"
             />
             
-            {/* MODAL DE ÉXITO */}
             <ModalExito
                 isOpen={showExito}
                 onClose={() => setShowExito(false)}
                 mensaje="¡Todas las escenas han sido eliminadas correctamente!"
             />
             
-            {/* MODAL DE ERROR */}
             <ModalError
                 isOpen={showError}
                 onClose={() => setShowError(false)}

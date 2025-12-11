@@ -1,16 +1,18 @@
+// Formulario.jsx (Código corregido)
+
 import React from 'react';
 import styles from './Formulario.module.css';
 import imgChorros from '../../assets/imagenes/chorros.png';
 import imgLuces from '../../assets/imagenes/luces.png';
-// 💡 Importar las constantes centralizadas
-import { DAYS_OF_WEEK, MIN_TEMP, MAX_TEMP } from '../../assets/constants/constants';
+import Botones from '../BotonesGenerales/Botones/Botones'; 
+// Asegúrate de que este archivo de constantes exista y tenga las variables
+import { DAYS_OF_WEEK, MIN_TEMP, MAX_TEMP } from '../../assets/constants/constants'; 
 
 
 // ==========================================================
 // CONSTANTES Y UTILIDADES LOCALES
 // ==========================================================
-
-// Estilo para los iconos SVG/PNG en las filas de dispositivos
+// Estilo para los iconos de dispositivos
 const imgStyle = {
   width: '24px',
   height: '24px',
@@ -18,12 +20,11 @@ const imgStyle = {
   objectFit: 'contain'
 };
 
-// UTILITY FUNCTIONS para manejar el color Picker (RGB <-> HEX)
+// Función para convertir RGB a Hex (para el input de color)
 const rgbToHex = (r, g, b) => {
   r = Math.max(0, Math.min(255, r));
   g = Math.max(0, Math.min(255, g));
   b = Math.max(0, Math.min(255, b));
-
   const toHex = (c) => {
     const hex = c.toString(16);
     return hex.length === 1 ? "0" + hex : hex;
@@ -31,13 +32,14 @@ const rgbToHex = (r, g, b) => {
   return "#" + toHex(r) + toHex(g) + toHex(b);
 };
 
+// Función para convertir Hex a RGB (para manejar el cambio de color)
 const hexToRgb = (hex) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
     r: parseInt(result[1], 16),
     g: parseInt(result[2], 16),
     b: parseInt(result[3], 16)
-  } : { r: 255, g: 255, b: 255 }; // Default white
+  } : { r: 255, g: 255, b: 255 };
 };
 // ==========================================================
 
@@ -48,7 +50,6 @@ const Formulario = ({
   errorLocal,
   mutation,
   mode,
-  // Handlers
   handleChange,
   handleScheduleChange,
   handleDayToggle,
@@ -58,28 +59,27 @@ const Formulario = ({
   handleNext,
   handleBack,
   handleAction,
-  // 🏆 CLAVE: Recibimos la clase del contenedor padre
   containerClassName
 }) => {
 
+  // Lógica de UI
   const progressWidth = step === 1 ? '0%' : step === 2 ? '33%' : step === 3 ? '66%' : '100%';
   const actionLabel = mode === 'edit' ? "Guardar Cambios" : "Crear Escena";
 
-  // Clases dinámicas para los iconos de dispositivo
+  // Clases para el estado visual de los iconos
   const chorrosIconClass = formData.actions.chorrosAgua ? styles.svgActive : styles.svgInactive;
   const lucesIconClass = formData.actions.luces.estado ? styles.svgActive : styles.svgInactive;
   const musicaIconClass = formData.actions.musica ? styles.svgActive : styles.svgInactive;
   const tempIconClass = formData.actions.temperatura.estado ? styles.svgActive : styles.svgInactive;
   const limpiezaIconClass = formData.actions.limpieza ? styles.svgActive : styles.svgInactive;
 
-  // Resumen de días seleccionados
+  // Lógica de resumen de días
   const selectedDaysLabels = formData.schedule.days?.map(key =>
     DAYS_OF_WEEK.find(day => day.key === key)?.label || key
   ).join(', ') || "Ninguno";
 
 
   return (
-    // 🏆 Aplicamos la clase del contenedor principal que viene del componente padre
     <div className={containerClassName}>
 
       {/* BARRA DE PROGRESO */}
@@ -92,7 +92,6 @@ const Formulario = ({
         <div className={`${styles['step-indicator']} ${step >= 4 ? styles.active : ''}`}>4</div>
       </div>
 
-      {/* TARJETA PRINCIPAL DEL FORMULARIO */}
       <div className={styles['form-card']}>
 
         {/* PASO 1: IDENTIDAD */}
@@ -101,26 +100,12 @@ const Formulario = ({
             <h2 className={styles['form-title']}>1. Identidad</h2>
             <div className={styles['form-group']}>
               <label className={styles['form-label']}>Nombre</label>
-              <input
-                type="text"
-                name="name"
-                className={styles['form-input']}
-                value={formData.name || ''}
-                onChange={handleChange}
-                placeholder="Ej. Fiesta Acuática"
-              />
+              <input type="text" name="name" className={styles['form-input']} value={formData.name || ''} onChange={handleChange} placeholder="Ej. Fiesta Acuática" />
               <p className={styles['error-msg']}>{errorLocal}</p>
             </div>
             <div className={styles['form-group']}>
               <label className={styles['form-label']}>Descripción</label>
-              <textarea
-                name="descripcion"
-                className={styles['form-textarea']}
-                rows="3"
-                value={formData.descripcion || ''}
-                onChange={handleChange}
-                placeholder="Descripción opcional"
-              ></textarea>
+              <textarea name="descripcion" className={styles['form-textarea']} rows="3" value={formData.descripcion || ''} onChange={handleChange} placeholder="Descripción opcional"></textarea>
             </div>
           </div>
         )}
@@ -130,29 +115,17 @@ const Formulario = ({
           <div className={styles['step-content']}>
             <h2 className={styles['form-title']}>2. Dispositivos</h2>
             {errorLocal && <p className={styles['error-msg']}>{errorLocal}</p>}
-
-            {/* CHORROS */}
+            
+            {/* Control Chorros de Agua */}
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}>
-                <img src={imgChorros} alt="Chorros" style={imgStyle} />
-                <span className={chorrosIconClass}>Chorros de Agua</span>
-              </span>
-              <label className={styles.switch}>
-                <input type="checkbox" checked={formData.actions.chorrosAgua} onChange={() => handleToggle('chorros')} />
-                <span className={styles.slider}></span>
-              </label>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgChorros} alt="Chorros" style={imgStyle} /><span className={chorrosIconClass}>Chorros de Agua</span></span>
+              <label className={styles.switch}><input type="checkbox" checked={formData.actions.chorrosAgua} onChange={() => handleToggle('chorros')} /><span className={styles.slider}></span></label>
             </div>
-
-            {/* LUCES + COLOR */}
+            
+            {/* Control Luces */}
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}>
-                <img src={imgLuces} alt="Luces" style={imgStyle} />
-                <span className={lucesIconClass}>Luces</span>
-              </span>
-              <label className={styles.switch}>
-                <input type="checkbox" checked={formData.actions.luces.estado} onChange={() => handleToggle('luces')} />
-                <span className={styles.slider}></span>
-              </label>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Luces" style={imgStyle} /><span className={lucesIconClass}>Luces</span></span>
+              <label className={styles.switch}><input type="checkbox" checked={formData.actions.luces.estado} onChange={() => handleToggle('luces')} /><span className={styles.slider}></span></label>
             </div>
             {formData.actions.luces.estado && (
               <div className={styles['form-group']} style={{ marginTop: 20, paddingLeft: 35 }}>
@@ -173,58 +146,32 @@ const Formulario = ({
                 </div>
               </div>
             )}
-
-            {/* MÚSICA */}
+            
+            {/* Control Música Ambiente (Usando imagen temporal) */}
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}>
-                <img src={imgChorros} alt="Música" style={imgStyle} />
-                <span className={musicaIconClass}>Música Ambiente</span>
-              </span>
-              <label className={styles.switch}>
-                <input type="checkbox" checked={formData.actions.musica} onChange={() => handleToggle('musica')} />
-                <span className={styles.slider}></span>
-              </label>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgChorros} alt="Música" style={imgStyle} /><span className={musicaIconClass}>Música Ambiente</span></span>
+              <label className={styles.switch}><input type="checkbox" checked={formData.actions.musica} onChange={() => handleToggle('musica')} /><span className={styles.slider}></span></label>
             </div>
-
-            {/* TEMPERATURA + SLIDER */}
+            
+            {/* Control Temperatura */}
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}>
-                <img src={imgLuces} alt="Temperatura" style={imgStyle} />
-                <span className={tempIconClass}>Control de Temperatura</span>
-              </span>
-              <label className={styles.switch}>
-                <input type="checkbox" checked={formData.actions.temperatura.estado} onChange={() => handleToggle('temperatura')} />
-                <span className={styles.slider}></span>
-              </label>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Temperatura" style={imgStyle} /><span className={tempIconClass}>Control de Temperatura</span></span>
+              <label className={styles.switch}><input type="checkbox" checked={formData.actions.temperatura.estado} onChange={() => handleToggle('temperatura')} /><span className={styles.slider}></span></label>
             </div>
             {formData.actions.temperatura.estado && (
               <div className={styles['form-group']} style={{ marginTop: 10, paddingLeft: 35 }}>
                 <label className={styles['form-label']}>Temperatura Deseada: <strong>{formData.actions.temperatura.grados}°C</strong></label>
-                <input type="range"
-                  min={MIN_TEMP}
-                  max={MAX_TEMP}
-                  step="1"
-                  value={formData.actions.temperatura.grados}
-                  onChange={handleTempChange}
-                  className={styles.rangeSlider} // Asumimos un estilo de slider en Formulario.module.css si es necesario
-                />
+                <input type="range" min={MIN_TEMP} max={MAX_TEMP} step="1" value={formData.actions.temperatura.grados} onChange={handleTempChange} className={styles.rangeSlider} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8em', color: 'var(--color-text-faded)' }}>
-                  <span>{MIN_TEMP}°C</span>
-                  <span>{MAX_TEMP}°C</span>
+                  <span>{MIN_TEMP}°C</span><span>{MAX_TEMP}°C</span>
                 </div>
               </div>
             )}
-
-            {/* LIMPIEZA */}
+            
+            {/* Control Limpieza Programada (Usando imagen temporal) */}
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}>
-                <img src={imgLuces} alt="Limpieza" style={imgStyle} />
-                <span className={limpiezaIconClass}>Limpieza Programada</span>
-              </span>
-              <label className={styles.switch}>
-                <input type="checkbox" checked={formData.actions.limpieza} onChange={() => handleToggle('limpieza')} />
-                <span className={styles.slider}></span>
-              </label>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Limpieza" style={imgStyle} /><span className={limpiezaIconClass}>Limpieza Programada</span></span>
+              <label className={styles.switch}><input type="checkbox" checked={formData.actions.limpieza} onChange={() => handleToggle('limpieza')} /><span className={styles.slider}></span></label>
             </div>
           </div>
         )}
@@ -235,12 +182,8 @@ const Formulario = ({
             <h2 className={styles['form-title']}>3. Programación</h2>
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}>Activación Automática</span>
-              <label className={styles.switch}>
-                <input type="checkbox" checked={formData.schedule.enabled} onChange={() => handleScheduleChange('enabled', !formData.schedule.enabled)} />
-                <span className={styles.slider}></span>
-              </label>
+              <label className={styles.switch}><input type="checkbox" checked={formData.schedule.enabled} onChange={() => handleScheduleChange('enabled', !formData.schedule.enabled)} /><span className={styles.slider}></span></label>
             </div>
-
             {formData.schedule.enabled && (
               <>
                 {errorLocal && <p className={styles['error-msg']}>{errorLocal}</p>}
@@ -248,12 +191,13 @@ const Formulario = ({
                   <label className={styles['form-label']}>Días de la semana:</label>
                   <div className={styles['day-selector-container']}>
                     {DAYS_OF_WEEK.map(day => (
-                      <button key={day.key}
-                        className={`${styles['day-button']} ${formData.schedule.days.includes(day.key) ? styles.selected : ''}`}
-                        onClick={() => handleDayToggle(day.key)}
-                      >
-                        {day.label.slice(0, 3)}
-                      </button>
+                        <button 
+                            key={day.key} 
+                            className={`${styles['day-button']} ${formData.schedule.days.includes(day.key) ? styles.selected : ''}`} 
+                            onClick={() => handleDayToggle(day.key)}
+                        >
+                            {day.label.slice(0, 3)}
+                        </button>
                     ))}
                   </div>
                 </div>
@@ -291,26 +235,33 @@ const Formulario = ({
           </div>
         )}
 
-        {/* BOTONES DE NAVEGACIÓN */}
+        {/* BLOQUE CLAVE: BOTONES DE NAVEGACIÓN */}
         <div className={styles['buttons-container']}>
           {step > 1 && (
-            <button className={`${styles['btn-nav']} ${styles['btn-prev']}`} onClick={handleBack}>Atrás</button>
+            // BOTÓN ATRÁS (Mantenemos Azul para navegación)
+            <Botones variant="default" className={styles['btn-flex-grow']} onClick={handleBack}>
+              Atrás
+            </Botones>
           )}
 
           {step < 4 ? (
-            <button className={`${styles['btn-nav']} ${styles['btn-next']}`} onClick={handleNext} disabled={!!errorLocal}>Siguiente</button>
+            // BOTÓN SIGUIENTE (Mantenemos Azul para navegación)
+            <Botones variant="default" className={styles['btn-flex-grow']} onClick={handleNext} disabled={!!errorLocal}>
+              Siguiente
+            </Botones>
           ) : (
-            <button
-              className={`${styles['btn-nav']} ${styles['btn-next']}`}
+            // BOTÓN ACCIÓN FINAL (CLAVE: Cambiamos a variant="success" para el VERDE)
+            <Botones
+              variant="success" // <--- CAMBIO AQUÍ: Usar estilo verde
+              className={`${styles['btn-flex-grow']}`}
               onClick={handleAction}
-              // Usar estilo en línea para el color de fondo para la variante "Guardar"
-              style={{ backgroundColor: mode === 'edit' ? 'var(--color-success)' : 'var(--color-primary-blue)' }}
               disabled={mutation.isPending}
             >
               {mutation.isPending ? (mode === 'edit' ? "Actualizando..." : "Creando...") : actionLabel}
-            </button>
+            </Botones>
           )}
         </div>
+
       </div>
     </div>
   );
