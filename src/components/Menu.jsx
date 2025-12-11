@@ -1,50 +1,42 @@
-import React from 'react'
-import { NavLink } from 'react-router-dom'
-import imgEscenas from '../assets/imagenes/home.png'
-import imgMas from '../assets/imagenes/mas.png' 
-import imgConfi from '../assets/imagenes/configuracion.png' 
-import styles from "./Menu.module.css"; // Importa los estilos modulares
+// src/components/Menu.jsx
+
+import React from 'react';
+// Importamos el componente BotonNav con la ruta corregida
+import BotonNav from './BotonesGenerales/BotonNav/BotonNav'; 
+// Importamos las imágenes (asumiendo que están en assets/imagenes/ desde la raíz del src)
+import imgEscenas from '../assets/imagenes/home.png';
+import imgMas from '../assets/imagenes/mas.png'; 
+import imgConfi from '../assets/imagenes/configuracion.png'; 
+// Importamos solo los estilos contenedores (ya que BotonNav maneja los estilos del enlace)
+import styles from "./Menu.module.css"; 
 
 const Menu = () => {
 
-    const iconStyle = {
-        width: '32px', 
-        height: '32px',
-        objectFit: 'contain' 
-    };
-
-    
   return (
         <div className={styles.menuContainer}> 
             <nav className={styles.navbarWrapper}> 
                 
-                {/* 1. Enlace a /escenas */}
-                <NavLink 
+                {/* 1. Botón Configuración */}
+                <BotonNav
                     to="/configuracion"
-                    // 🏆 Agrega la clase modular .navLinkActive si isActive es true
-                    className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
-                >
-                    <img src={imgConfi} alt="configuracion" style={iconStyle} />
-                </NavLink>
+                    imgSrc={imgConfi}
+                    altText="Configuración"
+                />
 
-                {/* 2. Enlace a / (Inicio) - Activo por defecto */}
-                <NavLink 
-                    to="/" 
-                    end // 🏆 CLAVE: Asegura que solo se active cuando la ruta es EXACTAMENTE '/'
-                    // 🏆 Agrega la clase modular .navLinkActive si isActive es true (lo cual es por defecto en la raíz)
-                    className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
-                > 
-                    <img src={imgEscenas} alt="Inicio" style={iconStyle} />
-                </NavLink>
+                {/* 2. Botón Inicio (Ruta Raíz) */}
+                <BotonNav
+                    to="/"
+                    imgSrc={imgEscenas}
+                    altText="Inicio"
+                    end={true} // Se activa solo en la ruta exacta '/'
+                />
 
-                {/* 3. Enlace a /CrearEscena */}
-                <NavLink 
+                {/* 3. Botón Crear Escena */}
+                <BotonNav
                     to="/CrearEscena"
-                    // 🏆 Agrega la clase modular .navLinkActive si isActive es true
-                    className={({ isActive }) => isActive ? styles.navLinkActive : undefined}
-                >
-                    <img src={imgMas} alt="Más" style={iconStyle} />
-                </NavLink>
+                    imgSrc={imgMas}
+                    altText="Crear Escena"
+                />
 
             </nav>
         </div>
