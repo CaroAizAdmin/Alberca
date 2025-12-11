@@ -4,20 +4,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
 import styles from './CardEscena.module.css';
 
-// 💡 IMPORTACIONES DE IMÁGENES
+// IMÁGENES
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
 import imgLimpieza from '../assets/imagenes/limpieza.png';
 import imgMusica from '../assets/imagenes/musica.png';
 import imgTemperatura from '../assets/imagenes/temperatura.png';
-// Sustituir imgLuces por estas cuando las rutas sean correctas:
-// import imgMusica from '../assets/imagenes/musica.png'; 
-// import imgTemperatura from '../assets/imagenes/temperatura.png';
-// import imgLimpieza from '../assets/imagenes/limpieza.png'; 
 
 import ModalExito from './ModalExito';
 
-// Función auxiliar para formatear días
 const formatDays = (days) => {
   if (!days || days.length === 0) return "Sin días";
   const dayMap = {
@@ -32,38 +27,43 @@ const CardEscena = ({ id, escena }) => {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
 
-  // --- 1. LÓGICA DE ACTIVACIÓN (CON HISTORIAL) ---
+  // --- 1. LÓGICA BLINDADA DE ACTIVACIÓN ÚNICA ---
   const activateMutation = useMutation({
     mutationFn: () => {
-      // 1. Obtener todas las escenas
+      // PASO A: Traer TODAS las escenas frescas desde Firebase
       return fetch(`${URL_BASE}/escenas.json`)
         .then((response) => response.json())
         .then((allScenes) => {
           const updates = {};
           
-          // Preparar datos del historial
+          // Datos para el historial
           const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
           const historyId = Date.now().toString();
 
           if (allScenes) {
-            // 2. Iterar y actualizar el estado
+            // PASO B: Recorrer TODAS y forzar estado
             Object.keys(allScenes).forEach((key) => {
+              const currentScene = allScenes[key];
+              
               if (key === id) {
-                 // Activar la escena actual + Guardar Historial
-                 const prevHistory = allScenes[key].history || {};
+                 // --- ESTA ES LA ELEGIDA (TRUE) ---
+                 const prevHistory = currentScene.history || {};
                  updates[key] = {
-                    ...allScenes[key],
-                    active: true,
-                    // Asegurarse de que history sea un objeto si es null
-                    history: { ...(prevHistory || {}), [historyId]: newHistoryEntry }
+                    ...currentScene,
+                    active: true, // ¡ENCENDIDA!
+                    history: { ...(prevHistory), [historyId]: newHistoryEntry }
                  };
               } else {
-                 // Desactivar las demás escenas
-                 updates[key] = { ...allScenes[key], active: false };
+                 // --- CUALQUIER OTRA (FALSE) ---
+                 updates[key] = { 
+                    ...currentScene, 
+                    active: false // ¡APAGADA A LA FUERZA!
+                 };
               }
             });
           }
-          // 3. Enviar la actualización PUT con todas las escenas
+          
+          // PASO C: Subir el objeto completo actualizado (PUT masivo)
           return fetch(`${URL_BASE}/escenas.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -77,21 +77,19 @@ const CardEscena = ({ id, escena }) => {
       setShowModal(true);
     },
     onError: (err) => {
-      console.error("Error en activateMutation:", err);
-      alert("No se pudo activar la escena. Verifica la estructura JSON de la escena.");
+      console.error("Error activando escena:", err);
+      alert("No se pudo activar la escena.");
     }
   });
 
-  // --- 2. DATOS VISUALES (Se asegura de usar el operador ?. para evitar fallos si actions es null) ---
+  // --- 2. PREPARACIÓN VISUAL ---
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const aguaOn = escena.actions?.chorrosAgua || false;
+  const musicaOn = escena.actions?.musica || false; // Ajustado para soportar boolean simple
+  const temperaturaOn = escena.actions?.temperatura?.estado || false; // Ajustado para objeto
+  const limpiezaOn = escena.actions?.limpieza || false;
+  
   const lucesConfiguradas = luces.estado;
-  
-  // LECTURA SEGURA DE LOS NUEVOS DISPOSITIVOS
-  const musicaOn = escena.actions?.musica?.estado || false;
-  const temperaturaOn = escena.actions?.temperatura?.estado || false;
-  const limpiezaOn = escena.actions?.limpieza?.estado || false;
-  
   const isSceneActive = escena.active === true;
   const diasTexto = formatDays(escena.schedule?.days);
 
@@ -100,7 +98,6 @@ const CardEscena = ({ id, escena }) => {
     if (typeof luces.color === 'string') {
         colorRGB = luces.color;
     } else {
-        // Aseguramos que r, g, b no sean undefined o null antes de usarlos
         const { r, g, b } = luces.color;
         colorRGB = `rgb(${r || 0}, ${g || 0}, ${b || 0})`;
     }
@@ -120,7 +117,7 @@ const CardEscena = ({ id, escena }) => {
       <ModalExito 
         isOpen={showModal} 
         onClose={() => setShowModal(false)}
-        mensaje={`¡La escena "${escena.name}" activada y registrada!`}
+        mensaje={`¡La escena "${escena.name}" está activa!`}
       />
 
       <div 
@@ -128,44 +125,36 @@ const CardEscena = ({ id, escena }) => {
         onClick={navigateToDetail}
         style={{ '--scene-color': colorRGB }}
       >
-        {/* 1. SECCIÓN IZQUIERDA: Texto y 5 Íconos Pequeños (infoWrapper) */}
         <div className={styles.infoWrapper}>
           <h3 className={styles.sceneTitle}>{escena.name}</h3>
           <p className={styles.sceneDescription}>{escena.descripcion || "Sin descripción"}</p>
           
-          {/* Badge Automático (si existe) */}
           {escena.schedule?.enabled && (
                <span className={styles.autoBadge}>
                   📅 {diasTexto} — ⏰ {escena.schedule.time}
                </span>
            )}
-           
-           {/* 🏆 CONTENEDOR DE LOS 5 ÍCONOS DE RESUMEN */}
+
+           {/* ICONOS RESUMEN */}
            <div className={styles.summaryIconsWrapper}>
-               {/* 1. ÍCONO LUCES */}
                <div className={`${styles.summaryIconItem} ${lucesConfiguradas ? styles.activeLight : ''}`}>
                   <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
                </div>
-               {/* 2. ÍCONO CHORROS */}
                <div className={`${styles.summaryIconItem} ${aguaOn ? styles.activeWater : ''}`}>
                   <img src={imgChorros} alt="Chorros" className={styles.deviceImage} />
                </div>
-               {/* 3. ÍCONO MÚSICA */}
                <div className={`${styles.summaryIconItem} ${musicaOn ? styles.activeMusic : ''}`}>
                   <img src={imgMusica} alt="Música" className={styles.deviceImage} /> 
                </div>
-               {/* 4. ÍCONO TEMPERATURA */}
                <div className={`${styles.summaryIconItem} ${temperaturaOn ? styles.activeTemp : ''}`}>
                   <img src={imgTemperatura} alt="Temperatura" className={styles.deviceImage} />
                </div>
-               {/* 5. ÍCONO LIMPIEZA */}
                <div className={`${styles.summaryIconItem} ${limpiezaOn ? styles.activeLimpieza : ''}`}>
                   <img src={imgLimpieza} alt="Limpieza" className={styles.deviceImage} />
                </div>
            </div>
-        </div> {/* Cierre de infoWrapper */}
+        </div>
 
-        {/* 2. SECCIÓN DERECHA: Solo Botón de Play (iconosWrapper) */}
         <div className={styles.iconosWrapper}>
           <button 
               className={`${styles.quickPlayBtn} ${isSceneActive ? styles.btnActive : ''}`} 
@@ -174,8 +163,8 @@ const CardEscena = ({ id, escena }) => {
           >
               {activateMutation.isPending ? "..." : (isSceneActive ? "■" : "▶")}
           </button>
-        </div> {/* Cierre de iconosWrapper */}
-      </div> {/* Cierre de modernCardLine */}
+        </div>
+      </div>
     </>
   )
 }

@@ -10,9 +10,13 @@ import imgLimpieza from '../assets/imagenes/limpieza.png';
 import imgMusica from '../assets/imagenes/musica.png';
 import imgTemperatura from '../assets/imagenes/temperatura.png';
 import { useTitulo } from '../hooks/useTitulo';
-import ModalExito from './ModalExito';
 
-// Función auxiliar para formatear días (completa)
+// MODALES
+import ModalExito from './ModalExito';
+import ModalConfirmacion from './ModalConfirmacion';
+import ModalError from './ModalError'; // Ya creado en el paso anterior
+
+// Función auxiliar para formatear días
 const formatDaysFull = (days) => {
   if (!days || days.length === 0) return "Sin programación";
   const dayMap = {
@@ -23,31 +27,38 @@ const formatDaysFull = (days) => {
   return days.map(d => dayMap[d] || d).join(", ");
 };
 
-// 🏆 NUEVA FUNCIÓN: Formatea la fecha ISO del historial
+// Formatea la fecha ISO del historial
 const formatHistoryDate = (isoDate) => {
   try {
     const date = new Date(isoDate);
     if (isNaN(date)) return "Fecha inválida";
-
     const day = date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
     const time = date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-
     return `${day} - ${time}`;
   } catch (e) {
     return "Fecha desconocida";
   }
 };
 
-
 const Detalle = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  
+  // --- ESTADOS DE MODALES ---
+  const [showModalExito, setShowModalExito] = useState(false);
+  const [mensajeExito, setMensajeExito] = useState("");
+  
+  const [showModalStop, setShowModalStop] = useState(false);
+  // 🏆 ESTADO CLAVE PARA LA ELIMINACIÓN
+  const [showModalDelete, setShowModalDelete] = useState(false); 
+  
+  const [showModalError, setShowModalError] = useState(false);
+  const [mensajeError, setMensajeError] = useState("");
 
-  // Estado local para manejo de modal
-  const [showModal, setShowModal] = useState(false);
+  const [redirectOnClose, setRedirectOnClose] = useState(false);
 
-  // --- OBTENER DATOS (GET) ---
+  // --- GET DATA ---
   const { data: escena, isLoading, error } = useQuery({
     queryKey: ["escena", id],
     queryFn: async () => {
@@ -61,82 +72,143 @@ const Detalle = () => {
 
   useTitulo(escena ? escena.name : "Cargando escena...");
 
-  // --- MUTACIÓN PARA ELIMINAR (DELETE) ---
+  // --- MUTACIÓN ELIMINAR (SIN ALERTS) ---
   const deleteMutation = useMutation({
-    mutationFn: () => {
-      return fetch(`${URL_BASE}/escenas/${id}.json`, { method: 'DELETE' })
-        .then((res) => {
-          if (!res.ok) return Promise.reject("Error al eliminar");
-          return res.json();
-        });
-    },
+    mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, { method: 'DELETE' }).then(res => res.json()),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
-      alert("Escena eliminada correctamente");
-      navigate('/escenas');
+      setMensajeExito("La escena ha sido eliminada correctamente.");
+      setRedirectOnClose(true); // Redirige al listado al cerrar el modal
+      setShowModalExito(true);
+      setShowModalDelete(false); // Cierra el modal de confirmación
     },
-    onError: () => alert("Hubo un error al intentar eliminar.")
+    onError: () => {
+      setMensajeError("No se pudo eliminar la escena. Intenta de nuevo.");
+      setShowModalError(true);
+      setShowModalDelete(false);
+    }
   });
 
-  // --- MUTACIÓN PARA ACTIVAR ESCENA ---
+  // --- MUTACIÓN ACTIVAR (ON) ---
   const activateMutation = useMutation({
     mutationFn: () => {
-      // *NOTA: Aquí debería ir la lógica completa de PUT/PATCH para actualizar 'active' en la base de datos
-      // y potencialmente registrar en el historial si no lo hace el backend. 
-      // Si la CardEscena ya maneja la lógica completa de PUT/Historial, aquí solo hacemos un PATCH simple:
-      return fetch(`${URL_BASE}/escenas/${id}.json`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ active: true })
-      }).then(res => {
-        if (!res.ok) throw new Error('Error al activar');
-        return res.json();
-      });
+      return fetch(`${URL_BASE}/escenas.json`)
+        .then(res => res.json())
+        .then(allScenes => {
+            const updates = {};
+            const historyId = Date.now().toString();
+            const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
+
+            if (allScenes) {
+                Object.keys(allScenes).forEach((key) => {
+                    const currentScene = allScenes[key];
+                    if (key === id) {
+                        const prevHistory = currentScene.history || {};
+                        updates[key] = {
+                            ...currentScene,
+                            active: true,
+                            history: { ...prevHistory, [historyId]: newHistoryEntry }
+                        };
+                    } else {
+                        updates[key] = { ...currentScene, active: false };
+                    }
+                });
+            }
+            return fetch(`${URL_BASE}/escenas.json`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updates),
+            });
+        })
+        .then(res => res.json());
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['escena', id] });
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
-      setShowModal(true);
+      queryClient.invalidateQueries({ queryKey: ['escena', id] });
+      setMensajeExito(`¡La escena "${escena.name}" está activa!`);
+      setRedirectOnClose(false);
+      setShowModalExito(true);
     },
-    onError: () => alert("No se pudo activar la escena.")
+    onError: (err) => {
+      setMensajeError("Hubo un problema al conectar con el servidor.");
+      setShowModalError(true);
+    }
   });
 
-  const handleEdit = () => navigate(`/editar-escena/${id}`);
+  // --- MUTACIÓN DESACTIVAR (Stop) ---
+  const deactivateMutation = useMutation({
+    mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ active: false }),
+        }).then(res => res.json()),
+    onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: ['escenas'] });
+        queryClient.invalidateQueries({ queryKey: ['escena', id] });
+        setShowModalStop(false);
+    },
+    onError: () => {
+       setMensajeError("No se pudo apagar la escena.");
+       setShowModalError(true);
+    }
+  });
 
-  const handleDelete = () => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar esta escena?")) deleteMutation.mutate();
+  // --- HANDLERS ---
+  const handleEdit = () => navigate(`/editar-escena/${id}`);
+  
+  // 🏆 1. BOTÓN ELIMINAR: Abre el modal de confirmación
+  const handleDelete = () => { 
+    setShowModalDelete(true); 
+  };
+  
+  // 🏆 2. CONFIRMACIÓN: Lanza la mutación real
+  const confirmDelete = () => {
+    deleteMutation.mutate(); 
   };
 
   const handleExecute = () => {
-    if (escena.active) {
-      alert("La escena ya está activa. Presiona editar si deseas modificar sus parámetros.");
-    } else {
-      activateMutation.mutate();
-    }
+    if (escena.active) setShowModalStop(true);
+    else activateMutation.mutate();
   };
 
+  const handleCloseExito = () => {
+      setShowModalExito(false);
+      if (redirectOnClose) {
+          navigate('/escenas');
+      }
+  };
 
   if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando...</div>;
-  if (error) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>Error: {error.message}</div>;
+  if (error) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>Error de conexión</div>;
 
-  // Lógica de estilos y acciones
+  // --- PREPARACIÓN DATOS VISUALES (NORMALIZACIÓN) ---
   const actions = escena.actions || {};
   const luces = actions.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
+  const chorrosOn = actions.chorrosAgua === true; 
+  
+  let musica = { estado: false };
+  if (typeof actions.musica === 'boolean') musica.estado = actions.musica;
+  else if (actions.musica) musica = actions.musica;
+
+  let temperatura = { estado: false, grados: 25 };
+  if (actions.temperatura) {
+      temperatura = {
+          estado: actions.temperatura.estado || false,
+          grados: actions.temperatura.grados || 25
+      };
+  }
+
+  let limpieza = { estado: false };
+  if (typeof actions.limpieza === 'boolean') limpieza.estado = actions.limpieza;
+  else if (actions.limpieza) limpieza = actions.limpieza;
+
   const isSceneActive = escena.active === true;
   const diasTexto = formatDaysFull(escena.schedule?.days);
 
-  const musica = actions.musica || { estado: false };
-  const temperatura = actions.temperatura || { estado: false, grados: 25 };
-  const limpieza = actions.limpieza || { estado: false };
-
-  // 🏆 LÓGICA DEL HISTORIAL
   const history = escena.history || {};
   const historyList = Object.keys(history)
     .map(key => ({ id: key, ...history[key] }))
-    // Ordenar por fecha (más reciente primero)
     .sort((a, b) => new Date(b.date) - new Date(a.date));
-  // Limitar a los 10 últimos
-  // .slice(0, 10);
 
   let colorRGB = "rgb(255, 255, 255)";
   if (luces.color) {
@@ -147,9 +219,8 @@ const Detalle = () => {
     }
   }
 
-  // Clases dinámicas
   const lightStyle = { ...(luces.estado && { '--scene-color': colorRGB }) };
-  const chorrosIconClass = `${styles.deviceIcon} ${actions.chorrosAgua ? styles.activeWater : ''}`;
+  const chorrosIconClass = `${styles.deviceIcon} ${chorrosOn ? styles.activeWater : ''}`;
   const lucesIconClass = `${styles.deviceIcon} ${luces.estado ? styles.activeLight : ''}`;
   const musicaIconClass = `${styles.deviceIcon} ${musica.estado ? styles.activeMusic : ''}`;
   const tempIconClass = `${styles.deviceIcon} ${temperatura.estado ? styles.activeTemp : ''}`;
@@ -160,13 +231,44 @@ const Detalle = () => {
 
   return (
     <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
+      
+      {/* --- ZONA DE MODALES --- */}
+      
+      {/* 1. Éxito */}
       <ModalExito
-        isOpen={showModal}
-        onClose={() => setShowModal(false)}
-        mensaje={`¡La escena "${escena.name}" ha sido ACTIVADA con éxito!`}
+        isOpen={showModalExito}
+        onClose={handleCloseExito}
+        mensaje={mensajeExito}
       />
 
-      {/* 1. NAVEGACIÓN */}
+      {/* 2. Error Genérico */}
+      <ModalError 
+        isOpen={showModalError}
+        onClose={() => setShowModalError(false)}
+        mensaje={mensajeError}
+      />
+
+      {/* 3. Confirmar Apagar */}
+      <ModalConfirmacion 
+        isOpen={showModalStop}
+        onClose={() => setShowModalStop(false)}
+        onConfirm={() => deactivateMutation.mutate()}
+        titulo="¿Apagar Escena?"
+        mensaje={`La escena "${escena.name}" está en ejecución. ¿Deseas detenerla?`}
+        textoBotonConfirmar="Sí, detener"
+      />
+
+      {/* 🏆 4. Confirmar Eliminar (¡El que necesitabas!) */}
+      <ModalConfirmacion 
+        isOpen={showModalDelete}
+        onClose={() => setShowModalDelete(false)}
+        onConfirm={confirmDelete}
+        titulo="¿Eliminar Escena?"
+        mensaje="Esta acción no se puede deshacer. ¿Estás seguro de eliminarla permanentemente?"
+        textoBotonConfirmar="Eliminar"
+      />
+
+      {/* HEADER NAV */}
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
           <button className={styles.btnBackNav} onClick={() => navigate('/escenas')}>
@@ -178,27 +280,28 @@ const Detalle = () => {
         </div>
       </div>
 
-      {/* 2. CONTENEDOR CENTRAL */}
       <div className={styles.centerWrapper}>
 
         <div className={styles.detalleHero} style={lightStyle}>
           <h1 className={styles.detalleTitle}>{escena.name}</h1>
           <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
+          
+          {/* BOTÓN GIGANTE */}
           <button
             className={`${styles.btnBigPlay} ${isSceneActive ? styles.btnBigPlayActive : ''}`}
             onClick={handleExecute}
-            disabled={activateMutation.isPending || deleteMutation.isPending}
+            disabled={activateMutation.isPending || deleteMutation.isPending || deactivateMutation.isPending}
           >
             <div className={styles.playIcon}>{isSceneActive ? "■" : "\u25B6"}</div>
             <span>{activateMutation.isPending ? "ACTIVANDO..." : (isSceneActive ? "ESCENA ACTIVA" : "ACTIVAR AHORA")}</span>
           </button>
         </div>
 
-        {/* TARJETAS DE DISPOSITIVOS */}
+        {/* DISPOSITIVOS */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
-
-          {/* LUCES PISCINA */}
+          
+          {/* LUCES */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={lucesIconClass} style={lightStyle}>
@@ -209,12 +312,11 @@ const Detalle = () => {
             <div className={styles.lightStatus}>
               {luces.estado && <div className={styles.colorPreviewDot} style={{ backgroundColor: colorRGB }}></div>}
               <span className={`${styles.statusBadge} ${luces.estado ? styles.on : styles.off}`}>
-                {luces.estado ? `ON (${colorRGB.match(/\d+/g).join(',')})` : 'APAGADAS'}
+                {luces.estado ? 'ENCENDIDAS' : 'APAGADAS'}
               </span>
             </div>
           </div>
-
-          {/* CHORROS DE AGUA */}
+          {/* CHORROS */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={chorrosIconClass}>
@@ -222,57 +324,46 @@ const Detalle = () => {
               </div>
               <span className={styles.deviceLabel}>Chorros de agua</span>
             </div>
-            <span className={`${styles.statusBadge} ${actions.chorrosAgua ? styles.on : styles.off}`}>
-              {actions.chorrosAgua ? 'ENCENDIDOS' : 'APAGADOS'}
+            <span className={`${styles.statusBadge} ${chorrosOn ? styles.on : styles.off}`}>
+              {chorrosOn ? 'ENCENDIDOS' : 'APAGADOS'}
             </span>
           </div>
-
-
-          {/* MÚSICA */}
-          {musica.estado !== undefined && (
-            <div className={styles.deviceListItem}>
-              <div className={styles.deviceIconAndLabel}>
-                <div className={musicaIconClass}>
-                  <img src={imgMusica} alt="Música" style={imgIconStyle} />
-                </div>
-                <span className={styles.deviceLabel}>Música Ambiente</span>
+          {/* MUSICA */}
+          <div className={styles.deviceListItem}>
+            <div className={styles.deviceIconAndLabel}>
+              <div className={musicaIconClass}>
+                <img src={imgMusica} alt="Música" style={imgIconStyle} />
               </div>
-              <span className={`${styles.statusBadge} ${musica.estado ? styles.on : styles.off}`}>
-                {musica.estado ? (musica.apiURL ? 'REPRODUCIENDO' : 'ON (Sin URL)') : 'APAGADA'}
-              </span>
+              <span className={styles.deviceLabel}>Música Ambiente</span>
             </div>
-          )}
-
-          {/* TEMPERATURA */}
-          {temperatura.estado !== undefined && (
-            <div className={styles.deviceListItem}>
-              <div className={styles.deviceIconAndLabel}>
-                <div className={tempIconClass}>
-                  <img src={imgTemperatura} alt="Temperatura" style={imgIconStyle} />
-                </div>
-                <span className={styles.deviceLabel}>Control de Temperatura</span>
+            <span className={`${styles.statusBadge} ${musica.estado ? styles.on : styles.off}`}>
+              {musica.estado ? 'ENCENDIDA' : 'APAGADA'}
+            </span>
+          </div>
+          {/* TEMP */}
+          <div className={styles.deviceListItem}>
+            <div className={styles.deviceIconAndLabel}>
+              <div className={tempIconClass}>
+                <img src={imgTemperatura} alt="Temperatura" style={imgIconStyle} />
               </div>
-              <span className={`${styles.statusBadge} ${temperatura.estado ? styles.on : styles.off}`}>
-                {temperatura.estado ? `${temperatura.grados}°C` : 'INACTIVA'}
-              </span>
+              <span className={styles.deviceLabel}>Control de Temperatura</span>
             </div>
-          )}
-
+            <span className={`${styles.statusBadge} ${temperatura.estado ? styles.on : styles.off}`}>
+              {temperatura.estado ? `${temperatura.grados}°C` : 'APAGADA'}
+            </span>
+          </div>
           {/* LIMPIEZA */}
-          {limpieza.estado !== undefined && (
-            <div className={styles.deviceListItem}>
-              <div className={styles.deviceIconAndLabel}>
-                <div className={limpiezaIconClass}>
-                  <img src={imgLimpieza} alt="Limpieza" style={imgIconStyle} />
-                </div>
-                <span className={styles.deviceLabel}>Limpieza Programada</span>
+          <div className={styles.deviceListItem}>
+            <div className={styles.deviceIconAndLabel}>
+              <div className={limpiezaIconClass}>
+                <img src={imgLimpieza} alt="Limpieza" style={imgIconStyle} />
               </div>
-              <span className={`${styles.statusBadge} ${limpieza.estado ? styles.on : styles.off}`}>
-                {limpieza.estado ? 'PROGRAMADA' : 'DETENIDA'}
-              </span>
+              <span className={styles.deviceLabel}>Limpieza Programada</span>
             </div>
-          )}
-
+            <span className={`${styles.statusBadge} ${limpieza.estado ? styles.on : styles.off}`}>
+              {limpieza.estado ? 'PROGRAMADA' : 'APAGADA'}
+            </span>
+          </div>
         </div>
 
         {/* HORARIOS */}
@@ -283,12 +374,8 @@ const Detalle = () => {
               <strong className={styles.scheduleTitle}>Programación Automática:</strong>
               {escena.schedule?.enabled ? (
                 <>
-                  <p className={styles.scheduleText}>
-                    Días: {diasTexto}
-                  </p>
-                  <p className={styles.scheduleText}>
-                    Hora: {escena.schedule.time}
-                  </p>
+                  <p className={styles.scheduleText}>Días: {diasTexto}</p>
+                  <p className={styles.scheduleText}>Hora: {escena.schedule.time}</p>
                 </>
               ) : (
                 <p className={styles.scheduleText}>Apagado automático desactivado.</p>
@@ -297,7 +384,7 @@ const Detalle = () => {
           </div>
         </div>
 
-        {/* 🏆 NUEVA CARD: HISTORIAL DE EJECUCIONES */}
+        {/* HISTORIAL */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Historial de Ejecuciones</h3>
           {historyList.length === 0 ? (
@@ -311,7 +398,6 @@ const Detalle = () => {
                   <span className={styles.historyDate}>
                     {formatHistoryDate(entry.date)}
                   </span>
-                  {/* Detecta si es manual o auto para el color de la etiqueta */}
                   <span className={`${styles.tagType} ${entry.type === 'MANUAL' ? styles.tagManual : styles.tagAuto}`}>
                     {entry.type === 'MANUAL' ? 'Manual' : 'Automática'}
                   </span>
@@ -321,14 +407,9 @@ const Detalle = () => {
           )}
         </div>
 
-
         {/* ZONA DE PELIGRO */}
         <div className={styles.dangerZone}>
-          <button
-            className={styles.btnDelete}
-            onClick={handleDelete}
-            disabled={deleteMutation.isPending}
-          >
+          <button className={styles.btnDelete} onClick={handleDelete} disabled={deleteMutation.isPending}>
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar Escena"}
           </button>
         </div>

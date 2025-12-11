@@ -41,8 +41,8 @@
     margin-top: 0 !important; 
     margin-bottom: 0 !important; 
     text-align: center;
-   width: 100%; /* Ejemplo de corrección, puedes ajustar el valor si es necesario */
-   line-height: 1.1;
+    width: 100%; 
+    line-height: 1.1;
 }
 
 .centerWrapper {
@@ -76,7 +76,7 @@
   /* Estilos funcionales */
   font-size: 0.95rem;
   font-weight: 600;
- color: whitesmoke;
+  color: whitesmoke;
   cursor: pointer;
   padding: 8px 14px;
   border-radius: 12px;
@@ -156,7 +156,6 @@ svg{
 }
 
 /* --- ESTADO ENCENDIDO (CHORROS) --- */
-/* Cuando tiene la clase .activeWater, la imagen dentro cambia */
 .activeWater img {
   opacity: 1;
   filter: none; /* Recupera el color original */
@@ -169,9 +168,34 @@ svg{
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  /* Usamos la variable CSS --scene-color que definimos en el JS para el color del brillo */
+  /* Brillo dinámico según el color de la luz */
   filter: drop-shadow(0 0 8px var(--scene-color, white)); 
 }
+
+/* 🏆 NUEVO: ESTADO ENCENDIDO (MÚSICA) */
+.activeMusic img {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px #d946ef); /* Brillo magenta/violeta */
+}
+
+/* 🏆 NUEVO: ESTADO ENCENDIDO (TEMPERATURA) */
+.activeTemp img {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px #f97316); /* Brillo naranja cálido */
+}
+
+/* 🏆 NUEVO: ESTADO ENCENDIDO (LIMPIEZA) */
+.activeClean img {
+  opacity: 1;
+  filter: none;
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 6px #22c55e); /* Brillo verde limpieza */
+}
+
 
 .deviceListItem {
   display: flex;
@@ -273,8 +297,6 @@ svg{
   }
 }
 
-/* ... resto del código ... */
-
 /* --- CLASE NUEVA: Botón Play Gigante Activo --- */
 .btnBigPlayActive {
   background: rgba(76, 217, 100, 0.3); /* Verde semi-transparente */
@@ -294,7 +316,6 @@ svg{
   text-shadow: 0 0 5px #4cd964;
 }
 
-/* ... (Tus estilos anteriores) ... */
 
 /* --- 6. HISTORIAL DE EJECUCIONES --- */
 .historyListContainer {
