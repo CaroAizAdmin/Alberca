@@ -245,13 +245,13 @@ const EditarEscena = () => {
       {/* Botón de navegación (fuera del Formulario) */}
       <div className={styles.flecha}>
         {/* 💡 REEMPLAZADO: Usamos el componente Botones para que herede el estilo glassy y cuadrado */}
-        <Botones 
-            onClick={() => navigate(-1)} 
-            isIconOnly={true} // Aplica el estilo compacto y cuadrado definido en Botones.module.css
-        >
-          {/* El CSS de Botones.module.css se encarga de que esta imagen se vea blanca */}
-          <img src={imgFlecha} alt="Atrás" />
-        </Botones>
+      
+<Botones 
+    onClick={() => navigate(-1)} 
+    variant="nav-icon" // 🏆 CLAVE: Aplica el estilo .nav-icon
+>
+    <img src={imgFlecha} alt="Atrás" />
+</Botones>
       </div>
 
       {/* Título de la página */}
