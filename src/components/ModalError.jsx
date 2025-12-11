@@ -1,19 +1,18 @@
 import React from 'react';
-import styles from './ModalExito.module.css'; // Reutilizamos los estilos base
+import styles from './ModalExito.module.css';
 
 const ModalError = ({ isOpen, onClose, mensaje }) => {
   if (!isOpen) return null;
 
   return (
     <div className={styles.overlay}>
-      <div className={styles.modalCard} style={{ 
-          // Opcional: Si quieres darle un toque extra de rojo al borde
+      <div className={styles.modalCard} style={{
           borderColor: 'rgba(246, 89, 89, 0.5)' 
       }}>
-        {/* Círculo Rojo con X */}
+
         <div className={styles.iconCircle} style={{ 
             backgroundColor: 'rgba(246, 89, 89, 0.2)', 
-            color: '#F65959', // Color de peligro (rojo)
+            color: '#F65959',
             boxShadow: '0 0 15px rgba(246, 89, 89, 0.3)'
         }}>
           ✕
@@ -24,7 +23,7 @@ const ModalError = ({ isOpen, onClose, mensaje }) => {
         <button 
             className={styles.btnCerrar} 
             onClick={onClose}
-            style={{ backgroundColor: '#F65959' }} // Botón Rojo
+            style={{ backgroundColor: '#F65959' }}
         >
           Aceptar
         </button>

@@ -1,20 +1,13 @@
-/* ========================================================== */
-/* VARIABLES DE COLOR (Centralizadas para el Formulario)      */
-/* ========================================================== */
 :root {
   --color-card-background-glass: rgba(45, 50, 90, 0.4); 
   --color-primary-blue: #5C97F2; 
   --color-text-light: #F0F0F0;
   --color-text-faded: #B0B3CC;
-  --color-success: #34c759; /* Verde para Guardar/Éxito */
+  --color-success: #34c759; 
   --color-danger: #F65959; 
   --color-border-glass: rgba(255, 255, 255, 0.1);
   --color-progress-fill: #5C97F2; 
 }
-
-/* ========================================================== */
-/* 1. TARJETA PRINCIPAL (Form Card)                           */
-/* ========================================================== */
 
 .form-card {
     background: var(--color-card-background-glass); 
@@ -23,7 +16,7 @@
     padding: 30px;
     color: var(--color-text-light);
     width: 100%;
-    max-width: 500px; /* Ancho máximo de la tarjeta */
+    max-width: 500px;
     box-sizing: border-box;
     border: 1px solid var(--color-border-glass); 
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); 
@@ -38,10 +31,6 @@
     border-bottom: 1px solid var(--color-border-glass);
     padding-bottom: 10px;
 }
-
-/* ========================================================== */
-/* 2. CAMPOS DE FORMULARIO                                    */
-/* ========================================================== */
 
 .form-group {
     margin-bottom: 25px;
@@ -98,10 +87,6 @@
     cursor: pointer;
 }
 
-/* ========================================================== */
-/* 3. BARRA DE PROGRESO                                       */
-/* ========================================================== */
-
 .progress-bar-container {
     display: flex;
     justify-content: space-between;
@@ -153,10 +138,6 @@
     box-shadow: 0 0 8px var(--color-progress-fill);
 }
 
-/* ========================================================== */
-/* 4. DEVICE TOGGLE, COLOR & DÍAS                             */
-/* ========================================================== */
-
 .device-row {
     display: flex;
     justify-content: space-between;
@@ -168,7 +149,7 @@
 .device-row:last-of-type {
     border-bottom: none;
 }
-/* Estilos del Switch */
+
 .switch {
   position: relative;
   display: inline-block;
@@ -189,7 +170,6 @@
 input:checked + .slider { background-color: var(--color-primary-blue); box-shadow: 0 0 5px var(--color-primary-blue); }
 input:checked + .slider:before { transform: translateX(20px); }
 
-/* Selector de Color */
 .color-picker-wrapper {
     display: flex;
     align-items: center;
@@ -212,7 +192,6 @@ input:checked + .slider:before { transform: translateX(20px); }
     color: var(--color-text-light); padding-right: 5px;
 }
 
-/* Selector de Días */
 .day-selector-container {
     display: flex; justify-content: space-between; gap: 5px;
     margin-bottom: 20px; padding: 5px 0;
@@ -232,15 +211,10 @@ input:checked + .slider:before { transform: translateX(20px); }
     transform: translateY(-1px);
 }
 
-/* Resumen */
 .summary-list strong {
     color: var(--color-primary-blue); font-weight: 700;
     display: inline-block; width: 100px;
 }
-
-/* ========================================================== */
-/* 5. BOTONES DE NAVEGACIÓN (Layout y Utilitarias)            */
-/* ========================================================== */
 
 .buttons-container {
     display: flex;
@@ -249,17 +223,9 @@ input:checked + .slider:before { transform: translateX(20px); }
     gap: 15px;
 }
 
-/* Clase de utilidad para que los botones crezcan y se repartan el espacio */
 .btn-flex-grow {
     flex-grow: 1;
 }
-
-/* ❌ Eliminadas clases .btn-nav, .btn-prev, .btn-next. El estilo viene de Botones.module.css */
-/* ❌ Eliminadas clases .btnPrimary y .btnSuccess. El estilo viene de Botones.module.css (variant="default" y variant="success") */
-
-/* ========================================================== */
-/* 6. ESTILOS SVG (Compartidos para Iconos)                   */
-/* ========================================================== */
 
 .svgInactive {
   opacity: 0.5;

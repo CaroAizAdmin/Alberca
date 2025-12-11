@@ -1,4 +1,3 @@
-import React from 'react';
 import styles from './ModalConfirmacion.module.css';
 
 const ModalConfirmacion = ({ isOpen, onClose, onConfirm, titulo, mensaje, textoBotonConfirmar = "Confirmar" }) => {

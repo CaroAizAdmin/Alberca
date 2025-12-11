@@ -1,5 +1,3 @@
-/* src/components/Detalle.module.css */
-
 :root {
   --color-delete: #F65959; 
   --color-app-background: #191E3B;
@@ -7,7 +5,7 @@
   --color-primary-blue: #5C97F2; 
   --color-text-faded: #B0B3CC;
 }
-/* --- 1. CONTENEDORES PRINCIPALES --- */
+
 .detalleContainer {
   min-height: 100vh;
   padding: 0;
@@ -15,7 +13,6 @@
   flex-direction: column; 
   align-items: center; 
 }
-
 
 .detalleNavWrapper {
     width: 100%;
@@ -46,8 +43,6 @@
   position: relative;
 }
 
-/* --- 2. LAYOUT Y CARDS --- */
-
 .detalleCard {
   background: rgba(45, 50, 90, 0.4); 
   backdrop-filter: blur(10px); 
@@ -75,7 +70,6 @@ svg{
     height: 24px;
 }
 
-/* Contenedor base del ícono de dispositivo */
 .deviceIcon {
   width: 50px;       
   height: 50px;
@@ -88,7 +82,6 @@ svg{
   transition: all 0.3s ease;
 }
 
-/* IMAGEN DENTRO DEL ÍCONO */
 .deviceIcon img {
   width: 100%;
   height: 100%;
@@ -98,7 +91,6 @@ svg{
   filter: grayscale(100%);
 }
 
-/* --- ESTADOS ENCENDIDOS --- */
 .activeWater img {
   opacity: 1;
   filter: none; 
@@ -134,7 +126,6 @@ svg{
   filter: drop-shadow(0 0 6px #22c55e); 
 }
 
-
 .deviceListItem {
   display: flex;
   justify-content: space-between;
@@ -150,7 +141,6 @@ svg{
     flex-shrink: 0; 
 }
 
-/* --- ZONA DE PELIGRO (Contenedor) --- */
 .dangerZone {
     margin-top: 40px;
     width: 100%;
@@ -158,8 +148,6 @@ svg{
     justify-content: center;
 }
 
-
-/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   
   .detalleNavWrapper {
@@ -186,7 +174,6 @@ svg{
   }
 }
 
-/* --- HISTORIAL DE EJECUCIONES --- */
 .historyListContainer {
   margin-top: 15px;
   max-height: 200px; 
@@ -196,7 +183,7 @@ svg{
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
-/* ... (El resto de estilos de Historial se mantienen) ... */
+
 .historyItem {
   display: flex;
   justify-content: space-between;
@@ -216,7 +203,6 @@ svg{
   font-weight: 500;
 }
 
-/* Etiquetas de Tipo */
 .tagType {
   padding: 4px 10px;
   border-radius: 8px;

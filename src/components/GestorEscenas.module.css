@@ -1,18 +1,8 @@
-/* ========================================================== */
-/* VARIABLES DE COLOR (Mínimas para el layout)                */
-/* ========================================================== */
 :root {
   --color-app-background: #191E3B; 
   --color-text-light: #F0F0F0;
 }
 
-/* ========================================================== */
-/* 1. CONTENEDOR Y TÍTULO DE PÁGINA                           */
-/* ========================================================== */
-
-
-
-/* TÍTULO PRINCIPAL GRANDE */
 .editTitle {
     font-size: 2.5rem; 
     font-weight: 800; 
@@ -23,9 +13,6 @@
     color: var(--color-text-light); 
 }
 
-/* ========================================================== */
-/* 2. RESPONSIVE                                              */
-/* ========================================================== */
 @media (max-width: 768px) {
     .editContainer {
         padding: 20px 16px 80px;

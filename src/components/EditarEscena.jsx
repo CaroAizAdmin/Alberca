@@ -3,11 +3,11 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
-import styles from './EditarEscena.module.css'; // Solo estilos de contenedor y navegación
+import styles from './EditarEscena.module.css';
 import Formulario from './Formulario/Formulario';
 import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
-import Botones from './BotonesGenerales/Botones/Botones'; // 💡 Importamos el componente Botones
+import Botones from './BotonesGenerales/Botones/Botones';
 
 
 const EditarEscena = () => {
@@ -17,13 +17,11 @@ const EditarEscena = () => {
 
   useTitulo("Editar Escena");
 
-  // --- OBTENER DATOS (GET) ---
   const { data: escenaDatos, isLoading: isLoadingEscena, isError: isErrorEscena } = useQuery({
     queryKey: ['escena', id],
     queryFn: () => fetch(`${URL_BASE}/escenas/${id}.json`).then(res => res.json())
   });
 
-  // --- ESTADOS ---
   const [step, setStep] = useState(1);
   const [errorLocal, setErrorLocal] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -41,7 +39,6 @@ const EditarEscena = () => {
     schedule: { enabled: false, days: [], time: "19:00" }
   });
 
-  // --- EFECTO RELLENO DE DATOS (Añadimos limpieza de claves de días) ---
   useEffect(() => {
     if (escenaDatos && escenaDatos.name) {
 
@@ -72,9 +69,7 @@ const EditarEscena = () => {
 
         schedule: {
           enabled: escenaDatos.schedule?.enabled ?? false,
-          // 💡 LIMPIEZA DE CLAVES DE DÍAS: Convertir posibles errores de guardado ('th', 'thu') a 'ju'
           days: (escenaDatos.schedule?.days || []).map(dayKey => {
-            // Manejar 'th' o 'thu' (abreviaturas en inglés) y convertir a 'ju' (Jueves en español)
             if (dayKey === 'th' || dayKey === 'thu') {
               return 'ju';
             }
@@ -90,7 +85,6 @@ const EditarEscena = () => {
     }
   }, [escenaDatos]);
 
-  // --- MUTACIÓN (PUT) ---
   const mutation = useMutation({
     mutationFn: (datosActualizados) => {
       return fetch(`${URL_BASE}/escenas/${id}.json`, {
@@ -110,13 +104,11 @@ const EditarEscena = () => {
     onError: (error) => alert(`Error al editar: ${error.message}`)
   });
 
-  // FUNCIÓN PARA CERRAR MODAL Y NAVEGAR
   const handleCloseModal = () => {
     setShowModal(false);
     navigate('/');
   };
 
-  // --- HANDLERS DE FORMULARIO Y PASOS ---
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value ?? "" });
     setErrorLocal("");
@@ -145,12 +137,10 @@ const EditarEscena = () => {
   };
 
   const handleNext = () => {
-    // Validación del paso 1
     if (step === 1 && (!formData.name || !formData.name.trim())) {
       setErrorLocal("El nombre de la escena es obligatorio.");
       return;
     }
-    // Validación (Advertencia) del paso 2
     if (step === 2) {
       const activeActions = Object.keys(formData.actions).some(key => {
         const action = formData.actions[key];
@@ -165,7 +155,6 @@ const EditarEscena = () => {
         setErrorLocal("");
       }
     }
-    // Validación del paso 3
     if (step === 3 && formData.schedule.enabled && formData.schedule.days.length === 0) {
       setErrorLocal("Selecciona al menos un día.");
       return;
@@ -179,7 +168,6 @@ const EditarEscena = () => {
     setStep(step - 1);
   }
 
-  // --- HANDLER DE TOGGLE UNIFICADO (Lógica Inmutable CLAVE) ---
   const handleToggle = (device) => {
     setFormData(prev => {
       const newActions = { ...prev.actions };
@@ -205,7 +193,6 @@ const EditarEscena = () => {
     });
   };
 
-  // --- HANDLERS DE COLOR Y TEMPERATURA ---
   const handleColorPickerChange = ({ r, g, b }) => {
     setFormData(prev => ({
       ...prev,
@@ -227,10 +214,8 @@ const EditarEscena = () => {
     }));
   };
 
-  // --- FUNCIÓN DE ACCIÓN FINAL ---
   const handleUpdate = () => mutation.mutate(formData);
 
-  // --- CONDICIONALES DE CARGA/ERROR ---
   if (isLoadingEscena) return <div style={{ textAlign: 'center', marginTop: 50, color: 'white' }}>Cargando...</div>;
   if (isErrorEscena) return <div style={{ textAlign: 'center', marginTop: 50, color: 'red' }}>Error al cargar.</div>;
 
@@ -242,23 +227,18 @@ const EditarEscena = () => {
         mensaje="¡La escena se ha actualizado correctamente!"
       />
 
-      {/* Botón de navegación (fuera del Formulario) */}
       <div className={styles.flecha}>
-        {/* 💡 REEMPLAZADO: Usamos el componente Botones para que herede el estilo glassy y cuadrado */}
       
 <Botones 
     onClick={() => navigate(-1)} 
-    variant="nav-icon" // 🏆 CLAVE: Aplica el estilo .nav-icon
+    variant="nav-icon" 
 >
     <img src={imgFlecha} alt="Atrás" />
 </Botones>
       </div>
 
-      {/* Título de la página */}
       <h1 className={styles['edit-title']}>{formData.name || "Cargando..."}</h1>
 
-
-      {/* COMPONENTE DINÁMICO */}
       <Formulario
         formData={formData}
         step={step}

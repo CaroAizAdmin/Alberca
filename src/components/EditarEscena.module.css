@@ -1,15 +1,8 @@
-/* ========================================================== */
-/* VARIABLES DE COLOR (Mínimas para el layout)                */
-/* ========================================================== */
 :root {
   --color-app-background: #191E3B; 
   --color-primary-blue: #5C97F2; 
   --color-text-light: #F0F0F0;
 }
-
-/* ========================================================== */
-/* 1. CONTENEDOR Y TÍTULO DE PÁGINA                           */
-/* ========================================================== */
 
 .edit-container {
     min-height: 100vh;
@@ -18,10 +11,8 @@
     align-items: center; 
     padding: 30px 20px 80px; 
     box-sizing: border-box;
-    /* El Formulario se centrará dentro */
 }
 
-/* TÍTULO PRINCIPAL GRANDE */
 .edit-title {
     font-size: 2.5rem; 
     font-weight: 800; 
@@ -32,12 +23,6 @@
     color: var(--color-text-light); 
 }
 
-
-/* ========================================================== */
-/* 2. BOTÓN DE NAVEGACIÓN (Solo posicionamiento)              */
-/* ========================================================== */
-
-/* Esta clase se encarga ÚNICAMENTE de la posición absoluta en la esquina. */
 .flecha {
     position: absolute;
     top: 25px;
@@ -45,12 +30,6 @@
     z-index: 20; 
 }
 
-/* ❌ ELIMINADO: Se eliminan las clases .btnBackNav y sus estados (:hover, img) */
-/* ya que el estilo viene del componente Botones. */
-
-/* ========================================================== */
-/* 3. RESPONSIVE                                              */
-/* ========================================================== */
 @media (max-width: 768px) {
     .edit-container {
         padding: 70px 16px 80px;

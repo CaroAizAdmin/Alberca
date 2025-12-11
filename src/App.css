@@ -1,85 +1,51 @@
-/* VARIABLES DE COLOR */
 :root {
-  /* Color principal de fondo (Azul de Hydrate) */
   --color-dark-blue: #103C76; 
   --color-header-blue: #213547;
 }
 
-/* =========================================
-   1. CONFIGURACIÓN GLOBAL Y ROOT (FONDO FIJO ASEGURADO)
-   ========================================= */
-
 body {
   margin: 0;
   padding: 0;
-  
-  /* Color de respaldo */
   background-color: var(--color-dark-blue); 
-  
-  /* CLAVE: Aplica la imagen de fondo */
   background-image: url('./assets/imagenes/fondo1.png'); 
-  
-  /* CLAVE: Mantiene la imagen fija mientras el contenido se desplaza */
   background-attachment: fixed; 
-  
-  /* Ajuste de tamaño y posición */
   background-size: cover; 
   background-repeat: no-repeat;
-  background-position: center ; 
-  
-  /* Propiedades de Scroll y Ancho */
+  background-position: center ;
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   width: 100%;
   max-width: 100%;
   overflow-x: hidden; 
 }
 
-/* El #ROOT queda limpio de fondo para no competir con el body */
 #root {
   min-height: 100vh;
   width: 100%;
-  
   background-image: none; 
-  
   box-sizing: border-box;
 }
-
-/* =========================================
-   2. HEADER (ENCABEZADO FIJO)
-   ========================================= */
 
 .header {
   width: 100%;
 }
 
 .cabeza {
-  /* Posicionamiento Fijo */
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   z-index: 1000; 
   box-sizing: border-box; 
-
-  /* Estilos Visuales */
   background-color: var(--color-header-blue);
   color: white;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   padding: 1rem;
-
-  /* Tipografía y Alineación */
   font-size: 1.5rem;
   font-weight: bold;
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-/* =========================================
-   3. MENÚ (BARRA DE NAVEGACIÓN INFERIOR)
-   ========================================= */
-
-
 
 .navbar {
   margin: auto;
@@ -89,10 +55,6 @@ body {
   width: 100%;
   max-width: 400px; 
 }
-
-/* =========================================
-   4. ESTILOS DE LISTA Y BOILERPLATE
-   ========================================= */
 
 .logo {
   height: 6em;
@@ -131,20 +93,14 @@ body {
 }
 
 .escena-list{
-  /* Centrado y límite de ancho */
-/*   max-width: 400px;  */
-
   width: 90%; 
   margin: 0 auto; 
   padding-bottom: 200px;
-  /* Compensación para la ola y el título (Ajusta este valor si es necesario) */
-  padding-top: 20px; 
-  /* Estilos de lista */
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
-
 
 .flecha{
   position: fixed;

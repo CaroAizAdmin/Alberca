@@ -6,7 +6,7 @@ import ModalExito from './ModalExito';
 import ModalError from './ModalError';
 import styles from './Configuracion.module.css';  
 import { useTitulo } from '../hooks/useTitulo';
-import Botones from './BotonesGenerales/Botones/Botones'; // 💡 Importado Botones
+import Botones from './BotonesGenerales/Botones/Botones';
 
 const Configuracion1 = () => {
    const queryClient = useQueryClient();
@@ -17,13 +17,11 @@ const Configuracion1 = () => {
     const [showError, setShowError] = useState(false);
     const [mensajeError, setMensajeError] = useState("");
 
-    // --- MUTACIÓN PARA ELIMINAR TODAS LAS ESCENAS ---
     const deleteAllScenesMutation = useMutation({
         mutationFn: () => {
             return fetch(`${URL_BASE}/escenas.json`, { 
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
-                // Envía 'null' para eliminar completamente el nodo 'escenas'
                 body: JSON.stringify(null), 
             });
         },
@@ -42,12 +40,10 @@ const Configuracion1 = () => {
     });
 
     const handleDeleteAllScenes = () => {
-        // Muestra la ventana modal de confirmación
         setShowConfirm(true);
     };
 
     const confirmDeletion = () => {
-        // Ejecuta la mutación de borrado
         deleteAllScenesMutation.mutate();
     };
 
@@ -59,18 +55,16 @@ const Configuracion1 = () => {
                 <h3>Gestión de Escenas</h3>
                 <p>Presiona este botón para eliminar permanentemente todas las escenas configuradas por el usuario. Esta acción no se puede deshacer.</p>
                 
-                {/* 🟢 Botón refactorizado con variant="delete" */}
                 <Botones 
                     variant="delete"
                     onClick={handleDeleteAllScenes} 
                     disabled={deleteAllScenesMutation.isPending}
-                    className={styles.btnFullWidth} // Clase para forzar 100% de ancho
+                    className={styles.btnFullWidth}
                 >
                     {deleteAllScenesMutation.isPending ? "Eliminando..." : "BORRAR TODAS LAS ESCENAS"}
                 </Botones>
             </div>
             
-            {/* MODALES (SIN CAMBIOS) */}
             <ModalConfirmacion
                 isOpen={showConfirm}
                 onClose={() => setShowConfirm(false)}

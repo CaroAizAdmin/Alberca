@@ -1,7 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-// 🚫 ELIMINAMOS: import './Error404Pool.css';
-// ✅ AÑADIMOS:
 import styles from './Error404.module.css';
 
 const Error404 = () => {
@@ -30,7 +28,6 @@ const Error404 = () => {
             x += speedX;
             y += speedY;
 
-            // Rebote Horizontal
             if (x + rect.width >= innerWidth) {
                 x = innerWidth - rect.width;
                 speedX = -speedX;
@@ -39,7 +36,6 @@ const Error404 = () => {
                 speedX = -speedX;
             }
 
-            // Rebote Vertical
             if (y + rect.height >= innerHeight) {
                 y = innerHeight - rect.height;
                 speedY = -speedY;
@@ -58,10 +54,8 @@ const Error404 = () => {
 
 
     return (
-        // ✅ CLASE ACTUALIZADA: fullPoolContainer
         <div className={styles.fullPoolContainer}>
 
-            {/* ✅ CLASES ACTUALIZADAS */}
             <div className={styles.driftingFloat} ref={floatRef}>
                 <div className={styles.poolFloatCss}>
                     <div className={styles.floatStripe + ' ' + styles.stripe1}></div>
@@ -72,7 +66,6 @@ const Error404 = () => {
                 <div className={styles.floatShadowWater}></div>
             </div>
 
-            {/* ✅ CLASES ACTUALIZADAS */}
             <div className={styles.contentCard}>
                 <h1 className={styles.pool404Number}>404</h1>
                 <h2 className={styles.pool404Title}>¡Ups! Te fuiste a lo hondo</h2>

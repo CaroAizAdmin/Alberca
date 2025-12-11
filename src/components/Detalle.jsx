@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-// Importamos DAYS_OF_WEEK desde las constantes (para formatDaysFull)
 import { URL_BASE, DAYS_OF_WEEK } from "../assets/constants/constants"; 
 import styles from './Detalle.module.css';
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
@@ -11,30 +10,23 @@ import imgLimpieza from '../assets/imagenes/limpieza.png';
 import imgMusica from '../assets/imagenes/musica.png';
 import imgTemperatura from '../assets/imagenes/temperatura.png';
 import { useTitulo } from '../hooks/useTitulo';
-
-// MODALES
 import ModalExito from './ModalExito';
 import ModalConfirmacion from './ModalConfirmacion';
 import ModalError from './ModalError';
 import Botones from './BotonesGenerales/Botones/Botones'; 
 
-
-// Función auxiliar para formatear días (Usa la constante DAYS_OF_WEEK)
 const formatDaysFull = (days) => {
   if (!days || days.length === 0) return "Sin programación";
   
-  // Creamos el mapeo {'lu': 'Lunes', 'ma': 'Martes', ...}
   const dayMap = DAYS_OF_WEEK.reduce((map, day) => {
       map[day.key] = day.label;
       return map;
   }, {});
 
   if (days.length === 7) return "Todos los días";
-  // Mapea las claves guardadas (e.g., ['lu', 'mi']) a las etiquetas completas
   return days.map(d => dayMap[d] || d).join(", ");
 };
 
-// Formatea la fecha ISO del historial
 const formatHistoryDate = (isoDate) => {
   try {
     const date = new Date(isoDate);
@@ -56,7 +48,6 @@ const Detalle = () => {
     window.scrollTo(0, 0);
   }, []);
 
-  // --- ESTADOS DE MODALES ---
   const [showModalExito, setShowModalExito] = useState(false);
   const [mensajeExito, setMensajeExito] = useState("");
   const [showModalStop, setShowModalStop] = useState(false);
@@ -65,7 +56,6 @@ const Detalle = () => {
   const [mensajeError, setMensajeError] = useState("");
   const [redirectOnClose, setRedirectOnClose] = useState(false);
 
-  // --- GET DATA ---
   const { data: escena, isLoading, error } = useQuery({
     queryKey: ["escena", id],
     queryFn: async () => {
@@ -77,16 +67,14 @@ const Detalle = () => {
     },
   });
 
-  // 🏆 CLAVE: Título estático re-insertado
   useTitulo("Detalle de la escena"); 
 
-  // --- MUTACIÓN ELIMINAR ---
   const deleteMutation = useMutation({
     mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, { method: 'DELETE' }).then(res => res.json()),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
       setMensajeExito("La escena ha sido eliminada correctamente.");
-      setRedirectOnClose(true); // Redirección al listado al cerrar
+      setRedirectOnClose(true);
       setShowModalDelete(false);
       setShowModalExito(true);
     },
@@ -97,7 +85,6 @@ const Detalle = () => {
     }
   });
 
-  // 🏆 MUTACIÓN ACTIVAR (ON) - LÓGICA MUTEX (PUT)
   const activateMutation = useMutation({
     mutationFn: () => {
       return fetch(`${URL_BASE}/escenas.json`)
@@ -146,7 +133,6 @@ const Detalle = () => {
     }
   });
 
-  // --- MUTACIÓN DESACTIVAR (Stop) - Lógica de PATCH simple ---
   const deactivateMutation = useMutation({
     mutationFn: () => fetch(`${URL_BASE}/escenas/${id}.json`, {
             method: 'PATCH',
@@ -167,7 +153,6 @@ const Detalle = () => {
     }
   });
 
-  // --- HANDLERS ---
   const handleEdit = () => navigate(`/editar-escena/${id}`);
   const handleDelete = () => { setShowModalDelete(true); };
   const confirmDelete = () => { deleteMutation.mutate(); };
@@ -187,7 +172,6 @@ const Detalle = () => {
   if (isLoading) return <div className={`${styles.loadingMsg} ${styles.appBackground}`}>Cargando...</div>;
   if (error) return <div className={`${styles.errorMsg} ${styles.appBackground}`}>Error de conexión</div>;
 
-  // --- PREPARACIÓN DATOS VISUALES (NORMALIZACIÓN) ---
   const actions = escena.actions || {};
   const luces = actions.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const chorrosOn = actions.chorrosAgua === true; 
@@ -230,7 +214,6 @@ const Detalle = () => {
   return (
     <div className={`${styles.detalleContainer} ${styles.appBackground}`}>
       
-      {/* --- ZONA DE MODALES --- */}
       <ModalExito
         isOpen={showModalExito}
         onClose={handleCloseExito}
@@ -258,10 +241,8 @@ const Detalle = () => {
         textoBotonConfirmar="Eliminar"
       />
 
-      {/* HEADER NAV */}
       <div className={styles.detalleNavWrapper}>
         <div className={styles.detalleHeader}>
-          {/* BOTÓN ATRÁS */}
           <Botones onClick={() => navigate('/')} variant="nav-icon">
             <img 
               src={imgFlecha} 
@@ -269,7 +250,6 @@ const Detalle = () => {
               className={styles.flechaBlanca}
             />
           </Botones>
-          {/* BOTÓN EDITAR */}
           <Botones onClick={handleEdit} variant="nav-icon">
             Editar
           </Botones>
@@ -279,11 +259,9 @@ const Detalle = () => {
       <div className={styles.centerWrapper}>
 
         <div className={styles.detalleHero} style={lightStyle}>
-          {/* 🏆 ESTE TÍTULO SÍ ES DINÁMICO */}
           <h1 className={styles.detalleTitle}>{escena.name}</h1>
           <p className={styles.detalleDesc}>{escena.descripcion || "Sin descripción."}</p>
           
-          {/* BOTÓN GIGANTE */}
           <Botones
             variant="success" 
             isActive={isSceneActive}
@@ -295,12 +273,9 @@ const Detalle = () => {
           </Botones>
         </div>
 
-        {/* ... (Resto del contenido se mantiene igual) ... */}
-        {/* DISPOSITIVOS */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
           
-          {/* LUCES */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={lucesIconClass} style={lightStyle}>
@@ -315,7 +290,6 @@ const Detalle = () => {
               </span>
             </div>
           </div>
-          {/* CHORROS */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={chorrosIconClass}>
@@ -327,7 +301,6 @@ const Detalle = () => {
               {chorrosOn ? 'ACTIVADOS' : 'APAGADOS'}
             </span>
           </div>
-          {/* MUSICA */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={musicaIconClass}>
@@ -339,7 +312,6 @@ const Detalle = () => {
               {musica.estado ? 'ON' : 'OFF'}
             </span>
           </div>
-          {/* TEMP */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={tempIconClass}>
@@ -351,7 +323,6 @@ const Detalle = () => {
               {temperatura.estado ? `${temperatura.grados}°C` : 'APAGADA'}
             </span>
           </div>
-          {/* LIMPIEZA */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
               <div className={limpiezaIconClass}>
@@ -365,7 +336,6 @@ const Detalle = () => {
           </div>
         </div>
 
-        {/* HORARIOS */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Días y Horarios</h3>
           <div className={styles.scheduleRow}>
@@ -383,7 +353,6 @@ const Detalle = () => {
           </div>
         </div>
 
-        {/* HISTORIAL */}
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Historial de Ejecuciones</h3>
           {historyList.length === 0 ? (
@@ -405,8 +374,7 @@ const Detalle = () => {
             </div>
           )}
         </div>
-
-        {/* ZONA DE PELIGRO */}
+        
         <div className={styles.dangerZone}>
           <Botones variant="delete" onClick={handleDelete} disabled={deleteMutation.isPending}>
             {deleteMutation.isPending ? "Eliminando..." : "Eliminar Escena"}

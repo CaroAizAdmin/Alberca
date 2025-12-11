@@ -6,11 +6,7 @@ const SinEscenas = () => {
   const navigate = useNavigate();
 
   return (
-    // Reemplazar "empty-state-container" por styles.emptyStateContainer
     <div className={styles.emptyStateContainer}> 
-      
-      {/* Círculo con icono */}
-      {/* Reemplazar "empty-icon-wrapper" por styles.emptyIconWrapper */}
       <div className={styles.emptyIconWrapper}>
         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M2 12h20"></path>
@@ -21,7 +17,6 @@ const SinEscenas = () => {
         </svg>
       </div>
 
-      {/* Reemplazar "empty-text-content" por styles.emptyTextContent */}
       <div className={styles.emptyTextContent}>
         <h3>No hay ningún modo/escena</h3>
         <p>
@@ -31,12 +26,10 @@ const SinEscenas = () => {
         </p>
       </div>
 
-      {/* Reemplazar "btn-create-first" por styles.btnCreateFirst */}
       <button 
         className={styles.btnCreateFirst} 
         onClick={() => navigate('/crearEscena')}
       >
-        {/* Reemplazar "plus-icon" por styles.plusIcon */}
         <span className={styles.plusIcon}>+</span> 
         Crear mi primera escena
       </button>

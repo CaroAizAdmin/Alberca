@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-
-// Componentes
 import Layout from "./components/Layout/Layout";
 import Inicio from "./components/Inicio";
 import GestorEscenas from "./components/GestorEscenas";
@@ -12,29 +10,18 @@ import Error404 from "./components/Error404";
 import Configuracion1 from "./components/Configuracion1";
 
 function App() {
-  // Estado global de escenas (si lo necesitas compartir entre componentes sin fetch)
   const [escenas, setEscenas] = useState([]);
 
   return (
     <Routes>
-      {/* 🟢 RUTAS CON HEADER Y MENÚ (Usan Layout) */}
       <Route element={<Layout />}>
-        
-        {/* Pasamos props si tus componentes las necesitan, o limpiamos si usas React Query */}
         <Route path='/' element={<Inicio escena={escenas} setEscenas={setEscenas} />} />
         <Route path='/configuracion' element={<Configuracion1 escena={escenas} setEscenas={setEscenas}/>}/>
-        
         <Route path='/crearEscena' element={<GestorEscenas escena={escenas} setEscenas={setEscenas} />} />
-        
-        {/* Las rutas dinámicas también usan el Layout */}
         <Route path='/escenas/:id' element={<Detalle escena={escenas} setEscenas={setEscenas} />} />
         <Route path='/editar-escena/:id' element={<EditarEscena escena={escenas} setEscenas={setEscenas} />} />
-      
       </Route>
-
-      {/* 🔴 RUTAS SIN LAYOUT (Pantalla completa, como el error) */}
       <Route path='*' element={<Error404 />} />
-      
     </Routes>
   );
 }

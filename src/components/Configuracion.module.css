@@ -1,5 +1,4 @@
 .configuracionContainer {
-
     color: white;
     max-width: 600px;
     margin: 0 auto;
@@ -19,7 +18,7 @@
 }
 
 .sectionCard h3 {
-    color: #ff4500; /* Un color de advertencia */
+    color: #ff4500;
     margin-top: 0;
 }
 
@@ -29,10 +28,7 @@
     margin-bottom: 20px;
 }
 
-/* Clase de utilidad para que el botón ocupe todo el ancho de la tarjeta */
 .btnFullWidth {
     width: 100%;
     margin-top: 10px;
 }
-
-/* ❌ Eliminada la clase .btnDeleteAll y sus estados. El estilo viene de Botones.module.css (variant="delete") */

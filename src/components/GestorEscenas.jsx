@@ -1,5 +1,3 @@
-// src/components/GestorEscenas.jsx
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -9,14 +7,12 @@ import Formulario from './Formulario/Formulario';
 import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
 
-
 const GestorEscenas = () => {
   useTitulo("Crear Nueva Escena");
 
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // ESTADOS
   const [showModal, setShowModal] = useState(false);
   const [step, setStep] = useState(1);
   const [errorLocal, setErrorLocal] = useState("");
@@ -34,10 +30,8 @@ const GestorEscenas = () => {
     schedule: { enabled: false, days: [], time: "19:00" }
   });
 
-  // --- LÓGICA DE MUTACIÓN (POST) ---
   const mutation = useMutation({
     mutationFn: (nuevaEscena) => {
-      // Nota: Si usa Firebase o similar, .json es necesario
       return fetch(`${URL_BASE}/escenas.json`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -54,15 +48,12 @@ const GestorEscenas = () => {
     onError: (error) => alert(`Error: ${error.message}`)
   });
 
-  // FUNCIÓN PARA CERRAR Y NAVEGAR
   const handleCloseModal = () => {
     setShowModal(false);
     navigate('/');
   };
 
-  // --- HANDLERS DE FORMULARIO Y PASOS ---
   const handleChange = (e) => {
-    // Usamos ?? "" para asegurar que el valor nunca sea null/undefined en el estado si el evento es inconsistente
     setFormData({ ...formData, [e.target.name]: e.target.value ?? "" });
     setErrorLocal("");
   };
@@ -90,12 +81,10 @@ const GestorEscenas = () => {
   };
 
   const handleNext = () => {
-    // Validación del paso 1
     if (step === 1 && (!formData.name || !formData.name.trim())) {
         setErrorLocal("El nombre de la escena es obligatorio.");
         return;
     }
-    // Validación (Advertencia) del paso 2
     if (step === 2) {
         const activeActions = Object.keys(formData.actions).some(key => {
             const action = formData.actions[key];
@@ -110,7 +99,6 @@ const GestorEscenas = () => {
             setErrorLocal("");
           }
     }
-    // Validación del paso 3
     if (step === 3 && formData.schedule.enabled && formData.schedule.days.length === 0) {
         setErrorLocal("Debes seleccionar al menos un día para la programación automática.");
         return;
@@ -124,7 +112,6 @@ const GestorEscenas = () => {
     setStep(step - 1);
   };
 
-  // --- HANDLER DE TOGGLE UNIFICADO (Lógica Inmutable CLAVE) ---
   const handleToggle = (device) => {
     setFormData(prev => {
       const newActions = { ...prev.actions };
@@ -134,7 +121,6 @@ const GestorEscenas = () => {
           newActions.chorrosAgua = !newActions.chorrosAgua;
           break;
         case 'luces':
-          // Copia inmutable correcta del objeto anidado 'luces'
           newActions.luces = { 
             ...newActions.luces, 
             estado: !newActions.luces.estado 
@@ -157,8 +143,6 @@ const GestorEscenas = () => {
     });
   };
 
-  // --- HANDLERS DE COLOR Y TEMPERATURA ---
-  // Recibe {r, g, b} del Formulario.jsx
   const handleColorPickerChange = ({ r, g, b }) => {
     setFormData(prev => ({
       ...prev,
@@ -180,29 +164,23 @@ const GestorEscenas = () => {
     }));
   };
 
-  // FUNCIÓN DE ACCIÓN FINAL
   const handleSave = () => mutation.mutate(formData);
 
   return (
     <div className={styles.editContainer}>
 
-      {/* MODAL */}
       <ModalExito
         isOpen={showModal}
         onClose={handleCloseModal}
         mensaje="¡La escena se ha creado y guardado en la nube correctamente!"
       />
       
-  
-
-
-      {/* COMPONENTE DINÁMICO */}
      <Formulario
         formData={formData}
         step={step}
         errorLocal={errorLocal}
         mutation={mutation}
-        mode="create" // Añadir el modo para diferenciar la acción final
+        mode="create"
         
         containerClassName={styles.editContainer} 
         

@@ -1,4 +1,3 @@
-/* ModalConfirmacion.module.css */
 .overlay {
   position: fixed;
   top: 0;
@@ -15,7 +14,7 @@
 }
 
 .modalCard {
-  background: rgba(30, 35, 60, 0.95); /* Un poco más azulado oscuro */
+  background: rgba(30, 35, 60, 0.95);
   border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 30px;
   border-radius: 20px;
@@ -31,7 +30,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: rgba(255, 193, 7, 0.2); /* Amarillo advertencia */
+  background: rgba(255, 193, 7, 0.2);
   color: #FFC107;
   font-size: 30px;
   display: flex;
@@ -76,7 +75,7 @@
 }
 
 .btnConfirm {
-    background: #F65959; /* Rojo para apagar */
+    background: #F65959;
     color: white;
     box-shadow: 0 4px 10px rgba(246, 89, 89, 0.3);
 }

@@ -1,13 +1,9 @@
-/* ========================================================== */
-/* 1. FONDO DE AGUA (fullPoolContainer)                       */
-/* ========================================================== */
 .fullPoolContainer {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-    /* Fondo oscuro y azul acorde con la app */
     background: linear-gradient(45deg, #48b4ee, #2959a1, #191E3B); 
     background-size: 400% 400%;
     animation: waterShimmer 5s ease infinite;
@@ -24,18 +20,14 @@
     100% { background-position: 0% 50%; }
 }
 
-/* ========================================================== */
-/* 2. EL FLOTADOR (driftingFloat)                             */
-/* ========================================================== */
 .driftingFloat {
     position: absolute;
-    top: 0;  /* JS controlará esto mediante translate */
-    left: 0; /* JS controlará esto mediante translate */
+    top: 0; 
+    left: 0; 
     z-index: 1;
     will-change: transform; 
 }
 
-/* El dibujo del flotador */
 .poolFloatCss {
     position: relative;
     width: 120px;
@@ -61,10 +53,6 @@
     100% { transform: rotate(360deg); }
 }
 
-
-/* ========================================================== */
-/* 3. CONTENIDO (contentCard) - GLASSY OSCURO 🏆              */
-/* ========================================================== */
 .contentCard {
     position: relative;
     z-index: 10;
@@ -76,11 +64,6 @@
     backdrop-filter: blur(10px);
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
     border: 1px solid var(--color-border-glass); 
-    
-    /* ✅ AJUSTE CLAVE: Limitamos el ancho máximo a 450px */
-
-    /* ✅ Aseguramos que ocupe casi todo el ancho en pantallas pequeñas, 
-       pero nunca más de 450px. */
     width: 60%; 
     height: 40%;
 }
@@ -89,48 +72,39 @@
     font-size: 4.5rem;
     font-weight: 900;
     margin: 0;
-    /* 🏆 Usamos el azul primario */
     color: var(--color-primary-blue); 
     line-height: 1;
-    text-shadow: 0 0 10px rgba(92, 151, 242, 0.5); /* Sombra luminosa */
+    text-shadow: 0 0 10px rgba(92, 151, 242, 0.5);
 }
 
 .pool404Title {
     font-size: 1.5rem;
     margin: 10px 0 20px;
-    /* 🏆 Usamos el texto claro */
     color: var(--color-text-light); 
 }
 
 .pool404Message {
-    /* 🏆 Usamos el texto claro desvanecido */
     color: var(--color-text-faded); 
     font-size: 1rem;
     margin-bottom: 30px;
     line-height: 1.6;
 }
 
-/* 🏆 Botón (Estilo Glassy Azul) */
 .pool404Button {
     padding: 14px 28px;
     font-size: 1rem;
     font-weight: bold;
-    /* 🏆 Texto claro */
     color: var(--color-text-light); 
-    
-    /* 🏆 Estilo Glassy Azul */
     background: rgba(92, 151, 242, 0.2); 
     backdrop-filter: blur(8px); 
     border: 1px solid rgba(92, 151, 242, 0.4); 
     box-shadow: 0 4px 10px rgba(92, 151, 242, 0.3);
-    
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .pool404Button:hover {
-    /* 🏆 Efecto hover más brillante */
     background: rgba(92, 151, 242, 0.4); 
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 6px 15px rgba(92, 151, 242, 0.5);

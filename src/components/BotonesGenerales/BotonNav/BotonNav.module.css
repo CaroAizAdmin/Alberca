@@ -1,6 +1,3 @@
-/* -------------------------------------- */
-/* ESTILOS DE ENLACE BASE (.navLink) */
-/* -------------------------------------- */
 .navLink {
     padding: 1.2em;
     border-radius: 100px ;
@@ -18,7 +15,6 @@
     text-decoration: none; 
 }
 
-/* Estilo del anillo que aparece al hacer hover o estar activo */
 .navLink::before {
     content: '';
     position: absolute;
@@ -29,7 +25,6 @@
     transition: transform 0.3s ease;
 }
 
-/* Aplicar estilo al hacer hover */
 .navLink:hover::before {
     transform: scale(1);
 }
@@ -40,27 +35,17 @@
 
 }
 
-/* -------------------------------------- */
-/* 🏆 ESTILOS ACTIVO (navLinkActive) */
-/* -------------------------------------- */
 
 .navLinkActive {
-    /* Esto aplica el efecto de levantamiento y sombra al botón activo */
     transform: translateY(-8px) scale(1.1);
     box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
-    /* 💡 CORRECCIÓN: Fondo oscuro en estado activo */
     background-color: var(--color-primary-blue, rgb(9, 59, 116)); 
 }
 
-/* Aplicar el anillo al elemento ACTIVO */
 .navLinkActive::before {
     transform: scale(1) !important; 
-    border-color: white; /* Anillo blanco cuando está activo y el fondo es de color */
+    border-color: white;
 }
-
-/* -------------------------------------- */
-/* ESTILOS DE IMAGEN/ÍCONO */
-/* -------------------------------------- */
 
 .navLink img {
     position: relative;

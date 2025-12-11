@@ -1,34 +1,19 @@
-/* VARIABLES DE COLOR */
 :root {
   --color-text-light: #F0F0F0;
 }
 
-/* 1. CONTENEDOR PRINCIPAL */
 .headerContainer {
-
     display: flex;
     top: -50px;
     padding: 0 40px;
-/*   width: 100vw;
-  display: flex;
-  justify-content: flex-start; 
-  padding: 0 40px; 
-margin-bottom: 30px;
-top: -100px;
-
   position: relative; 
   z-index: 50; 
-  width: 100%; */
-  /* 🏆 CLAVE: IMAGEN DE FONDO */
- /*  background-image: url('../assets/imagenes/fondo-header1.png');
-
+  width: 100%;
   background-repeat: no-repeat;
   background-position: center center; 
-  
-  min-height: 350px;  */
+  min-height: 350px;
 }
 
-/* 2. ESTILO DEL NOMBRE DINÁMICO */
 .dynamicTitle {
   font-size: 2rem; 
   font-weight: 900; 

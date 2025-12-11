@@ -1,18 +1,10 @@
-// Formulario.jsx (Código corregido)
 
-import React from 'react';
 import styles from './Formulario.module.css';
 import imgChorros from '../../assets/imagenes/chorros.png';
 import imgLuces from '../../assets/imagenes/luces.png';
-import Botones from '../BotonesGenerales/Botones/Botones'; 
-// Asegúrate de que este archivo de constantes exista y tenga las variables
+import Botones from '../BotonesGenerales/Botones/Botones';
 import { DAYS_OF_WEEK, MIN_TEMP, MAX_TEMP } from '../../assets/constants/constants'; 
 
-
-// ==========================================================
-// CONSTANTES Y UTILIDADES LOCALES
-// ==========================================================
-// Estilo para los iconos de dispositivos
 const imgStyle = {
   width: '24px',
   height: '24px',
@@ -20,7 +12,7 @@ const imgStyle = {
   objectFit: 'contain'
 };
 
-// Función para convertir RGB a Hex (para el input de color)
+
 const rgbToHex = (r, g, b) => {
   r = Math.max(0, Math.min(255, r));
   g = Math.max(0, Math.min(255, g));
@@ -32,7 +24,6 @@ const rgbToHex = (r, g, b) => {
   return "#" + toHex(r) + toHex(g) + toHex(b);
 };
 
-// Función para convertir Hex a RGB (para manejar el cambio de color)
 const hexToRgb = (hex) => {
   const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
   return result ? {
@@ -41,8 +32,6 @@ const hexToRgb = (hex) => {
     b: parseInt(result[3], 16)
   } : { r: 255, g: 255, b: 255 };
 };
-// ==========================================================
-
 
 const Formulario = ({
   formData,
@@ -62,18 +51,15 @@ const Formulario = ({
   containerClassName
 }) => {
 
-  // Lógica de UI
   const progressWidth = step === 1 ? '0%' : step === 2 ? '33%' : step === 3 ? '66%' : '100%';
   const actionLabel = mode === 'edit' ? "Guardar Cambios" : "Crear Escena";
 
-  // Clases para el estado visual de los iconos
   const chorrosIconClass = formData.actions.chorrosAgua ? styles.svgActive : styles.svgInactive;
   const lucesIconClass = formData.actions.luces.estado ? styles.svgActive : styles.svgInactive;
   const musicaIconClass = formData.actions.musica ? styles.svgActive : styles.svgInactive;
   const tempIconClass = formData.actions.temperatura.estado ? styles.svgActive : styles.svgInactive;
   const limpiezaIconClass = formData.actions.limpieza ? styles.svgActive : styles.svgInactive;
 
-  // Lógica de resumen de días
   const selectedDaysLabels = formData.schedule.days?.map(key =>
     DAYS_OF_WEEK.find(day => day.key === key)?.label || key
   ).join(', ') || "Ninguno";
@@ -82,7 +68,6 @@ const Formulario = ({
   return (
     <div className={containerClassName}>
 
-      {/* BARRA DE PROGRESO */}
       <div className={styles['progress-bar-container']}>
         <div className={styles['progress-line']}></div>
         <div className={styles['progress-fill']} style={{ width: progressWidth }}></div>
@@ -94,7 +79,6 @@ const Formulario = ({
 
       <div className={styles['form-card']}>
 
-        {/* PASO 1: IDENTIDAD */}
         {step === 1 && (
           <div className={styles['step-content']}>
             <h2 className={styles['form-title']}>1. Identidad</h2>
@@ -110,19 +94,16 @@ const Formulario = ({
           </div>
         )}
 
-        {/* PASO 2: DISPOSITIVOS */}
         {step === 2 && (
           <div className={styles['step-content']}>
             <h2 className={styles['form-title']}>2. Dispositivos</h2>
             {errorLocal && <p className={styles['error-msg']}>{errorLocal}</p>}
             
-            {/* Control Chorros de Agua */}
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgChorros} alt="Chorros" style={imgStyle} /><span className={chorrosIconClass}>Chorros de Agua</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.chorrosAgua} onChange={() => handleToggle('chorros')} /><span className={styles.slider}></span></label>
             </div>
             
-            {/* Control Luces */}
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Luces" style={imgStyle} /><span className={lucesIconClass}>Luces</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.luces.estado} onChange={() => handleToggle('luces')} /><span className={styles.slider}></span></label>
@@ -147,13 +128,11 @@ const Formulario = ({
               </div>
             )}
             
-            {/* Control Música Ambiente (Usando imagen temporal) */}
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgChorros} alt="Música" style={imgStyle} /><span className={musicaIconClass}>Música Ambiente</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.musica} onChange={() => handleToggle('musica')} /><span className={styles.slider}></span></label>
             </div>
             
-            {/* Control Temperatura */}
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Temperatura" style={imgStyle} /><span className={tempIconClass}>Control de Temperatura</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.temperatura.estado} onChange={() => handleToggle('temperatura')} /><span className={styles.slider}></span></label>
@@ -168,7 +147,6 @@ const Formulario = ({
               </div>
             )}
             
-            {/* Control Limpieza Programada (Usando imagen temporal) */}
             <div className={styles['device-row']}>
               <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Limpieza" style={imgStyle} /><span className={limpiezaIconClass}>Limpieza Programada</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.limpieza} onChange={() => handleToggle('limpieza')} /><span className={styles.slider}></span></label>
@@ -176,7 +154,6 @@ const Formulario = ({
           </div>
         )}
 
-        {/* PASO 3: PROGRAMACIÓN */}
         {step === 3 && (
           <div className={styles['step-content']}>
             <h2 className={styles['form-title']}>3. Programación</h2>
@@ -210,7 +187,6 @@ const Formulario = ({
           </div>
         )}
 
-        {/* PASO 4: Revisar Cambios / Resumen */}
         {step === 4 && (
           <div className={styles['step-content']}>
             <h2 className={styles['form-title']}>4. Revisar Cambios</h2>
@@ -235,24 +211,20 @@ const Formulario = ({
           </div>
         )}
 
-        {/* BLOQUE CLAVE: BOTONES DE NAVEGACIÓN */}
         <div className={styles['buttons-container']}>
           {step > 1 && (
-            // BOTÓN ATRÁS (Mantenemos Azul para navegación)
             <Botones variant="default" className={styles['btn-flex-grow']} onClick={handleBack}>
               Atrás
             </Botones>
           )}
 
           {step < 4 ? (
-            // BOTÓN SIGUIENTE (Mantenemos Azul para navegación)
             <Botones variant="default" className={styles['btn-flex-grow']} onClick={handleNext} disabled={!!errorLocal}>
               Siguiente
             </Botones>
           ) : (
-            // BOTÓN ACCIÓN FINAL (CLAVE: Cambiamos a variant="success" para el VERDE)
             <Botones
-              variant="success" // <--- CAMBIO AQUÍ: Usar estilo verde
+              variant="success"
               className={`${styles['btn-flex-grow']}`}
               onClick={handleAction}
               disabled={mutation.isPending}

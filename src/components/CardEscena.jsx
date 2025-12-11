@@ -4,11 +4,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { URL_BASE } from '../assets/constants/constants';
 import styles from './CardEscena.module.css';
 
-// 🟢 IMPORTAR EL COMPONENTE DE BOTÓN REUTILIZABLE
-// Asegúrate de que esta ruta sea correcta en tu proyecto
 import BtnQuickPlay from './BotonesGenerales/BotonPlay/BotonPlay'; 
 
-// IMÁGENES
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
 import imgLimpieza from '../assets/imagenes/limpieza.png';
@@ -31,43 +28,36 @@ const CardEscena = ({ id, escena }) => {
   const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
 
-  // --- 1. LÓGICA BLINDADA DE ACTIVACIÓN ÚNICA ---
   const activateMutation = useMutation({
     mutationFn: () => {
-      // PASO A: Traer TODAS las escenas frescas desde Firebase
       return fetch(`${URL_BASE}/escenas.json`)
         .then((response) => response.json())
         .then((allScenes) => {
           const updates = {};
           
-          // Datos para el historial
           const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
           const historyId = Date.now().toString();
 
           if (allScenes) {
-            // PASO B: Recorrer TODAS y forzar estado
             Object.keys(allScenes).forEach((key) => {
               const currentScene = allScenes[key];
               
               if (key === id) {
-                 // --- ESTA ES LA ELEGIDA (TRUE) ---
                  const prevHistory = currentScene.history || {};
                  updates[key] = {
                     ...currentScene,
-                    active: true, // ¡ENCENDIDA!
+                    active: true,
                     history: { ...(prevHistory), [historyId]: newHistoryEntry }
                  };
               } else {
-                 // --- CUALQUIER OTRA (FALSE) ---
                  updates[key] = { 
                     ...currentScene, 
-                    active: false // ¡APAGADA A LA FUERZA!
+                    active: false 
                  };
               }
             });
           }
           
-          // PASO C: Subir el objeto completo actualizado (PUT masivo)
           return fetch(`${URL_BASE}/escenas.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -86,12 +76,11 @@ const CardEscena = ({ id, escena }) => {
     }
   });
 
-  // --- 2. PREPARACIÓN VISUAL ---
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const aguaOn = escena.actions?.chorrosAgua || false;
-  // Normalización para soportar booleano simple o { estado: true }
+
   const musicaOn = escena.actions?.musica === true || escena.actions?.musica?.estado === true; 
-  const temperaturaOn = escena.actions?.temperatura?.estado || false; // Ajustado para objeto
+  const temperaturaOn = escena.actions?.temperatura?.estado || false; 
   const limpiezaOn = escena.actions?.limpieza === true || escena.actions?.limpieza?.estado === true;
   
   const lucesConfiguradas = luces.estado;
@@ -140,7 +129,6 @@ const CardEscena = ({ id, escena }) => {
                </span>
            )}
 
-           {/* ICONOS RESUMEN */}
            <div className={styles.summaryIconsWrapper}>
                <div className={`${styles.summaryIconItem} ${lucesConfiguradas ? styles.activeLight : ''}`}>
                   <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
@@ -161,7 +149,7 @@ const CardEscena = ({ id, escena }) => {
         </div>
 
         <div className={styles.iconosWrapper}>
-          {/* 🏆 USO DEL COMPONENTE REUTILIZABLE 🏆 */}
+          
           <BtnQuickPlay 
               styles={styles} 
               isSceneActive={isSceneActive}

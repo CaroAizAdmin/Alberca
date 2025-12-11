@@ -1,5 +1,3 @@
-/* src/components/BotonesGenerales/Botones/Botones.module.css */
-
 .btn {
     padding: 12px 20px;
     font-size: 1rem;
@@ -14,7 +12,6 @@
     color: white; 
 }
 
-/* --- ESTILO BASE & DESHABILITADO --- */
 .btn:not(:disabled) {
     transform: translateY(0);
 }
@@ -27,32 +24,25 @@
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
 
-/* ========================================================== */
-/* VARIANTS CLAVE                                             */
-/* ========================================================== */
 
-/* --- 0. VARIANT: NAV-ICON (Gris Glassy con Texto/Icono Blanco) --- */
 .nav-icon {
-    /* Estilos Glassy */
+
     background: rgba(255, 255, 255, 0.1) !important; 
     border: 1px solid rgba(255, 255, 255, 0.2) !important;
     border-radius: 8px !important; 
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
     padding: 6px 10px !important; 
-    
-    /* Texto blanco (para "Editar") */
     color: white !important; 
     font-size: 1.1rem !important; 
     line-height: 1 !important;
-    
     text-shadow: none !important;
     height: auto !important; 
     width: auto !important;
 }
 
-/* Regla para la imagen (flecha) dentro de este botón */
+
 .nav-icon img {
-    filter: invert(100%); /* CLAVE: Convierte el icono negro a blanco */
+    filter: invert(100%);
     width: 20px; 
     height: 20px;
     display: block;
@@ -64,7 +54,7 @@
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.4) !important;
 }
 
-/* --- 1. VARIANT: DEFAULT (Azul Uniforme) --- */
+
 .default {
     background: rgba(92, 151, 242, 0.35); 
     border: 1px solid rgba(92, 151, 242, 0.5); 
@@ -76,7 +66,7 @@
     box-shadow: 0 6px 12px rgba(92, 151, 242, 0.6);
 }
 
-/* --- 2. VARIANT: SUCCESS (Verde - ESCENA ACTIVA) --- */
+
 .success {
     background: rgba(52, 199, 89, 0.35); 
     border: 1px solid rgba(52, 199, 89, 0.5); 
@@ -88,7 +78,7 @@
     box-shadow: 0 6px 12px rgba(52, 199, 89, 0.6);
 }
 
-/* --- 3. VARIANT: DELETE (Rojo - Borrar Escenas) --- */
+
 .delete {
     background: rgba(255, 69, 0, 0.35); 
     border: 1px solid rgba(255, 69, 0, 0.5);
