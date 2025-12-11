@@ -6,6 +6,9 @@ import styles from './Detalle.module.css';
 import imgFlecha from '../assets/imagenes/flechaAtras.png';
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
+import imgLimpieza from '../assets/imagenes/limpieza.png';
+import imgMusica from '../assets/imagenes/musica.png';
+import imgTemperatura from '../assets/imagenes/temperatura.png';
 import { useTitulo } from '../hooks/useTitulo';
 import ModalExito from './ModalExito';
 
@@ -195,19 +198,6 @@ const Detalle = () => {
         <div className={styles.detalleCard}>
           <h3 className={styles.cardTitle}>Dispositivos Configurados</h3>
 
-          {/* CHORROS DE AGUA */}
-          <div className={styles.deviceListItem}>
-            <div className={styles.deviceIconAndLabel}>
-              <div className={chorrosIconClass}>
-                <img src={imgChorros} alt="Chorros" style={imgIconStyle} />
-              </div>
-              <span className={styles.deviceLabel}>Chorros de agua</span>
-            </div>
-            <span className={`${styles.statusBadge} ${actions.chorrosAgua ? styles.on : styles.off}`}>
-              {actions.chorrosAgua ? 'ENCENDIDOS' : 'APAGADOS'}
-            </span>
-          </div>
-
           {/* LUCES PISCINA */}
           <div className={styles.deviceListItem}>
             <div className={styles.deviceIconAndLabel}>
@@ -224,12 +214,26 @@ const Detalle = () => {
             </div>
           </div>
 
+          {/* CHORROS DE AGUA */}
+          <div className={styles.deviceListItem}>
+            <div className={styles.deviceIconAndLabel}>
+              <div className={chorrosIconClass}>
+                <img src={imgChorros} alt="Chorros" style={imgIconStyle} />
+              </div>
+              <span className={styles.deviceLabel}>Chorros de agua</span>
+            </div>
+            <span className={`${styles.statusBadge} ${actions.chorrosAgua ? styles.on : styles.off}`}>
+              {actions.chorrosAgua ? 'ENCENDIDOS' : 'APAGADOS'}
+            </span>
+          </div>
+
+
           {/* MÚSICA */}
           {musica.estado !== undefined && (
             <div className={styles.deviceListItem}>
               <div className={styles.deviceIconAndLabel}>
                 <div className={musicaIconClass}>
-                  <img src={imgChorros} alt="Música" style={imgIconStyle} />
+                  <img src={imgMusica} alt="Música" style={imgIconStyle} />
                 </div>
                 <span className={styles.deviceLabel}>Música Ambiente</span>
               </div>
@@ -244,7 +248,7 @@ const Detalle = () => {
             <div className={styles.deviceListItem}>
               <div className={styles.deviceIconAndLabel}>
                 <div className={tempIconClass}>
-                  <img src={imgChorros} alt="Temperatura" style={imgIconStyle} />
+                  <img src={imgTemperatura} alt="Temperatura" style={imgIconStyle} />
                 </div>
                 <span className={styles.deviceLabel}>Control de Temperatura</span>
               </div>
@@ -259,7 +263,7 @@ const Detalle = () => {
             <div className={styles.deviceListItem}>
               <div className={styles.deviceIconAndLabel}>
                 <div className={limpiezaIconClass}>
-                  <img src={imgChorros} alt="Limpieza" style={imgIconStyle} />
+                  <img src={imgLimpieza} alt="Limpieza" style={imgIconStyle} />
                 </div>
                 <span className={styles.deviceLabel}>Limpieza Programada</span>
               </div>

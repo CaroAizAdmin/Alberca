@@ -7,6 +7,9 @@ import styles from './CardEscena.module.css';
 // 💡 IMPORTACIONES DE IMÁGENES
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
+import imgLimpieza from '../assets/imagenes/limpieza.png';
+import imgMusica from '../assets/imagenes/musica.png';
+import imgTemperatura from '../assets/imagenes/temperatura.png';
 // Sustituir imgLuces por estas cuando las rutas sean correctas:
 // import imgMusica from '../assets/imagenes/musica.png'; 
 // import imgTemperatura from '../assets/imagenes/temperatura.png';
@@ -149,15 +152,15 @@ const CardEscena = ({ id, escena }) => {
                </div>
                {/* 3. ÍCONO MÚSICA */}
                <div className={`${styles.summaryIconItem} ${musicaOn ? styles.activeMusic : ''}`}>
-                  <img src={imgLuces} alt="Música" className={styles.deviceImage} /> 
+                  <img src={imgMusica} alt="Música" className={styles.deviceImage} /> 
                </div>
                {/* 4. ÍCONO TEMPERATURA */}
                <div className={`${styles.summaryIconItem} ${temperaturaOn ? styles.activeTemp : ''}`}>
-                  <img src={imgLuces} alt="Temperatura" className={styles.deviceImage} />
+                  <img src={imgTemperatura} alt="Temperatura" className={styles.deviceImage} />
                </div>
                {/* 5. ÍCONO LIMPIEZA */}
                <div className={`${styles.summaryIconItem} ${limpiezaOn ? styles.activeLimpieza : ''}`}>
-                  <img src={imgLuces} alt="Limpieza" className={styles.deviceImage} />
+                  <img src={imgLimpieza} alt="Limpieza" className={styles.deviceImage} />
                </div>
            </div>
         </div> {/* Cierre de infoWrapper */}
