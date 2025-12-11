@@ -14,8 +14,8 @@ const Error404 = () => {
 
         let x = Math.random() * (window.innerWidth - 150);
         let y = Math.random() * (window.innerHeight - 150);
-        
-        let speedX = 0.6; 
+
+        let speedX = 0.6;
         let speedY = 0.6;
 
         if (Math.random() > 0.5) speedX *= -1;
@@ -56,11 +56,11 @@ const Error404 = () => {
         return () => cancelAnimationFrame(animationFrameId);
     }, []);
 
-    
+
     return (
         // ✅ CLASE ACTUALIZADA: fullPoolContainer
-         <div className={styles.fullPoolContainer}>
-             
+        <div className={styles.fullPoolContainer}>
+
             {/* ✅ CLASES ACTUALIZADAS */}
             <div className={styles.driftingFloat} ref={floatRef}>
                 <div className={styles.poolFloatCss}>
@@ -74,15 +74,15 @@ const Error404 = () => {
 
             {/* ✅ CLASES ACTUALIZADAS */}
             <div className={styles.contentCard}>
-                 <h1 className={styles.pool404Number}>404</h1>
-                 <h2 className={styles.pool404Title}>¡Ups! Te fuiste a lo hondo</h2>
-                 <p className={styles.pool404Message}>Parece que la página que buscas se hundió en la piscina o no existe.
-                Será mejor volver a la superficie.</p>
-                 <button className={styles.pool404Button} onClick={() => navigate('/')}>
-                     Volver al inicio
+                <h1 className={styles.pool404Number}>404</h1>
+                <h2 className={styles.pool404Title}>¡Ups! Te fuiste a lo hondo</h2>
+                <p className={styles.pool404Message}>Parece que la página que buscas se hundió en la piscina o no existe.
+                    Será mejor volver a la superficie.</p>
+                <button className={styles.pool404Button} onClick={() => navigate('/')}>
+                    Volver al inicio
                 </button>
             </div>
-         </div>
+        </div>
     );
 };
 export default Error404;
