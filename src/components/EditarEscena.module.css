@@ -459,9 +459,7 @@ input:checked + .slider:before {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    color: black;
     padding: 12px 15px;
-    filter: invert(1);
     height: auto; /* Anula cualquier altura forzada por el navegador */
 }
 

@@ -7,10 +7,10 @@ import styles from './CardEscena.module.css';
 // 💡 IMPORTACIONES DE IMÁGENES
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
-// Asumiendo que estas imágenes están en la misma carpeta o ruta:
-/* import imgMusica from '../assets/imagenes/musica.png'; 
-import imgTemperatura from '../assets/imagenes/temperatura.png';
-import imgLimpieza from '../assets/imagenes/limpieza.png';  */
+// Sustituir imgLuces por estas cuando las rutas sean correctas:
+// import imgMusica from '../assets/imagenes/musica.png'; 
+// import imgTemperatura from '../assets/imagenes/temperatura.png';
+// import imgLimpieza from '../assets/imagenes/limpieza.png'; 
 
 import ModalExito from './ModalExito';
 
@@ -32,31 +32,35 @@ const CardEscena = ({ id, escena }) => {
   // --- 1. LÓGICA DE ACTIVACIÓN (CON HISTORIAL) ---
   const activateMutation = useMutation({
     mutationFn: () => {
+      // 1. Obtener todas las escenas
       return fetch(`${URL_BASE}/escenas.json`)
         .then((response) => response.json())
         .then((allScenes) => {
           const updates = {};
           
-          // Datos del historial
+          // Preparar datos del historial
           const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
           const historyId = Date.now().toString();
 
           if (allScenes) {
+            // 2. Iterar y actualizar el estado
             Object.keys(allScenes).forEach((key) => {
               if (key === id) {
-                 // Activar + Guardar Historial
+                 // Activar la escena actual + Guardar Historial
                  const prevHistory = allScenes[key].history || {};
                  updates[key] = {
                     ...allScenes[key],
                     active: true,
-                    history: { ...prevHistory, [historyId]: newHistoryEntry }
+                    // Asegurarse de que history sea un objeto si es null
+                    history: { ...(prevHistory || {}), [historyId]: newHistoryEntry }
                  };
               } else {
-                 // Solo desactivar
+                 // Desactivar las demás escenas
                  updates[key] = { ...allScenes[key], active: false };
               }
             });
           }
+          // 3. Enviar la actualización PUT con todas las escenas
           return fetch(`${URL_BASE}/escenas.json`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
@@ -70,15 +74,17 @@ const CardEscena = ({ id, escena }) => {
       setShowModal(true);
     },
     onError: (err) => {
-      console.error(err);
-      alert("No se pudo activar la escena.");
+      console.error("Error en activateMutation:", err);
+      alert("No se pudo activar la escena. Verifica la estructura JSON de la escena.");
     }
   });
 
-  // --- 2. DATOS VISUALES ---
+  // --- 2. DATOS VISUALES (Se asegura de usar el operador ?. para evitar fallos si actions es null) ---
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const aguaOn = escena.actions?.chorrosAgua || false;
   const lucesConfiguradas = luces.estado;
+  
+  // LECTURA SEGURA DE LOS NUEVOS DISPOSITIVOS
   const musicaOn = escena.actions?.musica?.estado || false;
   const temperaturaOn = escena.actions?.temperatura?.estado || false;
   const limpiezaOn = escena.actions?.limpieza?.estado || false;
@@ -91,6 +97,7 @@ const CardEscena = ({ id, escena }) => {
     if (typeof luces.color === 'string') {
         colorRGB = luces.color;
     } else {
+        // Aseguramos que r, g, b no sean undefined o null antes de usarlos
         const { r, g, b } = luces.color;
         colorRGB = `rgb(${r || 0}, ${g || 0}, ${b || 0})`;
     }
@@ -130,7 +137,7 @@ const CardEscena = ({ id, escena }) => {
                </span>
            )}
            
-           {/* 🏆 CONTENEDOR DE LOS 5 ÍCONOS DE RESUMEN (TODOS JUNTOS) */}
+           {/* 🏆 CONTENEDOR DE LOS 5 ÍCONOS DE RESUMEN */}
            <div className={styles.summaryIconsWrapper}>
                {/* 1. ÍCONO LUCES */}
                <div className={`${styles.summaryIconItem} ${lucesConfiguradas ? styles.activeLight : ''}`}>
@@ -142,15 +149,15 @@ const CardEscena = ({ id, escena }) => {
                </div>
                {/* 3. ÍCONO MÚSICA */}
                <div className={`${styles.summaryIconItem} ${musicaOn ? styles.activeMusic : ''}`}>
-                  <img src={imgChorros} alt="Música" className={styles.deviceImage} /> 
+                  <img src={imgLuces} alt="Música" className={styles.deviceImage} /> 
                </div>
                {/* 4. ÍCONO TEMPERATURA */}
                <div className={`${styles.summaryIconItem} ${temperaturaOn ? styles.activeTemp : ''}`}>
-                  <img src={imgChorros} alt="Temperatura" className={styles.deviceImage} />
+                  <img src={imgLuces} alt="Temperatura" className={styles.deviceImage} />
                </div>
                {/* 5. ÍCONO LIMPIEZA */}
                <div className={`${styles.summaryIconItem} ${limpiezaOn ? styles.activeLimpieza : ''}`}>
-                  <img src={imgChorros} alt="Limpieza" className={styles.deviceImage} />
+                  <img src={imgLuces} alt="Limpieza" className={styles.deviceImage} />
                </div>
            </div>
         </div> {/* Cierre de infoWrapper */}

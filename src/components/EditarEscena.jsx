@@ -263,8 +263,7 @@ const EditarEscena = () => {
                 <span className={styles.slider}></span>
               </label>
             </div>
-            
-            {formData.actions.luces.estado && (
+  {formData.actions.luces.estado && (
                 <div className={styles['form-group']} style={{marginTop: 20}}>
                     <div className={styles['color-picker-wrapper']}>
                         <label className={styles['form-label']}>Color:</label>
@@ -280,6 +279,70 @@ const EditarEscena = () => {
                     </div>
                 </div>
             )}
+            
+            {/* 🏆 MÚSICA + DESPLEGABLE DE API */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgChorros} alt="Música" style={imgStyle} /> 
+                <span className={musicaIconClass}>Música Ambiente</span>
+              </span>
+              <label className={styles.switch}>
+                <input type="checkbox" checked={formData.actions.musica.estado} onChange={() => handleToggle('musica')} />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+            {formData.actions.musica.estado && (
+                <div className={styles.formGroup} style={{marginTop: 10, paddingLeft: 35}}>
+                    <label className={styles.formLabel}>URL de Playlist (API):</label>
+                    <input type="url" name="apiURL" className={styles.formInput} 
+                        value={formData.actions.musica.apiURL} 
+                        onChange={handleMusicApiChange} 
+                        placeholder="Ej: https://api.music.com/playlist/fiesta"
+                    />
+                </div>
+            )}
+
+            {/* 🏆 TEMPERATURA + DESPLEGABLE DE SLIDER */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgChorros} alt="Temperatura" style={imgStyle} />
+                <span className={tempIconClass}>Control de Temperatura</span>
+              </span>
+              <label className={styles.switch}>
+                <input type="checkbox" checked={formData.actions.temperatura.estado} onChange={() => handleToggle('temperatura')} />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+            {formData.actions.temperatura.estado && (
+                <div className={styles.formGroup} style={{marginTop: 10, paddingLeft: 35}}>
+                    <label className={styles.formLabel}>Temperatura Deseada: <strong>{formData.actions.temperatura.grados}°C</strong></label>
+                    <input type="range" 
+                        min={MIN_TEMP} 
+                        max={MAX_TEMP} 
+                        step="1" 
+                        value={formData.actions.temperatura.grados} 
+                        onChange={handleTempChange}
+                        className={styles.rangeSlider} // Asumiendo que tienes una clase de estilo para sliders
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '0.8em', color: 'var(--color-text-secondary)'}}>
+                        <span>{MIN_TEMP}°C</span>
+                        <span>{MAX_TEMP}°C</span>
+                    </div>
+                </div>
+            )}
+
+            {/* LIMPIEZA (Simple ON/OFF) */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgChorros} alt="Limpieza" style={imgStyle} /> 
+                <span className={limpiezaIconClass}>Limpieza Programada</span>
+              </span>
+              <label className={styles.switch}>
+                <input type="checkbox" checked={formData.actions.limpieza.estado} onChange={() => handleToggle('limpieza')} />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+            
           </div>
         )}
 

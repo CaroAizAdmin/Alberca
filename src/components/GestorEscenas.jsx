@@ -6,7 +6,10 @@ import styles from './GestorEscenas.module.css';
 import { useTitulo } from '../hooks/useTitulo'; 
 import imgChorros from '../assets/imagenes/chorros.png'; 
 import imgLuces from '../assets/imagenes/luces.png';
-// 1. IMPORTAR EL MODAL
+// 🏆 Íconos (Asegúrate de que existan o mantén imgChorros como placeholder)
+// import imgMusica from '../assets/imagenes/musica.png'; 
+// import imgTemperatura from '../assets/imagenes/temperatura.png';
+// import imgLimpieza from '../assets/imagenes/limpieza.png'; 
 import ModalExito from './ModalExito';
 
 const DAYS_OF_WEEK = [
@@ -27,12 +30,29 @@ const GestorEscenas = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  // 2. ESTADO PARA EL MODAL
+  // ESTADOS DEL MODAL Y FORMULARIO
   const [showModal, setShowModal] = useState(false);
+  const [step, setStep] = useState(1);
+  const [errorLocal, setErrorLocal] = useState("");
+
+  const [formData, setFormData] = useState({
+    name: "",
+    descripcion: "",
+    actions: {
+      chorrosAgua: false,
+      luces: { estado: false, color: { r: 255, g: 255, b: 255 } },
+      // 🏆 ESTADO INICIAL PARA NUEVOS DISPOSITIVOS
+      musica: { estado: false },
+      temperatura: { estado: false },
+      limpieza: { estado: false }
+    },
+    schedule: { enabled: false, days: [], time: "19:00" }
+  });
 
   // --- LÓGICA DE MUTACIÓN (POST) ---
   const mutation = useMutation({
     mutationFn: (nuevaEscena) => {
+      // Nota: Al usar POST con Firebase Realtime Database, la respuesta incluye el ID generado.
       return fetch(`${URL_BASE}/escenas.json`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -44,34 +64,18 @@ const GestorEscenas = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['escenas'] });
-      
-      // 3. EN VEZ DE ALERT Y NAVIGATE, MOSTRAMOS EL MODAL
       setShowModal(true);
     },
     onError: (error) => alert(`Error: ${error.message}`)
   });
 
-  // 4. FUNCIÓN PARA CERRAR Y NAVEGAR
+  // FUNCIÓN PARA CERRAR Y NAVEGAR
   const handleCloseModal = () => {
       setShowModal(false);
       navigate('/escenas');
   };
 
-  // --- ESTADOS DEL FORMULARIO ---
-  const [step, setStep] = useState(1);
-  const [errorLocal, setErrorLocal] = useState("");
-
-  const [formData, setFormData] = useState({
-    name: "",
-    descripcion: "",
-    actions: {
-      chorrosAgua: false,
-      luces: { estado: false, color: { r: 255, g: 255, b: 255 } }
-    },
-    schedule: { enabled: false, days: [], time: "19:00" }
-  });
-
-  // --- HANDLERS ---
+  // --- HANDLERS DE FORMULARIO Y NAVEGACIÓN ---
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setErrorLocal("");
@@ -121,21 +125,41 @@ const GestorEscenas = () => {
     setStep(step - 1);
   };
 
+  // 🏆 FUNCIÓN DE TOGGLE UNIFICADA (Añadiendo Música, Temp, Limpieza)
   const handleToggle = (device) => {
-    if (device === 'chorros') {
-      setFormData(prev => ({
-        ...prev,
-        actions: { ...prev.actions, chorrosAgua: !prev.actions.chorrosAgua }
-      }));
-    } else if (device === 'luces') {
-      setFormData(prev => ({
-        ...prev,
-        actions: { 
-            ...prev.actions, 
-            luces: { ...prev.actions.luces, estado: !prev.actions.luces.estado } 
+    setFormData(prev => {
+        const currentActions = prev.actions;
+        
+        if (device === 'chorros') {
+            return {
+                ...prev,
+                actions: { ...currentActions, chorrosAgua: !currentActions.chorrosAgua }
+            };
+        } else if (device === 'luces') {
+            return {
+                ...prev,
+                actions: { ...currentActions, luces: { ...currentActions.luces, estado: !currentActions.luces.estado } }
+            };
+        } 
+        // 🏆 NUEVOS TOGGLES
+        else if (device === 'musica') {
+            return {
+                ...prev,
+                actions: { ...currentActions, musica: { ...currentActions.musica, estado: !currentActions.musica.estado } }
+            };
+        } else if (device === 'temperatura') {
+            return {
+                ...prev,
+                actions: { ...currentActions, temperatura: { ...currentActions.temperatura, estado: !currentActions.temperatura.estado } }
+            };
+        } else if (device === 'limpieza') {
+            return {
+                ...prev,
+                actions: { ...currentActions, limpieza: { ...currentActions.limpieza, estado: !currentActions.limpieza.estado } }
+            };
         }
-      }));
-    }
+        return prev;
+    });
   };
 
   const rgbToHex = (r, g, b) => {
@@ -167,9 +191,13 @@ const GestorEscenas = () => {
 
   const handleSave = () => mutation.mutate(formData);
 
-  // Clases condicionales
+  // Clases condicionales (Necesitas estas clases en tu CSS para Música, Temp y Limpieza)
   const chorrosIconClass = `${formData.actions.chorrosAgua ? styles.svgActive : styles.svgInactive}`;
   const lucesIconClass = `${formData.actions.luces.estado ? styles.svgActive : styles.svgInactive}`;
+  // 🏆 NUEVAS CLASES DINÁMICAS
+  const musicaIconClass = `${formData.actions.musica.estado ? styles.svgActive : styles.svgInactive}`;
+  const tempIconClass = `${formData.actions.temperatura.estado ? styles.svgActive : styles.svgInactive}`;
+  const limpiezaIconClass = `${formData.actions.limpieza.estado ? styles.svgActive : styles.svgInactive}`;
 
   const selectedDaysLabels = formData.schedule.days.map(key => 
       DAYS_OF_WEEK.find(day => day.key === key)?.label || key
@@ -180,7 +208,7 @@ const GestorEscenas = () => {
   return (
     <div className={styles.editContainer}>
 
-      {/* 5. INSERTAR EL MODAL */}
+      {/* INSERTAR EL MODAL */}
       <ModalExito 
         isOpen={showModal} 
         onClose={handleCloseModal}
@@ -215,15 +243,16 @@ const GestorEscenas = () => {
           </div>
         )}
 
-        {/* PASO 2 */}
+       {/* PASO 2 */}
         {step === 2 && (
-          <div className={styles.stepContent}>
-            <h2 className={styles.formTitle}>2. Dispositivos</h2>
+          <div className={styles['step-content']}>
+            <h2 className={styles['form-title']}>2. Dispositivos</h2>
             
-            <div className={styles.deviceRow}>
-              <span className={styles.formLabel} style={{margin:0}}>
-                <span className={chorrosIconClass}><img src={imgChorros} alt="Chorros" style={imgStyle} /></span>
-                Chorros
+            {/* CHORROS */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgChorros} alt="Chorros" style={imgStyle} />
+                <span className={chorrosIconClass}>Chorros</span>
               </span>
               <label className={styles.switch}>
                 <input type="checkbox" checked={formData.actions.chorrosAgua} onChange={() => handleToggle('chorros')} />
@@ -231,33 +260,100 @@ const GestorEscenas = () => {
               </label>
             </div>
             
-            <div className={styles.deviceRow}>
-              <span className={styles.formLabel} style={{margin:0}}>
-                <span className={lucesIconClass}><img src={imgLuces} alt="Luces" style={imgStyle} /></span>
-                Luces
+            {/* LUCES + SELECTOR DE COLOR */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgLuces} alt="Luces" style={imgStyle} />
+                <span className={lucesIconClass}>Luces</span>
               </span>
               <label className={styles.switch}>
                 <input type="checkbox" checked={formData.actions.luces.estado} onChange={() => handleToggle('luces')} />
                 <span className={styles.slider}></span>
               </label>
             </div>
-
             {formData.actions.luces.estado && (
-                <div className={styles.formGroup} style={{marginTop: 20}}>
-                    <div className={styles.colorPickerWrapper}>
-                        <label className={styles.formLabel}>Color:</label>
-                        <div className={styles.modernColorInputContainer}>
-                            <input type="color" className={styles.modernColorInput}
+                <div className={styles['form-group']} style={{marginTop: 20}}>
+                    <div className={styles['color-picker-wrapper']}>
+                        <label className={styles['form-label']}>Color:</label>
+                        <div className={styles['modern-color-input-container']}>
+                            <input type="color" className={styles['modern-color-input']}
                                 value={rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b)}
                                 onChange={handleColorPickerChange}
                             />
-                            <span className={styles.colorCode}>
+                            <span className={styles['color-code']}>
                                 {rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b).toUpperCase()}
                             </span>
                         </div>
                     </div>
                 </div>
             )}
+            
+            {/* MÚSICA + DESPLEGABLE DE API */}
+            {/* Se usa imgLuces como placeholder */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgLuces} alt="Música" style={imgStyle} /> 
+                <span className={musicaIconClass}>Música Ambiente</span>
+              </span>
+              <label className={styles.switch}>
+                <input type="checkbox" checked={formData.actions.musica.estado} onChange={() => handleToggle('musica')} />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+            {formData.actions.musica.estado && (
+                <div className={styles['form-group']} style={{marginTop: 10, paddingLeft: 35}}>
+                    <label className={styles['form-label']}>URL de Playlist (API):</label> 
+                    <input type="url" name="apiURL" className={styles['form-input']}
+                        value={formData.actions.musica.apiURL} 
+                        onChange={handleMusicApiChange} 
+                        placeholder="Ej: https://api.music.com/playlist/fiesta"
+                    />
+                </div>
+            )}
+
+            {/* TEMPERATURA + DESPLEGABLE DE SLIDER */}
+            {/* Se usa imgLuces como placeholder */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgLuces} alt="Temperatura" style={imgStyle} />
+                <span className={tempIconClass}>Control de Temperatura</span>
+              </span>
+              <label className={styles.switch}>
+                <input type="checkbox" checked={formData.actions.temperatura.estado} onChange={() => handleToggle('temperatura')} />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+            {formData.actions.temperatura.estado && (
+                <div className={styles['form-group']} style={{marginTop: 10, paddingLeft: 35}}>
+                    <label className={styles['form-label']}>Temperatura Deseada: <strong>{formData.actions.temperatura.grados}°C</strong></label>
+                    <input type="range" 
+                        min={MIN_TEMP} 
+                        max={MAX_TEMP} 
+                        step="1" 
+                        value={formData.actions.temperatura.grados} 
+                        onChange={handleTempChange}
+                        className={styles.rangeSlider} 
+                    />
+                    <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '0.8em', color: 'var(--color-text-faded)'}}>
+                        <span>{MIN_TEMP}°C</span>
+                        <span>{MAX_TEMP}°C</span>
+                    </div>
+                </div>
+            )}
+
+            {/* LIMPIEZA (Simple ON/OFF) */}
+            {/* Se usa imgLuces como placeholder */}
+            <div className={styles['device-row']}>
+              <span className={styles['form-label']} style={{margin:0}}>
+                <img src={imgLuces} alt="Limpieza" style={imgStyle} /> 
+                <span className={limpiezaIconClass}>Limpieza Programada</span>
+              </span>
+              <label className={styles.switch}>
+                <input type="checkbox" checked={formData.actions.limpieza.estado} onChange={() => handleToggle('limpieza')} />
+                <span className={styles.slider}></span>
+              </label>
+            </div>
+            
           </div>
         )}
 
@@ -308,6 +404,11 @@ const GestorEscenas = () => {
                 <hr style={{margin: '15px 0', border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.1)'}}/>
                 <p><strong>Chorros:</strong> {formData.actions.chorrosAgua ? "ON" : "OFF"}</p>
                 <p><strong>Luces:</strong> {formData.actions.luces.estado ? `ON (${rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b)})` : "OFF"}</p>
+                {/* 🏆 RESUMEN DE NUEVOS DISPOSITIVOS */}
+                <p><strong>Música:</strong> {formData.actions.musica.estado ? "ON" : "OFF"}</p>
+                <p><strong>Temperatura:</strong> {formData.actions.temperatura.estado ? "ON" : "OFF"}</p>
+                <p><strong>Limpieza:</strong> {formData.actions.limpieza.estado ? "ON" : "OFF"}</p>
+                
                 <hr style={{margin: '15px 0', border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.1)'}}/>
                 <p><strong>Auto ON:</strong> {formData.schedule.enabled ? "Sí" : "No"}</p>
                 {formData.schedule.enabled && (

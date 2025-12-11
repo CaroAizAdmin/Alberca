@@ -235,7 +235,7 @@
     /* Copiando activeStyle */
     opacity: 1;
     filter: none;
-    transform: scale(2);
+    transform: scale(1.05);
     
     border-color: cyan; /* Color para Música */
 }
