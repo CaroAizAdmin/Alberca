@@ -1,20 +1,80 @@
-import React, { useState } from 'react'; // 1. Importar useState
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { URL_BASE } from '../assets/constants/constants';
 import styles from './CardEscena.module.css';
 import imgChorros from '../assets/imagenes/chorros.png';
 import imgLuces from '../assets/imagenes/luces.png';
-import ModalExito from './ModalExito'; // 2. Importar Modal
+import ModalExito from './ModalExito';
+
+// Función auxiliar para formatear días
+const formatDays = (days) => {
+  if (!days || days.length === 0) return "Sin días";
+  const dayMap = {
+    mon: "Lun", tue: "Mar", wed: "Mié", thu: "Jue", 
+    fri: "Vie", sat: "Sáb", sun: "Dom"
+  };
+  return days.map(d => dayMap[d] || d).join(", ");
+};
 
 const CardEscena = ({ id, escena }) => {
   const navigate = useNavigate();
-  const [showModal, setShowModal] = useState(false); // 3. Estado del Modal
+  const queryClient = useQueryClient();
+  const [showModal, setShowModal] = useState(false);
 
-  // Acceso seguro a las acciones
+  // --- 1. LÓGICA DE ACTIVACIÓN (CON HISTORIAL) ---
+  const activateMutation = useMutation({
+    mutationFn: () => {
+      return fetch(`${URL_BASE}/escenas.json`)
+        .then((response) => response.json())
+        .then((allScenes) => {
+          const updates = {};
+          
+          // Datos del historial
+          const newHistoryEntry = { date: new Date().toISOString(), type: 'MANUAL' };
+          const historyId = Date.now().toString();
+
+          if (allScenes) {
+            Object.keys(allScenes).forEach((key) => {
+              if (key === id) {
+                 // Activar + Guardar Historial
+                 const prevHistory = allScenes[key].history || {};
+                 updates[key] = {
+                    ...allScenes[key],
+                    active: true,
+                    history: { ...prevHistory, [historyId]: newHistoryEntry }
+                 };
+              } else {
+                 // Solo desactivar
+                 updates[key] = { ...allScenes[key], active: false };
+              }
+            });
+          }
+          return fetch(`${URL_BASE}/escenas.json`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updates),
+          });
+        })
+        .then((updateResponse) => updateResponse.json());
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['escenas'] });
+      setShowModal(true);
+    },
+    onError: (err) => {
+      console.error(err);
+      alert("No se pudo activar la escena.");
+    }
+  });
+
+  // --- 2. DATOS VISUALES ---
   const luces = escena.actions?.luces || { estado: false, color: { r: 255, g: 255, b: 255 } };
   const aguaOn = escena.actions?.chorrosAgua;
-  const lucesOn = luces.estado;
-  
-  // Normalización del color
+  const lucesConfiguradas = luces.estado;
+  const isSceneActive = escena.active === true;
+  const diasTexto = formatDays(escena.schedule?.days);
+
   let colorRGB = "rgb(255, 255, 255)";
   if (luces.color) {
     if (typeof luces.color === 'string') {
@@ -29,23 +89,17 @@ const CardEscena = ({ id, escena }) => {
     navigate(`/escenas/${id}`); 
   };
 
-  // 🏆 EJECUCIÓN RÁPIDA CON MODAL
   const handleQuickRun = (e) => {
-    e.stopPropagation(); // Evita entrar al detalle
-    
-    // Aquí iría tu lógica real de activación (fetch/mutation)
-    
-    // Mostramos el modal de éxito
-    setShowModal(true);
+    e.stopPropagation();
+    activateMutation.mutate();
   };
   
   return (
     <>
-      {/* 4. Renderizar Modal */}
       <ModalExito 
         isOpen={showModal} 
         onClose={() => setShowModal(false)}
-        mensaje={`La escena "${escena.name}" se ha activado correctamente.`}
+        mensaje={`¡La escena "${escena.name}" activada y registrada!`}
       />
 
       <div 
@@ -53,37 +107,30 @@ const CardEscena = ({ id, escena }) => {
         onClick={navigateToDetail}
         style={{ '--scene-color': colorRGB }}
       >
-        
-        {/* 1. INFORMACIÓN */}
         <div className={styles.infoWrapper}>
           <h3 className={styles.sceneTitle}>{escena.name}</h3>
           <p className={styles.sceneDescription}>{escena.descripcion || "Sin descripción"}</p>
-          
           {escena.schedule?.enabled && (
                <span className={styles.autoBadge}>
-                  ⏰ {escena.schedule.time}
+                  📅 {diasTexto} — ⏰ {escena.schedule.time}
                </span>
            )}
         </div>
 
-        {/* 2. ÍCONOS Y CONTROLES */}
         <div className={styles.iconosWrapper}>
-          
-          <div className={`${styles.iconItem} ${lucesOn ? styles.activeLight : ''}`}>
+          <div className={`${styles.iconItem} ${lucesConfiguradas ? styles.activeLight : ''}`}>
              <img src={imgLuces} alt="Luces" className={styles.deviceImage} />
           </div>
-          
           <div className={`${styles.iconItem} ${aguaOn ? styles.activeWater : ''}`}>
              <img src={imgChorros} alt="Chorros" className={styles.deviceImage} />
           </div>
-
-          {/* BOTÓN PLAY RÁPIDO */}
-          <button className={styles.quickPlayBtn} onClick={handleQuickRun}>
-              ▶
+          <button 
+              className={`${styles.quickPlayBtn} ${isSceneActive ? styles.btnActive : ''}`} 
+              onClick={handleQuickRun}
+              disabled={activateMutation.isPending}
+          >
+              {activateMutation.isPending ? "..." : (isSceneActive ? "■" : "▶")}
           </button>
-          
-        
-          
         </div>
       </div>
     </>

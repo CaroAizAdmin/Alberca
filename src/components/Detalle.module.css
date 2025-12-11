@@ -272,3 +272,78 @@ svg{
     padding: 14px 25px; 
   }
 }
+
+/* ... resto del código ... */
+
+/* --- CLASE NUEVA: Botón Play Gigante Activo --- */
+.btnBigPlayActive {
+  background: rgba(76, 217, 100, 0.3); /* Verde semi-transparente */
+  border-color: #4cd964;
+  color: #fff;
+  box-shadow: 0 0 20px rgba(76, 217, 100, 0.4);
+  transform: translateY(-2px);
+}
+
+.btnBigPlayActive:hover {
+  background: rgba(76, 217, 100, 0.5);
+  box-shadow: 0 0 30px rgba(76, 217, 100, 0.6);
+}
+
+.btnBigPlayActive .playIcon {
+  color: #4cd964; /* El triangulito también verde */
+  text-shadow: 0 0 5px #4cd964;
+}
+
+/* ... (Tus estilos anteriores) ... */
+
+/* --- 6. HISTORIAL DE EJECUCIONES --- */
+.historyListContainer {
+  margin-top: 15px;
+  max-height: 200px; /* Altura máxima con scroll */
+  overflow-y: auto;  /* Scroll vertical */
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  padding: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.historyItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.9rem;
+  color: var(--color-text-faded);
+}
+
+.historyItem:last-child {
+  border-bottom: none;
+}
+
+.historyDate {
+  color: var(--color-text-light);
+  font-weight: 500;
+}
+
+/* Etiquetas de Tipo */
+.tagType {
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tagManual {
+  background: rgba(92, 151, 242, 0.2);
+  color: #5C97F2;
+  border: 1px solid rgba(92, 151, 242, 0.3);
+}
+
+.tagAuto {
+  background: rgba(255, 193, 7, 0.2);
+  color: #FFC107;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}

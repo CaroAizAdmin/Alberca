@@ -160,3 +160,12 @@
 .quickPlayBtn:active {
   transform: scale(0.95);
 }
+
+.btnActive {
+  background: #4cd964; /* El mismo verde del hover */
+  color: black;
+  box-shadow: 0 0 10px #4cd964;
+  border-color: #4cd964;
+  transform: scale(1.05); /* Un poco más grande para destacar */
+  opacity: 1;
+}
