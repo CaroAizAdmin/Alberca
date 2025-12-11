@@ -1,6 +1,7 @@
+/* src/components/Detalle.module.css */
+
 :root {
   --color-delete: #F65959; 
-  /* Agregando variables necesarias si no están definidas en otro lado */
   --color-app-background: #191E3B;
   --color-text-light: #F0F0F0;
   --color-primary-blue: #5C97F2; 
@@ -26,25 +27,6 @@
     z-index: 10;
 }
 
-.headerTitleWrapper {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    padding-bottom: 20px; 
-}
-
-/* 🏆 CLAVE: REDUCCIÓN DE TAMAÑO Y MARGEN DEL TÍTULO DINÁMICO */
-.headerTitleWrapper h1 {
-    /* 🛑 Ajuste de tamaño de fuente a un valor mediano/grande */
-    font-size: 2rem; 
-    /* 🛑 Eliminar o anular márgenes problemáticos */
-    margin-top: 0 !important; 
-    margin-bottom: 0 !important; 
-    text-align: center;
-    width: 100%; 
-    line-height: 1.1;
-}
-
 .centerWrapper {
     width: 90%;
     max-width: 60%; 
@@ -64,46 +46,8 @@
   position: relative;
 }
 
-/* --- 2. BOTONES DE NAVEGACIÓN (Glassy) --- */
-.btnBackNav,
-.btnEdit, .btnBigPlay {
-  /* 🏆 ESTILO GLASSY BASE */
-  background: rgba(45, 50, 90, 0.4); /* Fondo semi-transparente */
-  backdrop-filter: blur(8px); /* Desenfoque */
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
-  
-  /* Estilos funcionales */
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: whitesmoke;
-  cursor: pointer;
-  padding: 8px 14px;
-  border-radius: 12px;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
+/* --- 2. LAYOUT Y CARDS --- */
 
-.btnBackNav img {
-    filter: invert(1); 
-    width: 20px;
-    height: 20px;
-}
-.btnBackNav:hover,
-.btnEdit:hover, .btnBigPlay:hover {
-  background: rgba(45, 50, 90, 0.6); /* Más opaco al hacer hover */
-  transform: translateY(-1px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-}
-
-.iconBack,
-.iconEdit {
-    font-size: 1.1rem;
-}
-
-/* --- 3. CARDS Y LISTAS --- */
 .detalleCard {
   background: rgba(45, 50, 90, 0.4); 
   backdrop-filter: blur(10px); 
@@ -131,11 +75,11 @@ svg{
     height: 24px;
 }
 
-/* Contenedor base del ícono */
+/* Contenedor base del ícono de dispositivo */
 .deviceIcon {
-  width: 50px;       /* Ajusta el tamaño del cuadrado */
+  width: 50px;       
   height: 50px;
-  background: rgba(255, 255, 255, 0.1); /* Fondo grisaseo suave */
+  background: rgba(255, 255, 255, 0.1); 
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -150,50 +94,44 @@ svg{
   height: 100%;
   object-fit: contain;
   transition: all 0.3s ease;
-  /* Por defecto (apagado) se ve gris y opaco */
   opacity: 0.4;
   filter: grayscale(100%);
 }
 
-/* --- ESTADO ENCENDIDO (CHORROS) --- */
+/* --- ESTADOS ENCENDIDOS --- */
 .activeWater img {
   opacity: 1;
-  filter: none; /* Recupera el color original */
+  filter: none; 
   transform: scale(1.1);
-  filter: drop-shadow(0 0 5px #00bfff); /* Brillo azulado para agua */
+  filter: drop-shadow(0 0 5px #00bfff); 
 }
 
-/* --- ESTADO ENCENDIDO (LUCES) --- */
 .activeLight img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  /* Brillo dinámico según el color de la luz */
   filter: drop-shadow(0 0 8px var(--scene-color, white)); 
 }
 
-/* 🏆 NUEVO: ESTADO ENCENDIDO (MÚSICA) */
 .activeMusic img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 6px #d946ef); /* Brillo magenta/violeta */
+  filter: drop-shadow(0 0 6px #d946ef); 
 }
 
-/* 🏆 NUEVO: ESTADO ENCENDIDO (TEMPERATURA) */
 .activeTemp img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 6px #f97316); /* Brillo naranja cálido */
+  filter: drop-shadow(0 0 6px #f97316); 
 }
 
-/* 🏆 NUEVO: ESTADO ENCENDIDO (LIMPIEZA) */
 .activeClean img {
   opacity: 1;
   filter: none;
   transform: scale(1.1);
-  filter: drop-shadow(0 0 6px #22c55e); /* Brillo verde limpieza */
+  filter: drop-shadow(0 0 6px #22c55e); 
 }
 
 
@@ -212,17 +150,7 @@ svg{
     flex-shrink: 0; 
 }
 
-.deviceIcon {
-    flex-shrink: 0; 
-}
-
-.lightStatus {
-    display: flex; 
-    align-items: center; 
-    gap: 10px;
-}
-
-/* --- 4. BOTÓN DE ELIMINAR (Danger Zone) --- */
+/* --- ZONA DE PELIGRO (Contenedor) --- */
 .dangerZone {
     margin-top: 40px;
     width: 100%;
@@ -230,31 +158,10 @@ svg{
     justify-content: center;
 }
 
-.btnDelete {
-  /* 🏆 ESTILO GLASSY PARA ELIMINAR */
-  background: rgba(246, 89, 89, 0.2); /* Rojo semi-transparente */
-  backdrop-filter: blur(8px); 
-  border: 1px solid rgba(246, 89, 89, 0.4); /* Borde rojo */
-  box-shadow: 0 4px 10px rgba(246, 89, 89, 0.3);
-  
-  color: var(--color-delete); 
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
 
-.btnDelete:hover {
-  background: rgba(246, 89, 89, 0.4);
-  transform: translateY(-1px);
-}
-
-
-/* --- 5. RESPONSIVE --- */
+/* --- RESPONSIVE --- */
 @media (max-width: 768px) {
   
-  /* Botones: Se aplica el padding lateral aquí */
   .detalleNavWrapper {
       padding: 25px 16px 0; 
   }
@@ -262,23 +169,9 @@ svg{
   .detalleHeader {
       max-width: 100%;
       min-width: 0; 
-      padding-right: 0; /* Aseguramos que no haya padding extra en móvil */
+      padding-right: 0; 
   }
   
-  /* Título: Se aplica el padding lateral aquí */
-  .headerTitleWrapper {
-      padding: 0 16px 20px;
-      margin-top: 50px;
-  }
-  
-  /* 🏆 CLAVE RESPONSIVE: Reducción adicional del título dinámico en móvil */
-  .headerTitleWrapper h1 {
-      font-size: 1.5rem; /* Tamaño más pequeño en móviles */
-      padding: 0 10px;
-  }
-
-
-  /* Contenido: Se mantiene el padding lateral y eliminamos anchos mínimos */
   .centerWrapper {
       max-width: 100%; 
       padding: 0 16px 80px; 
@@ -289,45 +182,21 @@ svg{
   .detalleCard {
     margin: 16px 0 0;
     padding: 20px;
-    width: 100%; /* Ocupa todo el ancho en móvil */
-  }
-  
-  .btnBigPlay {
-    padding: 14px 25px; 
+    width: 100%; 
   }
 }
 
-/* --- CLASE NUEVA: Botón Play Gigante Activo --- */
-.btnBigPlayActive {
-  background: rgba(76, 217, 100, 0.3); /* Verde semi-transparente */
-  border-color: #4cd964;
-  color: #fff;
-  box-shadow: 0 0 20px rgba(76, 217, 100, 0.4);
-  transform: translateY(-2px);
-}
-
-.btnBigPlayActive:hover {
-  background: rgba(76, 217, 100, 0.5);
-  box-shadow: 0 0 30px rgba(76, 217, 100, 0.6);
-}
-
-.btnBigPlayActive .playIcon {
-  color: #4cd964; /* El triangulito también verde */
-  text-shadow: 0 0 5px #4cd964;
-}
-
-
-/* --- 6. HISTORIAL DE EJECUCIONES --- */
+/* --- HISTORIAL DE EJECUCIONES --- */
 .historyListContainer {
   margin-top: 15px;
-  max-height: 200px; /* Altura máxima con scroll */
-  overflow-y: auto;  /* Scroll vertical */
+  max-height: 200px; 
+  overflow-y: auto;  
   background: rgba(0, 0, 0, 0.2);
   border-radius: 12px;
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
-
+/* ... (El resto de estilos de Historial se mantienen) ... */
 .historyItem {
   display: flex;
   justify-content: space-between;

@@ -1,38 +1,51 @@
-
+// src/components/BotonesGenerales/Botones/Botones.jsx
 
 import React from 'react';
+import styles from './Botones.module.css'; 
 
 const Botones = ({ 
-    styles, 
-    isLastStep, 
-    handleNext, 
-    handleUpdate, 
-    errorLocal, 
-    mutation 
+  variant = 'default', 
+  isActive = false, 
+  children, 
+  className, 
+  isIconOnly = false, // 💡 Nuevo: Para botón de ícono
+  ...props 
 }) => {
-    
-  if (!isLastStep) {
-    // Caso: Siguiente (no es el último paso)
-    return (
-      <button 
-        className={`${styles['btn-nav']} ${styles['btn-next']}`} 
-        onClick={handleNext} 
-        disabled={!!errorLocal}
-      >
-        Siguiente
-      </button>
-    );
+  
+  let variantClass = '';
+  
+  switch (variant) {
+    case 'play':
+      variantClass = styles.btnPlay;
+      if (isActive) {
+        variantClass += ` ${styles.active}`;
+      }
+      break;
+      
+    case 'delete':
+      variantClass = styles.btnDelete;
+      break;
+      
+    case 'default':
+    default:
+      variantClass = styles.btnDefault;
+      break;
   }
 
-  // Caso: Guardar Cambios (es el último paso)
+  // Clases base y de variante
+  let finalClassName = `${styles.btnBase} ${variantClass} ${className || ''}`;
+
+  // 💡 APLICAR ESTILO DE ÍCONO SOLAMENTE
+  if (isIconOnly) {
+    finalClassName += ` ${styles.btnIconOnly}`;
+  }
+
   return (
-    <button
-      className={`${styles['btn-nav']} ${styles['btn-next']}`}
-      onClick={handleUpdate}
-      style={{ backgroundColor: 'var(--color-success)' }}
-      disabled={mutation.isPending}
+    <button 
+      className={finalClassName} 
+      {...props}
     >
-      {mutation.isPending ? "Actualizando..." : "Guardar Cambios"}
+      {children}
     </button>
   );
 };
