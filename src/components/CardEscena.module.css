@@ -1,6 +1,8 @@
 /* ========================================================== */
-/* 1. TARJETA BASE Y GENERAL                                  */
+/* CardEscena.module.css: ESTILOS DE LA TARJETA HORIZONTAL    */
+/* (NO INCLUYE ESTILOS .quickPlayBtn ni .btnActive)           */
 /* ========================================================== */
+/* 1. TARJETA BASE Y GENERAL */
 .modernCardLine {
   /* Estilo base de la tarjeta horizontal */
   display: flex;
@@ -22,9 +24,7 @@
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* ========================================================== */
-/* 2. SECCIÓN IZQUIERDA: Texto (infoWrapper)                  */
-/* ========================================================== */
+/* 2. SECCIÓN IZQUIERDA: Texto (infoWrapper) */
 .infoWrapper {
   /* Hacemos que la infoWrapper contenga todos los elementos de la izquierda */
   flex: 1; 
@@ -68,11 +68,10 @@
     gap: 8px; 
     margin-top: 18px; 
 }
-/* ========================================================== */
-/* 3. SECCIÓN DERECHA: Íconos y Botones (iconosWrapper)       */
-/* ========================================================== */
+
+/* 3. SECCIÓN DERECHA: Íconos y Botones (iconosWrapper) */
 .iconosWrapper {
-  /* Contiene solo los controles principales (Luces, Chorros y Botón Play) */
+  /* Contiene solo los controles principales (Íconos de control y Botón Play) */
   display: flex;
   align-items: center;
   gap: 12px; 
@@ -82,7 +81,6 @@
 /* ------------------------------------------------------------- */
 /* 🏆 ESTILOS PARA ÍCONOS DE RESUMEN (PEQUEÑOS)                  */
 /* ------------------------------------------------------------- */
-
 .summaryIconItem {
   /* Tamaño uniforme para todos */
   width: 35px; /* <--- MODIFICA ESTE VALOR */
@@ -96,8 +94,6 @@
   transition: all 0.3s ease;
 }
 
-
-
 /* Estilo de imagen dentro de los íconos de resumen */
 .summaryIconItem .deviceImage {
   width: 100%;
@@ -110,11 +106,9 @@
   transition: all 0.3s ease;
 }
 
-
 /* ------------------------------------------------------------- */
 /* ESTILOS PARA ÍCONOS DE CONTROL (GRANDES - iconosWrapper)     */
 /* ------------------------------------------------------------- */
-
 .iconItem {
   width: 40px;
   height: 40px;
@@ -235,7 +229,6 @@
     transform: scale(1.05);
     
     border-color: cyan; /* Color para Música */
-    /* 🟢 CORRECCIÓN APLICADA: Añadir animación */
     animation: pulseSmall 2s infinite ease-in-out;
 }
 
@@ -247,7 +240,6 @@
     transform: scale(1.05);
     
     border-color: #ff4500; /* Color para Temperatura (rojo/naranja) */
-    /* 🟢 CORRECCIÓN APLICADA: Añadir animación */
     animation: pulseSmall 2s infinite ease-in-out;
 }
 
@@ -259,44 +251,5 @@
     transform: scale(1.05);
     
     border-color: #34c759; /* Color para Limpieza (verde) */
-    /* 🟢 CORRECCIÓN APLICADA: Añadir animación */
     animation: pulseSmall 2s infinite ease-in-out;
-}
-
-
-/* --- BOTÓN PLAY RÁPIDO --- */
-.quickPlayBtn {
-  width: 35px;
-  height: 35px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
-  font-size: 0.8rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-  border: 1px solid rgba(255,255,255,0.2);
-}
-
-.quickPlayBtn:hover {
-  background: #4cd964; /* Verde al pasar el mouse */
-  color: black;
-  transform: scale(1.1);
-  box-shadow: 0 0 10px #4cd964;
-}
-
-.quickPlayBtn:active {
-  transform: scale(0.95);
-}
-
-.btnActive {
-  background: #4cd964; /* El mismo verde del hover */
-  color: black;
-  box-shadow: 0 0 10px #4cd964;
-  border-color: #4cd964;
-  transform: scale(1.05); /* Un poco más grande para destacar */
-  opacity: 1;
 }
