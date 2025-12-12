@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { URL_BASE } from '../assets/constants/constants';
-import imgFlecha from '../assets/imagenes/flechaAtras.png';
+import { URL_BASE } from '../../assets/constants/constants';
+import imgFlecha from '../../assets/imagenes/flechaAtras.png';
 import styles from './EditarEscena.module.css';
-import Formulario from './Formulario/Formulario';
-import { useTitulo } from '../hooks/useTitulo';
-import ModalExito from './ModalExito';
-import Botones from './BotonesGenerales/Botones/Botones';
-
+import Formulario from '../Formulario/Formulario';
+import { useTitulo } from '../../hooks/useTitulo';
+import ModalExito from '../Modal/ModalExito/ModalExito';
+import Botones from '../BotonesGenerales/Botones/Botones';
 
 const EditarEscena = () => {
   const { id } = useParams();

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import CardEscena from "./CardEscena.jsx";
+import CardEscena from "../CardEscenas/CardEscena.jsx";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { URL_BASE } from "../assets/constants/constants.js";
-import SinEscenas from "./SinEscenas.jsx";
-import ModalError from './ModalError';
+import { URL_BASE } from "../../assets/constants/constants.js";
+import SinEscenas from "../SinEscenas/SinEscenas.jsx";
+import ModalError from '../Modal/ModalError/ModalError.jsx';
 
 const JS_TO_CUSTOM_DAY_MAP = ['do', 'lu', 'ma', 'mi', 'ju', 'vi', 'sa'];
 

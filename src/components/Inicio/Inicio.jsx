@@ -1,5 +1,5 @@
-import ListadoEscenas from "./ListadoEscenas.jsx";
-import { useTitulo } from '../hooks/useTitulo';
+import ListadoEscenas from "../ListadoEscenas/ListadoEscenas.jsx";
+import { useTitulo } from '../../hooks/useTitulo.js';
 
 const Inicio = ({ escena, setEscenas }) => {
   useTitulo("Mis Escenas");

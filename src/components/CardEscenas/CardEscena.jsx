@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { URL_BASE } from '../assets/constants/constants';
+import { URL_BASE } from '../../assets/constants/constants';
 import styles from './CardEscena.module.css';
 
-import BtnQuickPlay from './BotonesGenerales/BotonPlay/BotonPlay';
+import BtnQuickPlay from '../BotonesGenerales/BotonPlay/BotonPlay';
 
-import imgChorros from '../assets/imagenes/chorros.png';
-import imgLuces from '../assets/imagenes/luces.png';
-import imgLimpieza from '../assets/imagenes/limpieza.png';
-import imgMusica from '../assets/imagenes/musica.png';
-import imgTemperatura from '../assets/imagenes/temperatura.png';
+import imgChorros from '../../assets/imagenes/chorros.png';
+import imgLuces from '../../assets/imagenes/luces.png';
+import imgLimpieza from '../../assets/imagenes/limpieza.png';
+import imgMusica from '../../assets/imagenes/musica.png';
+import imgTemperatura from '../../assets/imagenes/temperatura.png';
 
-import ModalExito from './ModalExito';
+import ModalExito from '../Modal/ModalExito/ModalExito';
 
 const formatDays = (days) => {
   if (!days || days.length === 0) return "Sin días";

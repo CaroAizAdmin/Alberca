@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { URL_BASE, DAYS_OF_WEEK } from "../assets/constants/constants";
+import { URL_BASE, DAYS_OF_WEEK } from "../../assets/constants/constants";
 import styles from './Detalle.module.css';
-import imgFlecha from '../assets/imagenes/flechaAtras.png';
-import imgChorros from '../assets/imagenes/chorros.png';
-import imgLuces from '../assets/imagenes/luces.png';
-import imgLimpieza from '../assets/imagenes/limpieza.png';
-import imgMusica from '../assets/imagenes/musica.png';
-import imgTemperatura from '../assets/imagenes/temperatura.png';
-import { useTitulo } from '../hooks/useTitulo';
-import ModalExito from './ModalExito';
-import ModalConfirmacion from './ModalConfirmacion';
-import ModalError from './ModalError';
-import Botones from './BotonesGenerales/Botones/Botones';
+import imgFlecha from '../../assets/imagenes/flechaAtras.png';
+import imgChorros from '../../assets/imagenes/chorros.png';
+import imgLuces from '../../assets/imagenes/luces.png';
+import imgLimpieza from '../../assets/imagenes/limpieza.png';
+import imgMusica from '../../assets/imagenes/musica.png';
+import imgTemperatura from '../../assets/imagenes/temperatura.png';
+import { useTitulo } from '../../hooks/useTitulo';
+import ModalExito from '../Modal/ModalExito/ModalExito';
+import ModalConfirmacion from '../Modal/ModalConfirmacion/ModalConfirmacion';
+import ModalError from '../Modal/ModalError/ModalError';
+import Botones from '../BotonesGenerales/Botones/Botones';
 
 const formatDaysFull = (days) => {
   if (!days || days.length === 0) return "Sin programación";

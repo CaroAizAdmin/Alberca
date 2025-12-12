@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { URL_BASE } from "../assets/constants/constants";
-import ModalConfirmacion from './ModalConfirmacion';
-import ModalExito from './ModalExito';
-import ModalError from './ModalError';
+import { URL_BASE } from "../../assets/constants/constants";
+import ModalConfirmacion from '../Modal/ModalConfirmacion/ModalConfirmacion';
+import ModalExito from '../Modal/ModalExito/ModalExito';
+import ModalError from '../Modal/ModalError/ModalError';
 import styles from './Configuracion.module.css';
-import { useTitulo } from '../hooks/useTitulo';
-import Botones from './BotonesGenerales/Botones/Botones';
+import { useTitulo } from '../../hooks/useTitulo';
+import Botones from '../BotonesGenerales/Botones/Botones';
 
 const Configuracion1 = () => {
     const queryClient = useQueryClient();

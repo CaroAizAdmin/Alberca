@@ -1,8 +1,9 @@
-import BotonNav from './BotonesGenerales/BotonNav/BotonNav';
-import imgEscenas from '../assets/imagenes/home.png';
-import imgMas from '../assets/imagenes/mas.png';
-import imgConfi from '../assets/imagenes/configuracion.png';
-import styles from "./Menu.module.css";
+
+import BotonNav from '../BotonesGenerales/BotonNav/BotonNav';
+import imgEscenas from '../../assets/imagenes/home.png'; 
+import imgMas from '../../assets/imagenes/mas.png';
+import imgConfi from '../../assets/imagenes/configuracion.png';
+import styles from './Menu.module.css';
 
 const Menu = () => {
 
@@ -34,4 +35,4 @@ const Menu = () => {
     )
 }
 
-export default Menu
+export default Menu;

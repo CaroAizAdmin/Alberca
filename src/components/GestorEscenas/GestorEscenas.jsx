@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { URL_BASE } from '../assets/constants/constants';
+import { URL_BASE } from '../../assets/constants/constants';
 import styles from './GestorEscenas.module.css';
-import Formulario from './Formulario/Formulario';
-import { useTitulo } from '../hooks/useTitulo';
-import ModalExito from './ModalExito';
+import Formulario from '../Formulario/Formulario';
+import { useTitulo } from '../../hooks/useTitulo';
+import ModalExito from '../Modal/ModalExito/ModalExito';
 
 const GestorEscenas = () => {
   useTitulo("Crear Nueva Escena");
