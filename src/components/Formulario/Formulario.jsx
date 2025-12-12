@@ -2,6 +2,9 @@
 import styles from './Formulario.module.css';
 import imgChorros from '../../assets/imagenes/chorros.png';
 import imgLuces from '../../assets/imagenes/luces.png';
+import imgMusica from '../../assets/imagenes/musica.png';
+import imgTemperatura from '../../assets/imagenes/temperatura.png';
+import imgLimpieza from '../../assets/imagenes/limpieza.png';
 import Botones from '../BotonesGenerales/Botones/Botones';
 import { DAYS_OF_WEEK, MIN_TEMP, MAX_TEMP } from '../../assets/constants/constants';
 
@@ -129,12 +132,12 @@ const Formulario = ({
             )}
 
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgChorros} alt="Música" style={imgStyle} /><span className={musicaIconClass}>Música Ambiente</span></span>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgMusica} alt="Música" style={imgStyle} /><span className={musicaIconClass}>Música Ambiente</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.musica} onChange={() => handleToggle('musica')} /><span className={styles.slider}></span></label>
             </div>
 
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Temperatura" style={imgStyle} /><span className={tempIconClass}>Control de Temperatura</span></span>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgTemperatura} alt="Temperatura" style={imgStyle} /><span className={tempIconClass}>Control de Temperatura</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.temperatura.estado} onChange={() => handleToggle('temperatura')} /><span className={styles.slider}></span></label>
             </div>
             {formData.actions.temperatura.estado && (
@@ -148,7 +151,7 @@ const Formulario = ({
             )}
 
             <div className={styles['device-row']}>
-              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLuces} alt="Limpieza" style={imgStyle} /><span className={limpiezaIconClass}>Limpieza Programada</span></span>
+              <span className={styles['form-label']} style={{ margin: 0 }}><img src={imgLimpieza} alt="Limpieza" style={imgStyle} /><span className={limpiezaIconClass}>Limpieza Programada</span></span>
               <label className={styles.switch}><input type="checkbox" checked={formData.actions.limpieza} onChange={() => handleToggle('limpieza')} /><span className={styles.slider}></span></label>
             </div>
           </div>
@@ -194,13 +197,13 @@ const Formulario = ({
               <p><strong>Nombre:</strong> {formData.name}</p>
               <p><strong>Descripción:</strong> {formData.descripcion || "-"}</p>
               <hr style={{ margin: '15px 0', border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }} />
-              <p><strong>Chorros:</strong> {formData.actions.chorrosAgua ? "ON" : "OFF"}</p>
-              <p><strong>Luces:</strong> {formData.actions.luces.estado ? `ON (${rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b)})` : "OFF"}</p>
-              <p><strong>Música:</strong> {formData.actions.musica ? "ON" : "OFF"}</p>
-              <p><strong>Temperatura:</strong> {formData.actions.temperatura.estado ? `ON (${formData.actions.temperatura.grados}°C)` : "OFF"}</p>
-              <p><strong>Limpieza:</strong> {formData.actions.limpieza ? "ON" : "OFF"}</p>
+              <p><strong>Chorros:</strong> {formData.actions.chorrosAgua ? "PRENDIDOS" : "APAGADOS"}</p>
+              <p><strong>Luces:</strong> {formData.actions.luces.estado ? `PRENDIDO (${rgbToHex(formData.actions.luces.color.r, formData.actions.luces.color.g, formData.actions.luces.color.b)})` : "APAGADO"}</p>
+              <p><strong>Música:</strong> {formData.actions.musica ? "PRENDIDO" : "APAGADO"}</p>
+              <p><strong>Temperatura:</strong> {formData.actions.temperatura.estado ? `PRENDIDO (${formData.actions.temperatura.grados}°C)` : "APAGADO"}</p>
+              <p><strong>Limpieza:</strong> {formData.actions.limpieza ? "PRENDIDO" : "APAGADO"}</p>
               <hr style={{ margin: '15px 0', border: 'none', borderTop: '1px solid rgba(255, 255, 255, 0.1)' }} />
-              <p><strong>Auto ON:</strong> {formData.schedule.enabled ? "Sí" : "No"}</p>
+              <p><strong>Automática:</strong> {formData.schedule.enabled ? "Sí" : "No"}</p>
               {formData.schedule.enabled && (
                 <>
                   <p><strong>Días:</strong> {selectedDaysLabels}</p>

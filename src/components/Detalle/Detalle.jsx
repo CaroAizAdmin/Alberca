@@ -286,7 +286,7 @@ const Detalle = () => {
             <div className={styles.lightStatus}>
               {luces.estado && <div className={styles.colorPreviewDot} style={{ backgroundColor: colorRGB }}></div>}
               <span className={`${styles.statusBadge} ${luces.estado ? styles.on : styles.off}`}>
-                {luces.estado ? 'ENCENDIDAS' : 'APAGADAS'}
+                {luces.estado ? 'PRENDIDAS' : 'APAGADAS'}
               </span>
             </div>
           </div>
@@ -298,7 +298,7 @@ const Detalle = () => {
               <span className={styles.deviceLabel}>Chorros de Agua</span>
             </div>
             <span className={`${styles.statusBadge} ${chorrosOn ? styles.on : styles.off}`}>
-              {chorrosOn ? 'ACTIVADOS' : 'APAGADOS'}
+              {chorrosOn ? 'PRENDIDOS' : 'APAGADOS'}
             </span>
           </div>
           <div className={styles.deviceListItem}>
@@ -309,7 +309,7 @@ const Detalle = () => {
               <span className={styles.deviceLabel}>Música</span>
             </div>
             <span className={`${styles.statusBadge} ${musica.estado ? styles.on : styles.off}`}>
-              {musica.estado ? 'ON' : 'OFF'}
+              {musica.estado ? 'PRENDIDA' : 'APAGADA'}
             </span>
           </div>
           <div className={styles.deviceListItem}>
